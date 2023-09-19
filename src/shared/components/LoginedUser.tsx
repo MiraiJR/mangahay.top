@@ -122,7 +122,8 @@ const LoginedUser = () => {
         />
         {showMenu && (
           <div
-            className={`rounded-sm p-4 z-10 shadow-outer-lg-${themeStore.getOppositeTheme()} absolute top-max right-0 flex items-center text-center bg-${themeStore.getTheme()} w-max`}
+            style={{ zIndex: "9999" }}
+            className={`rounded-sm p-4 shadow-outer-lg-${themeStore.getOppositeTheme()} absolute top-max right-0 flex items-center text-center bg-${themeStore.getTheme()} w-max`}
           >
             <ul className="flex flex-col">
               <li className="p-2 hover:bg-slate-400">Thông tin cá nhân</li>

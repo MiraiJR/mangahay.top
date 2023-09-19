@@ -32,14 +32,10 @@ const MainLayout = ({
       id="main-layout"
       className={`min-h-screen relative bg-${themeStore.getTheme()} ${className}`}
     >
-      <div
-        className={cn(`bg-${themeStore.getTheme()} drop-shadow-lg z-50`, {
-          "fixed top-0 w-screen": isScroll,
-        })}
-      >
+      <div className={cn(`bg-${themeStore.getTheme()} drop-shadow-lg z-50`)}>
         <Header />
       </div>
-      <div className="container mx-auto my-10 mobile:p-2">{children}</div>
+      <div className={cn("container mx-auto my-10 mobile:p-2")}>{children}</div>
       <div className="bg-slate-200">
         <Footer />
       </div>

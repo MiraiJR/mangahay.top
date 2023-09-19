@@ -104,16 +104,30 @@ const BoxSearch = ({ setComics, selectedGenres, resultRef }: itemProps) => {
   };
 
   const handleSearchComic = async () => {
-    window.history.pushState(
-      {},
-      "",
-      `?${comicName !== "" ? `comicName=${comicName}` : ""}&${
-        filterAuthor.length !== 0 ? `filterAuthor=${filterAuthor}` : ""
-      }&${filterGenres.length !== 0 ? `filterGenres=${filterGenres}` : ""}
-      &${filterState ? `filterState=${filterState?.name}` : ""}&${
-        filterSort ? `filterSort=${filterSort?.code}` : ""
-      }`
-    );
+    let params = "?";
+
+    if (comicName !== "") {
+      params += `comicName=${comicName}`;
+    }
+
+    if (filterAuthor.length !== 0) {
+      params += `filterAuthor=${filterAuthor}`;
+    }
+    if (filterGenres.length !== 0) {
+      params += `filterGenres=${filterGenres}`;
+    }
+    if (filterState) {
+      params += `filterState=${filterState?.name}`;
+    }
+    if (filterSort) {
+      params += `filterSort=${filterSort?.code}`;
+    }
+
+    if (params === "?") {
+      params = "";
+    }
+
+    window.history.pushState({}, "", params);
 
     try {
       const { data } = await comicService.searchComics({
@@ -125,7 +139,10 @@ const BoxSearch = ({ setComics, selectedGenres, resultRef }: itemProps) => {
       });
 
       setComics(data.comics);
-      resultRef.current.scrollIntoView({ behavior: "smooth" });
+      resultRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
     } catch (error: any) {
       toast.error(error.message);
     }

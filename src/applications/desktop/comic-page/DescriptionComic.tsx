@@ -159,7 +159,7 @@ const DescriptionComic = ({
       className={`grid grid-cols-12 gap-2 text-${themeStore.getOppositeTheme()}`}
     >
       <img
-        className="col-span-3 shadow-lg p-5 mobile:col-span-12"
+        className="col-span-3 shadow-lg p-5 mobile:col-span-12 w-[100%] max-h-[800px] object-cover object-top"
         src={comic.thumb}
         alt={comic.name}
       />

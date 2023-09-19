@@ -142,7 +142,10 @@ const Header = () => {
             ))}
           </div>
           {showListGenres && (
-            <div className="absolute top-full w-max z-50 desktop:top-3/4 mobile:left-0">
+            <div
+              className="absolute top-full w-max desktop:top-3/4 mobile:left-0"
+              style={{ zIndex: 1000 }}
+            >
               <ListGenres />
             </div>
           )}

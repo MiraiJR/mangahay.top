@@ -51,6 +51,15 @@ const CreateComicForm = () => {
     setComicGenres(_filterGenres);
   };
 
+  const handleBriefDescription = (): string => {
+    let temp = comicBriefDescription;
+    temp = temp.replace(/background-color: rgb\(255, 255, 255\)/g, "");
+    temp = temp.replace(/background-color: rgb\(0, 0, 0\)/g, "");
+    temp = temp.replace(/color: rgb\(0, 0, 0\)/g, "");
+    temp = temp.replace(/color: rgb\(5, 5, 5\)/g, "");
+    return temp;
+  };
+
   const handleCreateComic = async () => {
     if (
       comicName.trim() === "" ||
@@ -72,7 +81,7 @@ const CreateComicForm = () => {
     comicAuthors.forEach((author) => {
       formData.append("authors[]", author);
     });
-    formData.append("briefDescription", comicBriefDescription);
+    formData.append("briefDescription", handleBriefDescription());
     formData.append("file", comicThumb);
 
     try {
