@@ -1,3 +1,4 @@
+import { reduceQualityImage } from "@/shared/helpers/helpers";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -17,7 +18,7 @@ const CardSearchingComic = ({ comic }: itemProps) => {
         <Image
           width={0}
           height={0}
-          src={comic.thumb}
+          src={reduceQualityImage(comic.thumb)}
           alt={comic.name}
           className="w-[100%]"
         />

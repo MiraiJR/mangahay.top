@@ -11,7 +11,7 @@ import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import EmptyImage from "@/shared/assets/empty.png";
+import EmptyImage from "@/shared/assets/empty.webp";
 import Image from "next/image";
 
 interface itemProps {
@@ -88,7 +88,12 @@ const ListComicsPage = ({ genres, dataComics }: itemProps) => {
             <div className="grid grid-cols-5 mobile:grid-cols-2 relative gap-4 p-4">
               {comics?.length === 0 && (
                 <div className="col-span-5 text-center flex flex-col items-center justify-center">
-                  <Image width={100} src={EmptyImage} alt="Không có truyện" />
+                  <Image
+                    width={100}
+                    src={EmptyImage}
+                    alt="Không có truyện"
+                    priority
+                  />
                   <span>Không có truyện</span>
                 </div>
               )}

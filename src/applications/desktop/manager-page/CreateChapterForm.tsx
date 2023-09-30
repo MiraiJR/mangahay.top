@@ -1,3 +1,5 @@
+import MyLoading from "@/shared/components/MyLoading";
+import { extractComicId } from "@/shared/helpers/helpers";
 import comicService from "@/shared/services/comicService";
 import themeStore from "@/shared/stores/themeStore";
 import {
@@ -9,12 +11,19 @@ import { InputText } from "primereact/inputtext";
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 
+interface StatusLoading {
+  isCreating: boolean;
+}
+
 const CreateChapterForm = () => {
   const fileUploadRef = useRef<any>(null);
   const [comicName, setComicName] = useState<string>("");
   const [chapterName, setChapterName] = useState<string>("");
   const [items, setItems] = useState<string[]>([]);
   const [chapterImages, setChapterImages] = useState<File[]>([]);
+  const [loading, setLoading] = useState<StatusLoading>({
+    isCreating: false,
+  });
 
   const getComics = async (name: string): Promise<Comic[]> => {
     const { data } = await comicService.searchComics({ comicName: name });
@@ -36,6 +45,13 @@ const CreateChapterForm = () => {
       return;
     }
 
+    setLoading((pre) => {
+      return {
+        ...pre,
+        isCreating: true,
+      };
+    });
+
     const formData = new FormData();
     formData.append("nameChapter", chapterName);
     chapterImages.forEach((image) => {
@@ -43,19 +59,20 @@ const CreateChapterForm = () => {
     });
 
     try {
-      const comicId = extractComicId();
+      const comicId = extractComicId(comicName);
       const { data } = await comicService.createChapter(comicId, formData);
 
       toast.success(data);
       resetInput();
+      setLoading((pre) => {
+        return {
+          ...pre,
+          isCreating: false,
+        };
+      });
     } catch (error: any) {
       toast.error(error.message);
     }
-  };
-
-  const extractComicId = (): number => {
-    const array = comicName.split("/");
-    return parseInt(array[0]);
   };
 
   const resetInput = () => {
@@ -116,9 +133,13 @@ const CreateChapterForm = () => {
         </div>
       </div>
       <div className="flex items-center justify-center">
-        <button className="btn-primary w-fit" onClick={handleCreateChapter}>
-          Tạo chương
-        </button>
+        {loading.isCreating ? (
+          <MyLoading />
+        ) : (
+          <button className="btn-primary w-fit" onClick={handleCreateChapter}>
+            Tạo chương
+          </button>
+        )}
       </div>
     </div>
   );

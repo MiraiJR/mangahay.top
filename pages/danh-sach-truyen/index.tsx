@@ -1,10 +1,14 @@
-import ListComicsPage from "@/applications/desktop/list-comics-page/Page";
 import MetaTags from "@/shared/components/MetaTags";
 import ComicService from "@/shared/services/comicService";
+import dynamic from "next/dynamic";
 
 interface itemProps {
   genres: Genre[];
 }
+
+const ListComicsPage = dynamic(
+  () => import("@/applications/desktop/list-comics-page/Page")
+);
 
 export async function getServerSideProps(context: any) {
   try {

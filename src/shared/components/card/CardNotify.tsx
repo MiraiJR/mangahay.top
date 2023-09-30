@@ -1,4 +1,4 @@
-import { formatDate } from "@/shared/helpers/helpers";
+import { formatDate, reduceQualityImage } from "@/shared/helpers/helpers";
 import { cn } from "@/shared/libs/utils";
 import NotifyService from "@/shared/services/notifyService";
 import Image from "next/image";
@@ -24,7 +24,6 @@ const CardNotify = ({ notify, imageWidth, imageHeight }: itemProps) => {
       router.push(`${notify.redirectUrl}`);
       router.reload();
     } catch (error: any) {
-      console.log(error);
       toast.error(error.message);
     }
   };
@@ -40,7 +39,7 @@ const CardNotify = ({ notify, imageWidth, imageHeight }: itemProps) => {
         width={1}
         height={1}
         className={`col-span-2 col w-[100%] h-[${imageHeight}px] object-cover`}
-        src={data.thumb}
+        src={reduceQualityImage(data.thumb)}
         alt="thông báo"
       />
       <div className="col-span-10 flex flex-col">

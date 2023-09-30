@@ -1,4 +1,4 @@
-import LoginImage from "@/shared/assets/login.png";
+import LoginImage from "@/shared/assets/login.webp";
 import authService from "@/shared/services/authService";
 import { InputText } from "primereact/inputtext";
 import { useState } from "react";
@@ -51,6 +51,7 @@ const LoginForm = () => {
       </Helmet>
       <div className="flex justify-center items-center">
         <Image
+          priority
           className="mobile:hidden"
           src={LoginImage}
           alt="Đăng nhập"

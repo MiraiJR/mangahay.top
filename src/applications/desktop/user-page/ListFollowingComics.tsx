@@ -1,4 +1,4 @@
-import { formatDate } from "@/shared/helpers/helpers";
+import { formatDate, reduceQualityImage } from "@/shared/helpers/helpers";
 import MeService from "@/shared/services/meService";
 import themeStore from "@/shared/stores/themeStore";
 import { Rating } from "primereact/rating";
@@ -34,7 +34,7 @@ const ListFollowingComics = () => {
               width={0}
               height={0}
               className="w-[100%]"
-              src={comic.thumb}
+              src={reduceQualityImage(comic.thumb)}
               alt={comic.name}
             />
           </Link>

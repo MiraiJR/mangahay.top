@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import { reduceQualityImage } from "@/shared/helpers/helpers";
 
 const SlideComics = () => {
   const router = useRouter();
@@ -109,9 +110,10 @@ const SlideComics = () => {
             <SwiperSlide key={comic.id}>
               <div className="flex items-center justify-center">
                 <Image
+                  priority
                   width={300}
                   height={400}
-                  src={comic.thumb}
+                  src={reduceQualityImage(comic.thumb)}
                   alt={comic.name}
                   className="w-[300px] max-h-[400px] object-cover mobile:w-[200px]"
                 />

@@ -2,10 +2,8 @@ import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { MenuItem } from "primereact/menuitem";
 import { TabMenu } from "primereact/tabmenu";
 import { useContext, useState } from "react";
-import Profile from "./Profile";
 import themeStore from "@/shared/stores/themeStore";
-import Notification from "./Notification";
-import ListFollowingComics from "./ListFollowingComics";
+import dynamic from "next/dynamic";
 
 interface itemProps {
   user: User;
@@ -16,6 +14,10 @@ interface StatusMenuNavigate {
   notify: boolean;
   followingComics: boolean;
 }
+
+const Profile = dynamic(() => import("./Profile"));
+const Notification = dynamic(() => import("./Notification"));
+const ListFollowingComics = dynamic(() => import("./ListFollowingComics"));
 
 const UserPage = ({ user }: itemProps) => {
   const {} = useContext(ThemeContext);

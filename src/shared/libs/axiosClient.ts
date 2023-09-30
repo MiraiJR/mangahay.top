@@ -31,7 +31,11 @@ axiosClient.interceptors.response.use(
       return axios(originalRequest);
     }
 
-    if (error.response.data.statusCode === 401 && jwt.getToken()) {
+    if (
+      (error.response.data.statusCode === 401 ||
+        error.response.data.statusCode === 403) &&
+      jwt.getToken()
+    ) {
       const token = jwt.getToken();
 
       if (token) {

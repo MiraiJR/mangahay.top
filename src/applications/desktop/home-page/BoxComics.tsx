@@ -2,7 +2,7 @@ import CardComic from "@/shared/components/card/CardComic";
 import comicService from "@/shared/services/comicService";
 import { ChevronsRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import EmptyImage from "@/shared/assets/empty.png";
+import EmptyImage from "@/shared/assets/empty.webp";
 import themeStore from "@/shared/stores/themeStore";
 import { toast } from "react-toastify";
 import Image from "next/image";
@@ -53,7 +53,12 @@ const BoxComics = ({ title, field }: itemProps) => {
           </div>
           {comics.length === 0 ? (
             <div className="text-center flex flex-col items-center justify-center">
-              <Image width={200} src={EmptyImage} alt="Không có truyện" />
+              <Image
+                priority
+                width={200}
+                src={EmptyImage}
+                alt="Không có truyện"
+              />
               <span>Không có truyện</span>
             </div>
           ) : (

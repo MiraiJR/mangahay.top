@@ -8,18 +8,18 @@ import { useParams } from "next/navigation";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { MenuItem } from "primereact/menuitem";
 import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
-import { ProgressSpinner } from "primereact/progressspinner";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import EmptyImage from "@/shared/assets/empty.png";
+import EmptyImage from "@/shared/assets/empty.webp";
 import Image from "next/image";
+import MyLoading from "@/shared/components/MyLoading";
 
 interface itemProps {
   genres: Genre[];
   dataComics?: Comic[];
 }
 
-const THE_NUMBER_OF_COMICS_PER_PAGE: number = 24;
+const THE_NUMBER_OF_COMICS_PER_PAGE: number = 30;
 
 const ListComicsPage = ({ genres, dataComics }: itemProps) => {
   const { genre } = useParams();
@@ -92,7 +92,12 @@ const ListComicsPage = ({ genres, dataComics }: itemProps) => {
             <div className="grid grid-cols-5 mobile:grid-cols-2 relative gap-4 p-4">
               {comics?.length === 0 && (
                 <div className="col-span-5 text-center flex flex-col items-center justify-center">
-                  <Image width={100} src={EmptyImage} alt="Không có truyện" />
+                  <Image
+                    width={100}
+                    src={EmptyImage}
+                    alt="Không có truyện"
+                    priority
+                  />
                   <span>Không có truyện</span>
                 </div>
               )}
@@ -101,14 +106,7 @@ const ListComicsPage = ({ genres, dataComics }: itemProps) => {
                   <CardComic comic={comic} key={comic.id} />
                 ))
               ) : (
-                <div className="flex items-center justify-center w-[100%] col-span-12">
-                  <ProgressSpinner
-                    style={{ width: "50px", height: "50px" }}
-                    strokeWidth="8"
-                    fill="var(--surface-ground)"
-                    animationDuration=".5s"
-                  />
-                </div>
+                <MyLoading />
               )}
             </div>
             {comics && comics.length !== 0 && (
@@ -152,14 +150,7 @@ const ListComicsPage = ({ genres, dataComics }: itemProps) => {
                   </a>
                 ))
               ) : (
-                <div className="flex items-center justify-center w-[100%] col-span-12">
-                  <ProgressSpinner
-                    style={{ width: "50px", height: "50px" }}
-                    strokeWidth="8"
-                    fill="var(--surface-ground)"
-                    animationDuration=".5s"
-                  />
-                </div>
+                <MyLoading />
               )}
             </ul>
           </div>

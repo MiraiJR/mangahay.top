@@ -1,31 +1,37 @@
-import { extractIdFromSlugChapter } from "@/shared/helpers/helpers";
+import {
+  convertWebpResource,
+  extractIdFromSlugChapter,
+} from "@/shared/helpers/helpers";
 import { originalURL } from "@/shared/libs/config";
 import comicService from "@/shared/services/comicService";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { MenuItem } from "primereact/menuitem";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import DescriptionComic from "../comic-page/DescriptionComic";
 import { ArrowLeftCircle, ArrowRightCircle, MenuSquare } from "lucide-react";
 import { cn } from "@/shared/libs/utils";
 import { Editor, EditorTextChangeEvent } from "primereact/editor";
 import { globalStore } from "@/shared/stores/globalStore";
-import ListComments from "../comic-page/ListComments";
-import ListComicsRanking from "../home-page/ListComicsRanking";
-import ListComicsOfAuthor from "../comic-page/ListComicsOfAuthor";
 import themeStore from "@/shared/stores/themeStore";
-import MenuChapter from "./MenuChapter";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import MetaTags from "@/shared/components/MetaTags";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import { ProgressSpinner } from "primereact/progressspinner";
+import MyLoading from "@/shared/components/MyLoading";
+import dynamic from "next/dynamic";
+import ListComicsOfAuthor from "../comic-page/ListComicsOfAuthor";
+import ListComicsRanking from "../home-page/ListComicsRanking";
 
 interface itemProps {
   detailComic: ComicDetail;
   detailChapterA: DetailChapter;
 }
+
+const DescriptionComic = dynamic(
+  () => import("../comic-page/DescriptionComic")
+);
+const ListComments = dynamic(() => import("../comic-page/ListComments"));
+const MenuChapter = dynamic(() => import("./MenuChapter"));
+
 const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
   const menuChapterRef = useRef<any>(null);
   const router = useRouter();
@@ -188,20 +194,13 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
               width={0}
               height={0}
               className="w-[80%] mobile:w-[100%] object-fit"
-              src={image}
+              src={convertWebpResource(image)}
               alt={`${detailChapter?.currentChapter.name}-${comic?.name}`}
               key={_index}
             />
           ))
         ) : (
-          <div className="flex items-center justify-center w-[100%] col-span-12">
-            <ProgressSpinner
-              style={{ width: "50px", height: "50px" }}
-              strokeWidth="8"
-              fill="var(--surface-ground)"
-              animationDuration=".5s"
-            />
-          </div>
+          <MyLoading />
         )}
 
         <div

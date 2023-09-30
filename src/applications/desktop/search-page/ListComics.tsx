@@ -1,4 +1,4 @@
-import EmptyImage from "@/shared/assets/empty.png";
+import EmptyImage from "@/shared/assets/empty.webp";
 import CardComic from "@/shared/components/card/CardComic";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import themeStore from "@/shared/stores/themeStore";
@@ -47,6 +47,7 @@ const ListComics = ({ comics, title }: itemProps) => {
             className="w-[200px]"
             src={EmptyImage}
             alt="Không có truyện"
+            priority
           />
           <span className={`text-${themeStore.getOppositeTheme()}`}>
             Không có truyện

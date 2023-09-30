@@ -42,14 +42,18 @@ const ComicService = {
         "content-type": "multipart/form-data",
       },
     }),
-  crawlChapterOnFacebook: (
+  crawlChapter: (
     comicId: number,
     urlPost: string,
-    nameChapter: string
+    nameChapter: string,
+    querySelector: string,
+    attribute: string
   ) =>
-    axiosClient.post<string>(`/comics/${comicId}/crawl-comic`, {
+    axiosClient.post<string>(`/comics/${comicId}/crawl-chapter`, {
       urlPost,
       nameChapter,
+      querySelector,
+      attribute,
     }),
   getComicsCreatedByMe: () => axiosClient.get<Comic[]>(`/comics/created-by-me`),
   createChapter: (comicId: number, formdata: FormData) =>
@@ -59,9 +63,5 @@ const ComicService = {
       },
     }),
   getComicsWithChapters: () => axiosClient.get<Comic[]>(`/comics/chapters`),
-  getCrawlImages: (urlPost: string) =>
-    axiosClient.post<string[]>(`/comics/crawl-images`, {
-      urlPost,
-    }),
 };
 export default ComicService;

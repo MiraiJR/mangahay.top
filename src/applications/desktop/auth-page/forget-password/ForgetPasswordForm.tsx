@@ -1,5 +1,5 @@
 import MetaTags from "@/shared/components/MetaTags";
-import LoginImage from "@/shared/assets/login.png";
+import LoginImage from "@/shared/assets/login.webp";
 import Image from "next/image";
 import themeStore from "@/shared/stores/themeStore";
 import { useState } from "react";
@@ -44,6 +44,7 @@ const ForgetPasswordForm = () => {
       />
       <div className="flex justify-center items-center">
         <Image
+          priority
           className="mobile:hidden"
           src={LoginImage}
           alt="Đăng nhập"

@@ -11,6 +11,7 @@ import themeStore from "../stores/themeStore";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { reduceQualityImage } from "../helpers/helpers";
 
 const LoginedUser = () => {
   const elementRef = useRef<any>(null);
@@ -122,7 +123,7 @@ const LoginedUser = () => {
             width={50}
             height={0}
             className="mobile:w-[40px] w-[50px] h-[50px] object-cover rounded"
-            src={user.avatar}
+            src={reduceQualityImage(user.avatar)}
             alt={user.fullname}
             onClick={() => {
               setShowMenu(!showMenu);

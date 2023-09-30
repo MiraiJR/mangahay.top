@@ -1,13 +1,8 @@
 import comicService from "@/shared/services/comicService";
 import { useContext, useEffect, useState } from "react";
-import DescriptionComic from "./DescriptionComic";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { MenuItem } from "primereact/menuitem";
 import { originalURL } from "@/shared/libs/config";
-import ListChapters from "./ListChapters";
-import ListComicsOfAuthor from "./ListComicsOfAuthor";
-import ListComicsRanking from "../home-page/ListComicsRanking";
-import ListComments from "./ListComments";
 import { toast } from "react-toastify";
 import { Editor, EditorTextChangeEvent } from "primereact/editor";
 import { globalStore } from "@/shared/stores/globalStore";
@@ -15,10 +10,31 @@ import historyStore from "@/shared/stores/historyStore";
 import themeStore from "@/shared/stores/themeStore";
 import { useRouter } from "next/router";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import dynamic from "next/dynamic";
+import MyLoading from "@/shared/components/MyLoading";
 
 interface itemProps {
   detailComic: ComicDetail;
 }
+
+const DescriptionComic = dynamic(() => import("./DescriptionComic"), {
+  loading: () => <MyLoading />,
+});
+const ListChapters = dynamic(() => import("./ListChapters"), {
+  loading: () => <MyLoading />,
+});
+const ListComicsOfAuthor = dynamic(() => import("./ListComicsOfAuthor"), {
+  loading: () => <MyLoading />,
+});
+const ListComments = dynamic(() => import("./ListComments"), {
+  loading: () => <MyLoading />,
+});
+const ListComicsRanking = dynamic(
+  () => import("../home-page/ListComicsRanking"),
+  {
+    loading: () => <MyLoading />,
+  }
+);
 
 const ComicPage = ({ detailComic }: itemProps) => {
   const router = useRouter();

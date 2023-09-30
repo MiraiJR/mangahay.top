@@ -1,4 +1,4 @@
-import LoginImage from "@/shared/assets/login.png";
+import LoginImage from "@/shared/assets/login.webp";
 import authService from "@/shared/services/authService";
 import themeStore from "@/shared/stores/themeStore";
 import { InputText } from "primereact/inputtext";
@@ -56,6 +56,7 @@ const RegisterForm = () => {
       </Helmet>
       <div className="flex justify-center items-center">
         <Image
+          priority
           className="mobile:hidden"
           src={LoginImage}
           alt="Đăng ký"

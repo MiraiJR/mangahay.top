@@ -11,6 +11,7 @@ import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { convertWebpResource } from "@/shared/helpers/helpers";
 
 interface itemProps {
   comic: Comic;
@@ -165,10 +166,11 @@ const DescriptionComic = ({
       className={`grid grid-cols-12 gap-2 text-${themeStore.getOppositeTheme()}`}
     >
       <Image
+        priority
         width={0}
         height={0}
         className="col-span-3 shadow-lg p-5 mobile:col-span-12 w-[100%] max-h-[800px] object-cover object-top"
-        src={comic.thumb}
+        src={convertWebpResource(comic.thumb)}
         alt={comic.name}
       />
       <div className="col-span-7 flex flex-col gap-4 mobile:col-span-12 mobile:mx-4">
@@ -184,7 +186,7 @@ const DescriptionComic = ({
             {comic.state}
           </span>
         </h1>
-        <div className="flex gap-2 items-center mobile:flex-col mobile:items-start">
+        <div className="flex flex-wrap gap-2 items-center mobile:flex-col mobile:items-start">
           <h2 className="font-bold">Tên khác:</h2>
           <span>{comic.anotherName}</span>
         </div>
@@ -207,7 +209,7 @@ const DescriptionComic = ({
         </div>
         <div className="flex gap-2 items-center mobile:flex-col mobile:items-start">
           <h2 className="font-bold">Nhóm dịch:</h2>
-          <ul className="flex ">
+          <ul className="flex flex-wrap gap-2">
             {comic.translators.length === 0 ? (
               <div>Đang cập nhật</div>
             ) : (

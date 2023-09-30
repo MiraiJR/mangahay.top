@@ -9,6 +9,7 @@ import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
 import { toast } from "react-toastify";
 import MeService from "@/shared/services/meService";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { reduceQualityImage } from "@/shared/helpers/helpers";
 
 interface itemProps {
   user: User;
@@ -164,10 +165,11 @@ const Profile = ({ user }: itemProps) => {
           <div className="flex flex-col items-center justify-center">
             <div className="relative">
               <Image
+                priority
                 className="w-[150px] h-[150px] object-cover rounded-full"
                 width={100}
                 height={100}
-                src={me.avatar}
+                src={reduceQualityImage(me.avatar)}
                 alt={me.fullname}
                 onMouseOver={() => setShowChangeAvatar(true)}
                 onMouseOut={() => setShowChangeAvatar(false)}

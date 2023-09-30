@@ -110,6 +110,7 @@ const CreateComicForm = () => {
     setComicAuthors([]);
     setBriefDescription("");
     setComicThumb(null);
+    setComicTranslators([]);
     fileUploadRef.current.clear();
   };
 

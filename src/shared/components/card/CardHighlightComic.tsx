@@ -2,6 +2,7 @@ import themeStore from "@/shared/stores/themeStore";
 import Image from "next/image";
 import { Rating } from "primereact/rating";
 import Link from "next/link";
+import { reduceQualityImage } from "@/shared/helpers/helpers";
 
 interface itemProps {
   comic: Comic;
@@ -19,10 +20,11 @@ const CardHighlightComic = ({ comic }: itemProps) => {
         className="flex items-center justify-center"
       >
         <Image
+          loading="lazy"
           width={0}
           height={0}
           className="mobile:w-[150px] w-[100%]"
-          src={comic.thumb}
+          src={reduceQualityImage(comic.thumb)}
           alt={comic.name}
         />
       </Link>

@@ -1,11 +1,14 @@
 import historyStore from "@/shared/stores/historyStore";
 import { useEffect, useState, useContext } from "react";
-import ListComics from "../search-page/ListComics";
 import themeStore from "@/shared/stores/themeStore";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import dynamic from "next/dynamic";
+import MyLoading from "@/shared/components/MyLoading";
+
+const ListComics = dynamic(() => import("../search-page/ListComics"));
 
 const HistoryPage = () => {
-  const [comics, setComics] = useState<Comic[]>([]);
+  const [comics, setComics] = useState<Comic[] | null>(null);
   const {} = useContext(ThemeContext);
 
   useEffect(() => {
@@ -13,9 +16,15 @@ const HistoryPage = () => {
   }, []);
 
   return (
-    <div className={`bg-${themeStore.getTheme()}`}>
-      <ListComics comics={comics} title={"Lịch sử đọc truyện"} />
-    </div>
+    <>
+      {comics ? (
+        <div className={`bg-${themeStore.getTheme()}`}>
+          <ListComics comics={comics} title={"Lịch sử đọc truyện"} />
+        </div>
+      ) : (
+        <MyLoading />
+      )}
+    </>
   );
 };
 

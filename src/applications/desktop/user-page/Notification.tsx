@@ -2,7 +2,7 @@ import MeService from "@/shared/services/meService";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Image from "next/image";
-import EmptyImage from "@/shared/assets/empty.png";
+import EmptyImage from "@/shared/assets/empty.webp";
 import CardNotify from "@/shared/components/card/CardNotify";
 import { ProgressSpinner } from "primereact/progressspinner";
 
@@ -36,6 +36,7 @@ const Notification = () => {
               height={200}
               src={EmptyImage}
               alt="Không có truyện"
+              priority
             />
             <span>Không có thông báo</span>
           </div>

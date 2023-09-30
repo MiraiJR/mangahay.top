@@ -1,4 +1,4 @@
-import LogoWeb from "@/shared/assets/logo.png";
+import LogoWeb from "@/shared/assets/logo.webp";
 import { originalURL } from "@/shared/libs/config";
 import { Facebook, Youtube } from "lucide-react";
 import Image from "next/image";
@@ -10,6 +10,7 @@ const Footer = () => {
       <div className=" flex desktop:items-center desktop:justify-around mobile:flex-col">
         <div className="flex flex-col items-center gap-5 font-medium text-lg">
           <Image
+            priority
             width={0}
             height={150}
             className="h-[150px]"

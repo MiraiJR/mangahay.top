@@ -1,5 +1,5 @@
-import LogoWeb from "@/shared/assets/logo.png";
-import LogoWebLight from "@/shared/assets/logo-light.png";
+import LogoWeb from "@/shared/assets/logo.webp";
+import LogoWebLight from "@/shared/assets/logo-light.webp";
 import {
   ChevronDown,
   History,
@@ -122,6 +122,7 @@ const Header = () => {
       <div className="flex items-center gap-5 font-medium text-lg">
         <Link href="/" hrefLang="vi">
           <Image
+            priority
             width={0}
             height={100}
             className="mobile:h-[50px] mobile:w-fit h-[100px]"
@@ -156,8 +157,9 @@ const Header = () => {
       </div>
       <div className="card flex flex-wrap items-center justify-content-center gap-3">
         <div className="flex items-center gap-2 mobile:hidden">
-          <h3>{theme === "light" ? "Sáng" : "Tối"}</h3>
+          <label htmlFor="theme">{theme === "light" ? "Sáng" : "Tối"}</label>
           <InputSwitch
+            id="theme"
             checked={checkedChangeTheme}
             onChange={(e: InputSwitchChangeEvent) => {
               toggleTheme();

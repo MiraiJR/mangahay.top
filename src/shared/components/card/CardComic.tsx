@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Rating } from "primereact/rating";
 import { useState, useContext, useEffect } from "react";
 import { Skeleton } from "primereact/skeleton";
+import { reduceQualityImage } from "@/shared/helpers/helpers";
 
 interface itemProps {
   comic: Comic;
@@ -89,10 +90,10 @@ const CardComic = ({ comic }: itemProps) => {
       >
         <Image
           loading="lazy"
-          height={1}
-          width={1}
+          height={100}
+          width={100}
           className="w-[100%] object-cover h-[280px] mobile:max-h-[200px]"
-          src={comic.thumb}
+          src={reduceQualityImage(comic.thumb)}
           alt={comic.name}
         />
       </Link>

@@ -2,18 +2,19 @@ import { useState, useContext } from "react";
 import { TabMenu } from "primereact/tabmenu";
 import { MenuItem } from "primereact/menuitem";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import CreateComicForm from "./CreateComicForm";
-import CrawlChapterFromFacebook from "./CrawlChapterFromFacebook";
-import ListCreatedComics from "./ListCreatedComics";
-import CreateChapterForm from "./CreateChapterForm";
+import dynamic from "next/dynamic";
+
+const CreateComicForm = dynamic(() => import("./CreateComicForm"));
+const CrawlChapter = dynamic(() => import("./CrawlChapter"));
+const ListCreatedComics = dynamic(() => import("./ListCreatedComics"));
+const CreateChapterForm = dynamic(() => import("./CreateChapterForm"));
 
 const ManagerPage = () => {
   const [showCreateComic, setShowCreateComic] = useState<boolean>(false);
   const [showCreateChapter, setShowCreateChapter] = useState<boolean>(false);
   const [showListCreatedComics, setShowListCreatedComics] =
     useState<boolean>(true);
-  const [showCrawlChapterFromFacebook, setShowCrawlChapterFromFacebook] =
-    useState<boolean>(false);
+  const [showCrawlChapter, setShowCrawlChapter] = useState<boolean>(false);
   const {} = useContext(ThemeContext);
   const items: MenuItem[] = [
     {
@@ -21,7 +22,7 @@ const ManagerPage = () => {
       command: () => {
         setShowListCreatedComics(true);
         setShowCreateComic(false);
-        setShowCrawlChapterFromFacebook(false);
+        setShowCrawlChapter(false);
         setShowCreateChapter(false);
       },
     },
@@ -29,7 +30,7 @@ const ManagerPage = () => {
       label: "Tạo truyện",
       command: () => {
         setShowCreateComic(true);
-        setShowCrawlChapterFromFacebook(false);
+        setShowCrawlChapter(false);
         setShowListCreatedComics(false);
         setShowCreateChapter(false);
       },
@@ -39,14 +40,14 @@ const ManagerPage = () => {
       command: () => {
         setShowCreateChapter(true);
         setShowCreateComic(false);
-        setShowCrawlChapterFromFacebook(false);
+        setShowCrawlChapter(false);
         setShowListCreatedComics(false);
       },
     },
     {
-      label: "Cào chapter (Facebook)",
+      label: "Cào chapter",
       command: () => {
-        setShowCrawlChapterFromFacebook(true);
+        setShowCrawlChapter(true);
         setShowCreateComic(false);
         setShowListCreatedComics(false);
         setShowCreateChapter(false);
@@ -64,9 +65,7 @@ const ManagerPage = () => {
       </div>
       <div>{showListCreatedComics && <ListCreatedComics />}</div>
       <div className="mt-5 p-2">{showCreateComic && <CreateComicForm />}</div>
-      <div className="p-2">
-        {showCrawlChapterFromFacebook && <CrawlChapterFromFacebook />}
-      </div>
+      <div className="p-2">{showCrawlChapter && <CrawlChapter />}</div>
     </div>
   );
 };

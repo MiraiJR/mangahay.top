@@ -1,7 +1,7 @@
 import CardComic from "@/shared/components/card/CardComic";
 import CardHighlightComic from "@/shared/components/card/CardHighlightComic";
 import { ChevronsRight } from "lucide-react";
-import EmptyImage from "@/shared/assets/empty.png";
+import EmptyImage from "@/shared/assets/empty.webp";
 import themeStore from "@/shared/stores/themeStore";
 import Image from "next/image";
 import Link from "next/link";
@@ -56,6 +56,7 @@ const RecommendedComics = ({ genre, title }: itemProps) => {
       {comics.length === 0 && (
         <div className="text-center flex flex-col items-center justify-center">
           <Image
+            priority
             width={200}
             height={200}
             src={EmptyImage}
@@ -71,6 +72,7 @@ const RecommendedComics = ({ genre, title }: itemProps) => {
             height={200}
             src={EmptyImage}
             alt="Không có truyện"
+            priority
           />
           <span>Không có truyện</span>
         </div>
