@@ -1,12 +1,14 @@
-import LoginImage from "@/shared/assets/login.png";
+import LoginImage from "@/shared/assets/login.webp";
 import authService from "@/shared/services/authService";
 import { InputText } from "primereact/inputtext";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
 import JWTManager from "@/shared/libs/jwt";
-import { globalState } from "@/shared/stores/globalStore";
+import { globalStore } from "@/shared/stores/globalStore";
 import themeStore from "@/shared/stores/themeStore";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const title = "Đăng nhập";
 
@@ -14,8 +16,8 @@ const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const navigate = useNavigate();
-  const { setIsLogined } = globalState();
+  const router = useRouter();
+  const { setIsLogined } = globalStore();
 
   const handleLogin = async () => {
     try {
@@ -34,7 +36,7 @@ const LoginForm = () => {
 
       JWTManager.setToken(data);
       setIsLogined(true);
-      navigate("/");
+      router.push("/");
     } catch (error: any) {
       setErrorMessage(error.message);
     }
@@ -48,18 +50,19 @@ const LoginForm = () => {
         <meta property="og:type" content="website"></meta>
       </Helmet>
       <div className="flex justify-center items-center">
-        <img
+        <Image
+          priority
           className="mobile:hidden"
           src={LoginImage}
           alt="Đăng nhập"
           width={300}
         />
         <div className="flex flex-col gap-4">
-          <h1
+          <div
             className={`text-center text-4xl font-bold mb-5 text-${themeStore.getOppositeTheme()}`}
           >
             {title.toLocaleUpperCase()}
-          </h1>
+          </div>
           {errorMessage && (
             <small id="username-help" className="text-red-400">
               {errorMessage}
@@ -108,10 +111,20 @@ const LoginForm = () => {
             </div>
           </div>
           <div className="flex justify-between">
-            <Link to={"/dang-ky"} className="text-red-600 font-bold">
+            <Link
+              rel="preload"
+              hrefLang="vi"
+              href={"/dang-ky"}
+              className="text-red-600 font-bold"
+            >
               Đăng ký
             </Link>
-            <Link to={"/quen-mat-khau"} className="text-blue-400">
+            <Link
+              rel="preload"
+              hrefLang="vi"
+              href={"/quen-mat-khau"}
+              className="text-blue-400"
+            >
               Quên mật khẩu?
             </Link>
           </div>

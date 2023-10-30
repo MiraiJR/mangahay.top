@@ -13,11 +13,7 @@ const ListNotifies = ({ notifies }: itemProps) => {
       {notifies.length === 0 ? (
         <div className="text-center">Không có thông báo</div>
       ) : (
-        <div>
-          {notifies.map((notify) => (
-            <CardNotify notify={notify} key={notify.id} />
-          ))}
-        </div>
+        notifies.map((notify) => <CardNotify notify={notify} key={notify.id} />)
       )}
     </div>
   );

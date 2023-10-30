@@ -1,7 +1,13 @@
+const isClient = typeof window !== "undefined";
+
 const JWTManager = () => {
   let inMemoryToken: Token | null = null;
 
   const getToken = () => {
+    if (!isClient) {
+      return;
+    }
+
     if (
       window.localStorage.getItem("accessToken") &&
       inMemoryToken === null &&
@@ -17,15 +23,15 @@ const JWTManager = () => {
   };
 
   const setToken = (token: Token) => {
-    window.localStorage.setItem("accessToken", token.accessToken);
-    window.localStorage.setItem("refreshToken", token.refreshToken);
+    isClient && window.localStorage.setItem("accessToken", token.accessToken);
+    isClient && window.localStorage.setItem("refreshToken", token.refreshToken);
     inMemoryToken = token;
   };
 
   const deleteToken = () => {
     inMemoryToken = null;
-    window.localStorage.removeItem("accessToken");
-    window.localStorage.removeItem("refreshToken");
+    isClient && window.localStorage.removeItem("accessToken");
+    isClient && window.localStorage.removeItem("refreshToken");
   };
 
   return {

@@ -1,6 +1,6 @@
 import axiosClient from "../libs/axiosClient";
 
-export default {
+const AuthService = {
   login: (data: AccountLogin) => axiosClient.post<Token>(`/auth/login`, data),
   logout: () => axiosClient.put<string>("/auth/logout"),
   refreshToken: (refreshToken: string) =>
@@ -9,4 +9,10 @@ export default {
     }),
   register: (data: AccountRegister) =>
     axiosClient.post<string>(`/auth/register`, data),
+  forgetPassword: (email: string) =>
+    axiosClient.post<string>(`/auth/forget-password`, {
+      email,
+    }),
 };
+
+export default AuthService;

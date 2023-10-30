@@ -10,16 +10,19 @@ import {
   EffectCards,
   Autoplay,
 } from "swiper/modules";
-import { Link, useNavigate } from "react-router-dom";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import themeStore from "@/shared/stores/themeStore";
-import { toast } from "react-toastify";
 import TextAnimation from "@/shared/components/animations/TextAnimation";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import Image from "next/image";
+import { toast } from "react-toastify";
+import { reduceQualityImage } from "@/shared/helpers/helpers";
 
 const SlideComics = () => {
+  const router = useRouter();
   const [comics, setComics] = useState<Comic[]>([]);
-  const [currentComic, setCurrentComic] = useState<Comic | null>(null);
-  const navigate = useNavigate();
+  const [currentComic, setCurrentComic] = useState<Comic>(comics[0]);
   const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
@@ -40,16 +43,16 @@ const SlideComics = () => {
 
   return (
     <div
-      className={`bg-${themeStore.getOppositeTheme()} text-${theme} rounded-xl flex items-center mobile:flex-col-reverse justify-center h-max p-10`}
+      className={`bg-${themeStore.getOppositeTheme()} text-${theme} rounded-xl flex items-center mobile:flex-col-reverse justify-between h-max p-10`}
     >
       {currentComic && (
         <div className="flex flex-col px-10 w-max gap-5 mobile:w-fit mobile:mt-4">
-          <h1
+          <h2
             className="font-bold desktop:text-4xl mobile:text-xl"
             title={currentComic.name}
           >
             <TextAnimation text={currentComic.name} />
-          </h1>
+          </h2>
           <h2
             className="line-clamp-4 mobile:text-sm"
             title={currentComic.briefDescription}
@@ -57,14 +60,20 @@ const SlideComics = () => {
           ></h2>
           <div className="flex gap-2 flex-wrap">
             {currentComic.genres.map((genre) => (
-              <Link to={"/"} key={genre} className="capitalize">
+              <Link
+                hrefLang="vi"
+                href={`/tim-kiem?filterGenres=${genre.toLocaleLowerCase()}`}
+                key={genre}
+                className="capitalize"
+                rel="preload"
+              >
                 <Chip label={genre} />
               </Link>
             ))}
           </div>
           <div
             className="btn-primary w-fit"
-            onClick={() => navigate(`/truyen/${currentComic.slug}`)}
+            onClick={() => router.push(`/truyen/${currentComic.slug}`)}
           >
             Đọc ngay
           </div>
@@ -97,11 +106,14 @@ const SlideComics = () => {
           grabCursor={true}
           className="mobile:max-w-[300px] w-[500px]"
         >
-          {comics.map((comic) => (
+          {comics.slice(0, 5).map((comic) => (
             <SwiperSlide key={comic.id}>
               <div className="flex items-center justify-center">
-                <img
-                  src={comic.thumb}
+                <Image
+                  priority
+                  width={300}
+                  height={400}
+                  src={reduceQualityImage(comic.thumb)}
                   alt={comic.name}
                   className="w-[300px] max-h-[400px] object-cover mobile:w-[200px]"
                 />

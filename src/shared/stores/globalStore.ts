@@ -1,13 +1,13 @@
 import { create } from "zustand";
 
-interface GlobalState {
+interface globalStore {
   isLogined: boolean;
   setIsLogined: (data: boolean) => void;
   isLight: boolean;
   setIsLight: (data: boolean) => void;
 }
 
-export const globalState = create<GlobalState>((set) => ({
+export const globalStore = create<globalStore>((set) => ({
   isLogined: false,
   setIsLogined: (data) =>
     set((state) => ({

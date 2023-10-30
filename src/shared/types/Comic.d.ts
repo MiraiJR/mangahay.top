@@ -15,5 +15,7 @@ type Comic = {
   creator: number;
   createdAt: Date;
   updatedAt: Date;
+  translators: string[];
   newestChapter?: Chapter;
+  chapters?: Chapter[];
 };

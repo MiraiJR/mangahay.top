@@ -3,20 +3,25 @@ import meService from "../services/meService";
 import authService from "../services/authService";
 import jwt from "../libs/jwt";
 import { toast } from "react-toastify";
-import { globalState } from "../stores/globalStore";
+import { globalStore } from "../stores/globalStore";
 import { Bell } from "lucide-react";
 import { Badge } from "primereact/badge";
 import ListNotifies from "./ListNotifies";
 import themeStore from "../stores/themeStore";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { reduceQualityImage } from "../helpers/helpers";
 
 const LoginedUser = () => {
   const elementRef = useRef<any>(null);
   const notifyRef = useRef<any>(null);
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [notifies, setNotifies] = useState<Notify[]>([]);
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [showListNotifies, setShowListNotifies] = useState<boolean>(false);
-  const { setIsLogined } = globalState();
+  const { setIsLogined } = globalStore();
   const [theNumberOfUnredNotifies, setTheNumberOfUnredNotifies] =
     useState<number>(0);
   useEffect(() => {
@@ -76,6 +81,7 @@ const LoginedUser = () => {
       jwt.deleteToken();
       setIsLogined(false);
       toast.success(data);
+      router.push("/");
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -112,27 +118,44 @@ const LoginedUser = () => {
         )}
       </div>
       <div ref={elementRef}>
-        <img
-          className="mobile:w-[40px] w-[50px] rounded"
-          src={user?.avatar}
-          alt={user?.fullname}
-          onClick={() => {
-            setShowMenu(!showMenu);
-          }}
-        />
+        {user && (
+          <Image
+            width={50}
+            height={0}
+            className="mobile:w-[40px] w-[50px] h-[50px] object-cover rounded"
+            src={reduceQualityImage(user.avatar)}
+            alt={user.fullname}
+            onClick={() => {
+              setShowMenu(!showMenu);
+            }}
+          />
+        )}
         {showMenu && (
           <div
-            className={`rounded-sm p-4 z-10 shadow-outer-lg-${themeStore.getOppositeTheme()} absolute top-max right-0 flex items-center text-center bg-${themeStore.getTheme()} w-max`}
+            style={{ zIndex: "9999" }}
+            className={`rounded-sm p-4 shadow-outer-lg-${themeStore.getOppositeTheme()} absolute top-max right-0 flex items-center text-center bg-${themeStore.getTheme()} w-max`}
           >
             <ul className="flex flex-col">
-              <li className="p-2 hover:bg-slate-400">Thông tin cá nhân</li>
-              {user?.role === "admin" && (
-                <a href="/quan-ly" className="p-2 hover:bg-slate-400">
-                  Đăng truyện
-                </a>
+              {user && (
+                <Link
+                  rel="preload"
+                  href="/me"
+                  className="p-2 hover:bg-slate-400"
+                  hrefLang="vi"
+                >
+                  Thông tin cá nhân
+                </Link>
               )}
-              <li className="p-2 hover:bg-slate-400">Thông báo</li>
-              <li className="p-2 hover:bg-slate-400">Truyện đang theo dõi</li>
+              {user?.role === "admin" && (
+                <Link
+                  rel="preload"
+                  href="/quan-ly"
+                  className="p-2 hover:bg-slate-400"
+                  hrefLang="vi"
+                >
+                  Đăng truyện
+                </Link>
+              )}
               <li className="p-2 hover:bg-slate-400" onClick={handleLogout}>
                 Đăng xuất
               </li>

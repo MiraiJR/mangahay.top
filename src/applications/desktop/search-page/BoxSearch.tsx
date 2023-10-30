@@ -10,6 +10,7 @@ import themeStore from "@/shared/stores/themeStore";
 interface itemProps {
   setComics: any;
   selectedGenres: string[];
+  selectedAuthor: string | null;
   resultRef: any;
 }
 
@@ -22,10 +23,17 @@ interface OptionSort {
   code: string;
 }
 
-const BoxSearch = ({ setComics, selectedGenres, resultRef }: itemProps) => {
+const BoxSearch = ({
+  setComics,
+  selectedGenres,
+  selectedAuthor,
+  resultRef,
+}: itemProps) => {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [comicName, setComicName] = useState<string>("");
-  const [filterAuthor, setFilterAuthor] = useState<string>("");
+  const [filterAuthor, setFilterAuthor] = useState<string>(
+    selectedAuthor ?? ""
+  );
   const [filterState, setFilterState] = useState<OptionStatus | null>(null);
   const [filterSort, setFilterSort] = useState<OptionSort | null>(null);
   const [filterGenres, setFilterGenres] = useState<string[]>(
@@ -65,7 +73,9 @@ const BoxSearch = ({ setComics, selectedGenres, resultRef }: itemProps) => {
   ];
 
   useEffect(() => {
+    setFilterAuthor(selectedAuthor ?? "");
     setFilterGenres(selectedGenres);
+
     const getGenres = async () => {
       try {
         const { data } = await comicService.getGenres();
@@ -79,6 +89,7 @@ const BoxSearch = ({ setComics, selectedGenres, resultRef }: itemProps) => {
       try {
         const { data } = await await comicService.searchComics({
           filterGenres: selectedGenres,
+          filterAuthor: selectedAuthor ?? "",
         });
 
         setComics(data.comics);
@@ -88,11 +99,8 @@ const BoxSearch = ({ setComics, selectedGenres, resultRef }: itemProps) => {
     };
 
     getGenres();
-
-    if (selectedGenres.length !== 0) {
-      searchComics();
-    }
-  }, [selectedGenres]);
+    searchComics();
+  }, [selectedGenres, selectedAuthor]);
 
   const onIngredientsChange = (e: CheckboxChangeEvent) => {
     let _filterGenres = [...filterGenres];
@@ -104,16 +112,30 @@ const BoxSearch = ({ setComics, selectedGenres, resultRef }: itemProps) => {
   };
 
   const handleSearchComic = async () => {
-    window.history.pushState(
-      {},
-      "",
-      `?${comicName !== "" ? `comicName=${comicName}` : ""}&${
-        filterAuthor.length !== 0 ? `filterAuthor=${filterAuthor}` : ""
-      }&${filterGenres.length !== 0 ? `filterGenres=${filterGenres}` : ""}
-      &${filterState ? `filterState=${filterState?.name}` : ""}&${
-        filterSort ? `filterSort=${filterSort?.code}` : ""
-      }`
-    );
+    let params = "?";
+
+    if (comicName !== "") {
+      params += `comicName=${comicName}`;
+    }
+
+    if (filterAuthor.length !== 0) {
+      params += `filterAuthor=${filterAuthor}`;
+    }
+    if (filterGenres.length !== 0) {
+      params += `filterGenres=${filterGenres}`;
+    }
+    if (filterState) {
+      params += `filterState=${filterState?.name}`;
+    }
+    if (filterSort) {
+      params += `filterSort=${filterSort?.code}`;
+    }
+
+    if (params === "?") {
+      params = "";
+    }
+
+    window.history.pushState({}, "", params);
 
     try {
       const { data } = await comicService.searchComics({
@@ -125,7 +147,10 @@ const BoxSearch = ({ setComics, selectedGenres, resultRef }: itemProps) => {
       });
 
       setComics(data.comics);
-      resultRef.current.scrollIntoView({ behavior: "smooth" });
+      resultRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -135,13 +160,13 @@ const BoxSearch = ({ setComics, selectedGenres, resultRef }: itemProps) => {
     <div
       className={`bg-${themeStore.getTheme()} border border-${themeStore.getOppositeTheme()} text-${themeStore.getOppositeTheme()} p-4`}
     >
-      <h1
+      <div
         title="Tìm kiếm truyện"
         className="flex gap-2 items-center text-xl font-bold mobile:text-lg "
       >
         <i className="pi pi-search"></i>
         <span>Tìm kiếm truyện</span>
-      </h1>
+      </div>
       <Divider type="solid" />
       <div className="flex items-center">
         <input
@@ -163,7 +188,7 @@ const BoxSearch = ({ setComics, selectedGenres, resultRef }: itemProps) => {
         onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
       >
         <i className="pi pi-filter-fill"></i>
-        <h1 title="Tìm kiếm truyện">Tìm kiếm nâng cao</h1>
+        <div title="Tìm kiếm truyện">Tìm kiếm nâng cao</div>
       </div>
       {showAdvancedSearch && (
         <div className="grid grid-cols-2 mobile:grid-cols-1 gap-2">
@@ -208,7 +233,7 @@ const BoxSearch = ({ setComics, selectedGenres, resultRef }: itemProps) => {
             </div>
           </div>
           <div>
-            <h1 className="font-bold mb-4">Thể loại</h1>
+            <h2 className="font-bold mb-4">Thể loại</h2>
             <div className="grid grid-cols-4 mobile:grid-cols-3 gap-2">
               {genres.map((genre) => (
                 <div

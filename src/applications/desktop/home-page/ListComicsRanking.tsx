@@ -2,23 +2,28 @@ import CardRanking from "@/shared/components/card/CardRanking";
 import comicService from "@/shared/services/comicService";
 import { ChevronsRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import EmptyImage from "@/shared/assets/empty.png";
+import EmptyImage from "@/shared/assets/empty.webp";
 import themeStore from "@/shared/stores/themeStore";
 import { toast } from "react-toastify";
+import Image from "next/image";
+import Link from "next/link";
 
 interface itemProps {
   title: string;
   field: string;
+  amountComic: number;
 }
 
-const ListComicsRanking = ({ title, field }: itemProps) => {
+const ListComicsRanking = ({ title, field, amountComic }: itemProps) => {
   const [comics, setComics] = useState<Comic[]>([]);
 
   useEffect(() => {
     const getComics = async () => {
       try {
-        const { data } = await comicService.getRankingComics(field, 5);
+        const { data } = await comicService.getRankingComics(
+          field,
+          amountComic
+        );
         setComics(data);
       } catch (error: any) {
         toast.error(error.message);
@@ -30,19 +35,24 @@ const ListComicsRanking = ({ title, field }: itemProps) => {
   return (
     <div>
       <div className="my-4 flex justify-between items-center text-xl">
-        <h1
+        <div
           className={`font-bold text-2xl mobile:text-xl text-${themeStore.getOppositeTheme()}`}
         >
           {title}
-        </h1>
-        <Link className="flex items-center text-red-400" to={""}>
+        </div>
+        <Link
+          rel="preload"
+          className="flex items-center text-red-400"
+          href={""}
+          hrefLang="vi"
+        >
           <span className="text-sm not-italic">Xem thêm</span>
           <ChevronsRight size={20} />
         </Link>
       </div>
       {comics.length === 0 ? (
         <div className="text-center flex flex-col items-center justify-center">
-          <img width={200} src={EmptyImage} alt="Không có truyện" />
+          <Image priority width={200} src={EmptyImage} alt="Không có truyện" />
           <span>Không có truyện</span>
         </div>
       ) : (

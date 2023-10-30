@@ -8,11 +8,11 @@ const ListChapters = ({ chapters }: itemProps) => {
   return (
     <div>
       <div className="border-s-4 border-orange-500 pl-4 font-bold">
-        <h1
+        <div
           className={`text-2xl mobile:text-xl text-${themeStore.getOppositeTheme()}`}
         >
           Danh sách chương ({chapters.length})
-        </h1>
+        </div>
       </div>
       <div className="grid grid-cols-3 mobile:grid-cols-2 gap-3 mt-5 max-h-[800px] overflow-y-scroll">
         {chapters.map((chapter) => (

@@ -3,8 +3,8 @@ import comicService from "@/shared/services/comicService";
 import themeStore from "@/shared/stores/themeStore";
 import { ChevronsRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 interface itemProps {
   title: string;
@@ -35,13 +35,18 @@ const ListComicsOfAuthor = ({ title, author }: itemProps) => {
   return (
     <div>
       <div className="my-4 flex justify-between items-center text-xl">
-        <h1
+        <div
           className={`font-bold text-2xl mobile:text-xl text-${themeStore.getOppositeTheme()}`}
           title={`truyện tác giả ${author}`}
         >
           {title}
-        </h1>
-        <Link className="flex items-center text-red-400" to={""}>
+        </div>
+        <Link
+          rel="preload"
+          className="flex items-center text-red-400"
+          href={""}
+          hrefLang="vi"
+        >
           <span className="text-sm not-italic">Xem thêm</span>
           <ChevronsRight size={20} />
         </Link>

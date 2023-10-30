@@ -21,7 +21,7 @@ axiosClient.interceptors.response.use(
   (response) => {
     return response;
   },
-  async (error: any) => {
+  async (error) => {
     const originalRequest = error.config;
     if (
       originalRequest.url === "/auth/refresh-token" &&
@@ -31,13 +31,22 @@ axiosClient.interceptors.response.use(
       return axios(originalRequest);
     }
 
-    if (error.response.data.statusCode === 401 && jwt.getToken()) {
+    if (
+      (error.response.data.statusCode === 401 ||
+        error.response.data.statusCode === 403) &&
+      jwt.getToken()
+    ) {
       const token = jwt.getToken();
 
       if (token) {
         try {
           const { data } = await authService.refreshToken(token.refreshToken);
           jwt.setToken(data);
+
+          axiosClient.defaults.headers.common["Authorization"] =
+            "Bearer " + data.accessToken;
+          originalRequest.headers["Authorization"] =
+            "Bearer " + data.accessToken;
           return axios(originalRequest);
         } catch (error) {
           jwt.deleteToken();

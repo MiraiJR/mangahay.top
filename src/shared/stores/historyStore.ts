@@ -1,9 +1,12 @@
+const isClient = typeof window !== "undefined";
+
 const HistoryStoreManager = () => {
   let historyComics: Comic[] = [];
   const HISTORY_COMICS_STORAGE = "historyComics";
 
   const getHistoryComics = () => {
-    const storage = window.localStorage.getItem(HISTORY_COMICS_STORAGE);
+    const storage =
+      isClient && window.localStorage.getItem(HISTORY_COMICS_STORAGE);
     if (storage) {
       historyComics = JSON.parse(storage) ?? [];
     }
@@ -21,16 +24,17 @@ const HistoryStoreManager = () => {
     }
 
     historyComics.push(comic);
-    window.localStorage.setItem(
-      HISTORY_COMICS_STORAGE,
-      JSON.stringify(historyComics)
-    );
-    historyComics = historyComics;
+    isClient &&
+      window.localStorage.setItem(
+        HISTORY_COMICS_STORAGE,
+        JSON.stringify(historyComics)
+      );
+    historyComics = [...historyComics];
   };
 
   const deleteHistoryComics = () => {
     historyComics = [];
-    window.localStorage.removeItem(HISTORY_COMICS_STORAGE);
+    isClient && window.localStorage.removeItem(HISTORY_COMICS_STORAGE);
   };
 
   return {

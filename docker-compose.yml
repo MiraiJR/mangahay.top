@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  frontend:
+    build: .
+    container_name: comic_mangahay_fe
+    env_file:
+      - .env
+    ports:
+      - '3001:3001'

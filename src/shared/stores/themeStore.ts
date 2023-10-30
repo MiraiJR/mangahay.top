@@ -1,11 +1,14 @@
 import { Theme } from "../contexts/ThemeContext";
 
+const isClient = typeof window !== "undefined";
+
 const ThemeStoreManager = () => {
   let theme: Theme = "light";
   const THEME_STORAGE = "theme";
 
   const getTheme = () => {
-    const themeTemp = window.localStorage.getItem(THEME_STORAGE) as Theme;
+    const themeTemp =
+      isClient && (window.localStorage.getItem(THEME_STORAGE) as Theme);
     if (themeTemp) {
       theme = themeTemp;
     }
@@ -15,7 +18,7 @@ const ThemeStoreManager = () => {
 
   const changeTheme = () => {
     const themeTemp = theme === "light" ? "dark" : "light";
-    window.localStorage.setItem(THEME_STORAGE, themeTemp);
+    isClient && window.localStorage.setItem(THEME_STORAGE, themeTemp);
     theme = themeTemp;
   };
 

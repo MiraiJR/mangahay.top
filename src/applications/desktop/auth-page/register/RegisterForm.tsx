@@ -1,11 +1,13 @@
-import LoginImage from "@/shared/assets/login.png";
+import LoginImage from "@/shared/assets/login.webp";
 import authService from "@/shared/services/authService";
 import themeStore from "@/shared/stores/themeStore";
 import { InputText } from "primereact/inputtext";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const title = "Đăng ký";
 
@@ -15,6 +17,7 @@ const RegisterForm = () => {
   const [email, setEmail] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [fullname, setFullname] = useState<string>("");
+  const router = useRouter();
 
   const handleRegister = async () => {
     try {
@@ -38,7 +41,7 @@ const RegisterForm = () => {
       });
 
       toast.success(data);
-      window.location.href = "/dang-nhap";
+      router.push("/dang-nhap");
     } catch (error: any) {
       setErrorMessage(error.message);
     }
@@ -52,18 +55,19 @@ const RegisterForm = () => {
         <meta property="og:type" content="website"></meta>
       </Helmet>
       <div className="flex justify-center items-center">
-        <img
-          className="mr-2 mobile:hidden"
+        <Image
+          priority
+          className="mobile:hidden"
           src={LoginImage}
-          alt="Đăng nhập"
+          alt="Đăng ký"
           width={300}
         />
         <div className="flex flex-col gap-4">
-          <h1
+          <div
             className={`text-center text-4xl font-bold mb-5 text-${themeStore.getOppositeTheme()}`}
           >
             {title.toLocaleUpperCase()}
-          </h1>
+          </div>
           {errorMessage && (
             <small id="username-help" className="text-red-400">
               {errorMessage}
@@ -155,7 +159,9 @@ const RegisterForm = () => {
           </div>
           <div className="flex justify-between">
             <Link
-              to={"/dang-nhap"}
+              hrefLang="vi"
+              rel="preload"
+              href={"/dang-nhap"}
               className="text-red-600 font-bold float-right"
             >
               Đăng nhập

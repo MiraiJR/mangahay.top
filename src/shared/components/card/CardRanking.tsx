@@ -1,5 +1,6 @@
 import { cn } from "@/shared/libs/utils";
 import themeStore from "@/shared/stores/themeStore";
+import Link from "next/link";
 
 interface itemProps {
   comic: Comic;
@@ -21,24 +22,25 @@ const CardRanking = ({ comic, position, isRanking }: itemProps) => {
         </div>
       )}
       <div className="col-span-11 capitalize">
-        <a href={`/truyen/${comic.slug}`} hrefLang="vi">
-          <h1
+        <a rel="preload" href={`/truyen/${comic.slug}`} hrefLang="vi">
+          <h2
             className={`font-bold line-clamp-1 text-${themeStore.getOppositeTheme()}`}
             title={comic.name}
           >
             {comic.name}
-          </h1>
+          </h2>
         </a>
         <a
+          rel="preload"
           href={`/truyen/${comic.slug}/${comic.newestChapter?.slug}`}
           hrefLang="vi"
         >
-          <h1
+          <h2
             className={`font-light line-clamp-1 text-${themeStore.getOppositeTheme()}`}
             title={comic.newestChapter?.name}
           >
             {comic.newestChapter?.name}
-          </h1>
+          </h2>
         </a>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { formatDate } from "@/shared/helpers/helpers";
+import { formatDate, reduceQualityImage } from "@/shared/helpers/helpers";
 import { Avatar } from "primereact/avatar";
 import CardAnswer from "./CardAnswer";
 import themeStore from "@/shared/stores/themeStore";
@@ -9,15 +9,19 @@ interface itemProps {
 const CardComment = ({ comment }: itemProps) => {
   return (
     <div className="flex gap-4">
-      <Avatar image={comment.user.avatar} label="P" size="xlarge" />
+      <Avatar
+        image={reduceQualityImage(comment.user.avatar)}
+        label="P"
+        size="xlarge"
+      />
       <div className="flex flex-col w-[100%]">
         <div className="flex justify-between">
-          <h1
+          <h2
             className={`font-bold text-lg mobile:text-sm text-${themeStore.getOppositeTheme()}`}
             title={comment.user.fullname}
           >
             {comment.user.fullname}
-          </h1>
+          </h2>
           <h2
             className={`text-right mobile:text-sm text-${themeStore.getOppositeTheme()}`}
           >

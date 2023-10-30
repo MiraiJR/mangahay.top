@@ -1,7 +1,12 @@
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { cn } from "@/shared/libs/utils";
 import themeStore from "@/shared/stores/themeStore";
+import Image from "next/image";
+import Link from "next/link";
 import { Rating } from "primereact/rating";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
+import { Skeleton } from "primereact/skeleton";
+import { reduceQualityImage } from "@/shared/helpers/helpers";
 
 interface itemProps {
   comic: Comic;
@@ -67,44 +72,57 @@ const CardComic = ({ comic }: itemProps) => {
       previewComicElement.style.zIndex = "1000";
     }
   };
+
+  useEffect(() => {}, [comic]);
+
   return (
     <div
       className={`flex flex-col capitalize text-${themeStore.getOppositeTheme()}`}
     >
-      <a
+      <Link
+        rel="preload"
         hrefLang="vi"
         href={`/truyen/${comic.slug}`}
         onMouseMove={(e: any) => openPreviewComic(e)}
         onMouseLeave={() => setIsOpenPreview(false)}
         lang="vi"
       >
-        <img
-          className="w-[100%] object-cover max-h-[250px] mobile:max-h-[140px]"
-          src={comic.thumb}
+        <Image
+          loading="lazy"
+          height={100}
+          width={100}
+          className="w-[100%] object-cover h-[280px] mobile:max-h-[200px]"
+          src={reduceQualityImage(comic.thumb)}
           alt={comic.name}
         />
-      </a>
-      <a hrefLang="vi" href={`/truyen/${comic.slug}`} lang="vi">
-        <h1
+      </Link>
+      <Link
+        rel="preload"
+        hrefLang="vi"
+        href={`/truyen/${comic.slug}`}
+        lang="vi"
+      >
+        <h2
           className={`text-center font-bold line-clamp-2 mobile:text-sm text-${themeStore.getOppositeTheme()}`}
           title={comic.name}
         >
           {comic.name}
-        </h1>
-      </a>
+        </h2>
+      </Link>
       {comic.newestChapter && (
-        <a
+        <Link
+          rel="preload"
           hrefLang="vi"
           href={`/truyen/${comic.slug}/${comic.newestChapter.slug}`}
           lang="vi"
         >
-          <h1
+          <h3
             className={`text-${themeStore.getOppositeTheme()} line-clamp-1 mobile:text-sm`}
             title={comic.newestChapter.name}
           >
             {comic.newestChapter.name}
-          </h1>
-        </a>
+          </h3>
+        </Link>
       )}
       <div className="flex justify-between items-center">
         <div className="mobile:hidden">

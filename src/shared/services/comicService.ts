@@ -1,6 +1,6 @@
 import axiosClient from "../libs/axiosClient";
 
-export default {
+const ComicService = {
   getComics: (paging: Paging) =>
     axiosClient.get<PagingComicsResponse>(`/comics`, {
       params: paging,
@@ -42,13 +42,26 @@ export default {
         "content-type": "multipart/form-data",
       },
     }),
-  crawlChapterOnFacebook: (
+  crawlChapter: (
     comicId: number,
     urlPost: string,
-    nameChapter: string
+    nameChapter: string,
+    querySelector: string,
+    attribute: string
   ) =>
-    axiosClient.post<string>(`/comics/${comicId}/crawl-comic`, {
+    axiosClient.post<string>(`/comics/${comicId}/crawl-chapter`, {
       urlPost,
       nameChapter,
+      querySelector,
+      attribute,
     }),
+  getComicsCreatedByMe: () => axiosClient.get<Comic[]>(`/comics/created-by-me`),
+  createChapter: (comicId: number, formdata: FormData) =>
+    axiosClient.post<string>(`/comics/${comicId}/chapters`, formdata, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    }),
+  getComicsWithChapters: () => axiosClient.get<Comic[]>(`/comics/chapters`),
 };
+export default ComicService;

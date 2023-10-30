@@ -1,48 +1,54 @@
-import { useEffect, useRef, useState } from "react";
-import BoxSearch from "./BoxSearch";
-import ListComics from "./ListComics";
-import { Helmet } from "react-helmet";
+import { useContext, useEffect, useRef, useState } from "react";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import dynamic from "next/dynamic";
+import MyLoading from "@/shared/components/MyLoading";
+import MetaTags from "@/shared/components/MetaTags";
+
+const BoxSearch = dynamic(() => import("./BoxSearch"));
+const ListComics = dynamic(() => import("./ListComics"));
 
 const SearchPage = () => {
   const resultRef = useRef<any>(null);
-  const [comics, setComics] = useState<Comic[]>([]);
+  const [comics, setComics] = useState<Comic[] | null>(null);
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+  const [selectedAuthor, setSelectedAuthor] = useState<string | null>(null);
+  const {} = useContext(ThemeContext);
 
   useEffect(() => {
     const currentUrl = new URL(window.location.href);
     const genres =
       currentUrl.searchParams.get("filterGenres")?.split(",") ?? [];
+    const author = currentUrl.searchParams.get("filterAuthor") ?? null;
+
+    if (author) {
+      setSelectedAuthor(author);
+    }
+
     setSelectedGenres(genres);
   }, []);
 
   return (
     <div>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>{`Tìm kiếm truyện`}</title>
-        <meta
-          name="description"
-          content="Web đọc truyện tranh online lớn nhất được cập nhật liên tục mỗi ngày. Đa dạng thể loại từ manga (truyện Nhật), manhwa (truyện Hàn), manhua (Truyện trung)."
-        />
-        <meta
-          name="keywords"
-          content="1 tranh online1 mangahay truyn1 tranh mi1 nhtng nhptt1 truyn quyn1 manghaytop1 quyn1 manghaytop1 c truyn tranh1 online mangahay truyn1 tranh mi nhtng1 nhptt truyn quyn1 manghaytop1 manghaytop1 quyn1 manghaytop1 c truyn tranh online1 mangahay truyn tranh mi1 nhtng nhptt truyn quyn1 manghaytop1 manghaytop1 manghaytop1 quyn1 manghaytop"
-        />
-        <meta
-          property="og:title"
-          content="Đọc truyện tranh online - Mangahay - Truyện tranh mới nhất"
-        />
-        <meta property="og:site_name" content="MangaHay"></meta>
-        <meta property="og:type" content="website"></meta>
-        <meta property="og:url" content="https://mangahay.top"></meta>
-      </Helmet>
+      <MetaTags
+        title={"Tìm kiếm truyện"}
+        description={
+          "Web đọc truyện tranh online lớn nhất được cập nhật liên tục mỗi ngày. Đa dạng thể loại từ manga (truyện Nhật), manhwa (truyện Hàn), manhua (Truyện trung)."
+        }
+        image={""}
+        url={"https://mangahay.top/tim-kiem"}
+      />
       <BoxSearch
         resultRef={resultRef}
         setComics={setComics}
         selectedGenres={selectedGenres}
+        selectedAuthor={selectedAuthor}
       />
       <div ref={resultRef}>
-        <ListComics title="Kết quả tìm kiếm" comics={comics} />
+        {comics ? (
+          <ListComics title="Kết quả tìm kiếm" comics={comics} />
+        ) : (
+          <MyLoading />
+        )}
       </div>
     </div>
   );

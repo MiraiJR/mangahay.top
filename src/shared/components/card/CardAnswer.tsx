@@ -10,9 +10,9 @@ const CardAnswer = ({ answer }: itemProps) => {
       <Avatar image={answer.user.avatar} label="P" size="xlarge" />
       <div className="flex flex-col w-[100%]">
         <div className="flex justify-between">
-          <h1 className="font-bold text-lg" title={answer.user.fullname}>
+          <h2 className="font-bold text-lg" title={answer.user.fullname}>
             {answer.user.fullname}
-          </h1>
+          </h2>
           <h2 className="text-right">{formatDate(answer.updatedAt)}</h2>
         </div>
         <h2 title={answer.content}>

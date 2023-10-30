@@ -1,34 +1,40 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import themeStore from "@/shared/stores/themeStore";
+import Image from "next/image";
 import { Rating } from "primereact/rating";
-import { useContext } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import { reduceQualityImage } from "@/shared/helpers/helpers";
 
 interface itemProps {
   comic: Comic;
 }
 
 const CardHighlightComic = ({ comic }: itemProps) => {
-  const { theme } = useContext(ThemeContext);
-
   return (
     <div
-      className={`bg-${themeStore.getOppositeTheme()} p-6 text-${theme} text-sm flex flex-col gap-2`}
+      className={`bg-${themeStore.getOppositeTheme()} p-6 text-${themeStore.getTheme()} text-sm flex flex-col gap-2`}
     >
       <Link
-        to={`/truyen/${comic.slug}`}
+        rel="preload"
+        href={`/truyen/${comic.slug}`}
         lang="vi"
         className="flex items-center justify-center"
       >
-        <img className="mobile:w-[150px]" src={comic.thumb} alt={comic.name} />
+        <Image
+          loading="lazy"
+          width={0}
+          height={0}
+          className="mobile:w-[150px] w-[100%]"
+          src={reduceQualityImage(comic.thumb)}
+          alt={comic.name}
+        />
       </Link>
-      <Link to={`/truyen/${comic.slug}`} lang="vi">
-        <h1
+      <Link rel="preload" href={`/truyen/${comic.slug}`} lang="vi">
+        <h2
           className="text-center capitalize font-bold text-xl mobile:text-sm"
           title={comic.name}
         >
           {comic.name}
-        </h1>
+        </h2>
       </Link>
       <div className="flex justify-between">
         <Rating value={comic.star} cancel={false} readOnly />
@@ -36,25 +42,41 @@ const CardHighlightComic = ({ comic }: itemProps) => {
       </div>
       <div className="flex flex-wrap items-center justify-center">
         {comic.genres.map((genre, _index) => (
-          <Link to={""} className="flex flex-wrap m-1" key={_index} lang="vi">
-            <span className="p-1 bg-white text-black rounded-md" title={genre}>
+          <Link
+            rel="preload"
+            href={""}
+            className="flex flex-wrap m-1"
+            key={_index}
+            lang="vi"
+          >
+            <span
+              className="p-1 bg-white text-black rounded-md capitalize"
+              title={genre}
+            >
               {genre}
             </span>
           </Link>
         ))}
       </div>
-      <div>
-        <h1>Tác giả:</h1>
-        <div className="flex flex-wrap items-center justify-center">
+      <div className="flex flex-wrap">
+        <h2>Tác giả:</h2>
+        <div className="flex flex-wrap items-center justify-center gap-2">
           {comic.authors.map((author, _index) => (
-            <Link to={""} key={_index} lang="vi">
-              <span title={author}>{author}</span>
+            <Link
+              key={_index}
+              href={`/tim-kiem?filterAuthor=${author}`}
+              className={`bg-${themeStore.getTheme()} rounded-md border border-${
+                themeStore.getOppositeTheme
+              } px-1 capitalize text-${themeStore.getOppositeTheme()}`}
+              rel="preload"
+            >
+              <h2 title={author}>{author}</h2>
             </Link>
           ))}
         </div>
       </div>
       <div>
-        <h1>Mô tả:</h1>
+        <h2>Mô tả:</h2>
         <h2
           className="line-clamp-4"
           title={comic.briefDescription}

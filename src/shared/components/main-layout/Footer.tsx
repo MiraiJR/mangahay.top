@@ -1,13 +1,22 @@
-import LogoWeb from "@/shared/assets/logo.png";
+import LogoWeb from "@/shared/assets/logo.webp";
 import { originalURL } from "@/shared/libs/config";
 import { Facebook, Youtube } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 const Footer = () => {
   return (
     <div className="container mx-auto bg-slate-200 p-5">
       <div className=" flex desktop:items-center desktop:justify-around mobile:flex-col">
         <div className="flex flex-col items-center gap-5 font-medium text-lg">
-          <img className="h-[150px]" src={LogoWeb} alt="" />
+          <Image
+            priority
+            width={0}
+            height={150}
+            className="h-[150px]"
+            src={LogoWeb}
+            alt="mangahay top"
+          />
           <div className="flex gap-5">
             <Facebook size={30} />
             <Youtube size={30} />
@@ -17,146 +26,163 @@ const Footer = () => {
           <div className="font-bold text-lg mobile:text-sm">Từ khoá:</div>
           <ul className="flex flex-wrap gap-2">
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 truyện tranh
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 truyện tranh online
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 đọc truyện tranh
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 đọc truyện hay
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 manga world
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 nettruyen
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 nhattruyen
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 blogtruyen
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 truyentranhlh
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 otakusan
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 toptruyen
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 mi2manga
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 manhwa
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 manhua
-              </a>
+              </Link>
             </li>
             <li className="desktop:btn-primary">
-              <a
+              <Link
+                rel="preload"
                 hrefLang="vi"
-                href={originalURL}
+                href={originalURL ? originalURL : "https://mangahay.top"}
                 className="mobile:text-sm capitalize"
               >
                 manga
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
       </div>
       <div className="flex justify-around mobile:flex-col mt-2">
         <div className="text-center">Bản quyền và thiết kể - MiraiJR</div>
-        <div className="text-center">Liên hệ: truongvanhao159@gmail.com</div>
+        <div className="text-center">
+          Liên hệ: mangahay.manga.noreply@gmail.com
+        </div>
       </div>
     </div>
   );

@@ -1,12 +1,17 @@
 import { cn } from "@/shared/libs/utils";
 import comicService from "@/shared/services/comicService";
 import meService, { TypeComicInteraction } from "@/shared/services/meService";
-import { globalState } from "@/shared/stores/globalStore";
+import { globalStore } from "@/shared/stores/globalStore";
 import themeStore from "@/shared/stores/themeStore";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { Rating, RatingChangeEvent } from "primereact/rating";
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Link from "next/link";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { convertWebpResource } from "@/shared/helpers/helpers";
 
 interface itemProps {
   comic: Comic;
@@ -14,16 +19,18 @@ interface itemProps {
   firstChapter: Chapter | null;
   lastChapter: Chapter | null;
 }
+
 const DescriptionComic = ({
   comic,
   setComic,
   firstChapter,
   lastChapter,
 }: itemProps) => {
+  const {} = useContext(ThemeContext);
   const { slugChapter } = useParams();
   const [scoreStar, setScoreStar] = useState<number>(comic.star);
-  const { isLogined } = globalState();
-  const navigate = useNavigate();
+  const { isLogined } = globalStore();
+  const router = useRouter();
   const [statusInteractComic, setStatusInteraction] =
     useState<StatusInteractWithComic>({
       isEvaluated: false,
@@ -158,39 +165,77 @@ const DescriptionComic = ({
     <div
       className={`grid grid-cols-12 gap-2 text-${themeStore.getOppositeTheme()}`}
     >
-      <img
-        className="col-span-3 shadow-lg p-5 mobile:col-span-12"
-        src={comic.thumb}
+      <Image
+        priority
+        width={0}
+        height={0}
+        className="col-span-3 shadow-lg p-5 mobile:col-span-12 w-[100%] max-h-[800px] object-cover object-top"
+        src={convertWebpResource(comic.thumb)}
         alt={comic.name}
       />
       <div className="col-span-7 flex flex-col gap-4 mobile:col-span-12 mobile:mx-4">
-        <h1
-          className="font-bold text-2xl mobile:flex mobile:flex-col gap-2"
-          title={comic.name}
-        >
-          <span>{comic.name}</span>
+        <div className="mobile:flex mobile:flex-col gap-2">
+          <h1 className="font-bold text-2xl" title={comic.name}>
+            <span>{comic.name}</span>
+          </h1>
           <span
             className="text-sm font-thin text-yellow-500 ml-1"
             title={comic.state}
           >
             {comic.state}
           </span>
-        </h1>
+        </div>
+        <div className="flex flex-wrap gap-2 items-center mobile:flex-col mobile:items-start">
+          <h2 className="font-bold">Tên khác:</h2>
+          <span>{comic.anotherName}</span>
+        </div>
         <div className="flex gap-2 items-center mobile:flex-col mobile:items-start">
-          <h1 className="font-bold">Tác giả:</h1>
+          <h2 className="font-bold">Tác giả:</h2>
           <ul className="flex ">
             {comic.authors.map((author, _index) => (
-              <Link key={_index} to={""} className="mr-5 ">
-                <h2 title={author}>{author},</h2>
+              <Link
+                key={_index}
+                href={`/tim-kiem?filterAuthor=${author}`}
+                className={`bg-${themeStore.getTheme()} rounded-md border border-${
+                  themeStore.getOppositeTheme
+                } px-1 capitalize`}
+                rel="preload"
+              >
+                <h2 title={author}>{author}</h2>
               </Link>
             ))}
           </ul>
         </div>
         <div className="flex gap-2 items-center mobile:flex-col mobile:items-start">
-          <h1 className="font-bold">Thể loại:</h1>
+          <h2 className="font-bold">Nhóm dịch:</h2>
+          <ul className="flex flex-wrap gap-2">
+            {comic.translators.length === 0 ? (
+              <div>Đang cập nhật</div>
+            ) : (
+              comic.translators.map((translator, _index) => (
+                <Link
+                  key={_index}
+                  href={`/nhom-dich/${translator}`}
+                  className={`font-bold bg-${themeStore.getTheme()} text-red-600 rounded-md border border-${
+                    themeStore.getOppositeTheme
+                  } px-1 capitalize`}
+                  rel="preload"
+                >
+                  <h2 title={translator}>{translator}</h2>
+                </Link>
+              ))
+            )}
+          </ul>
+        </div>
+        <div className="flex gap-2 items-center mobile:flex-col mobile:items-start">
+          <h2 className="font-bold">Thể loại:</h2>
           <ul className="flex gap-1 flex-wrap">
             {comic.genres.map((genre, _index) => (
-              <Link key={_index} to={""}>
+              <Link
+                key={_index}
+                href={`/tim-kiem?filterGenres=${genre.toLocaleLowerCase()}`}
+                rel="preload"
+              >
                 <h2
                   title={genre}
                   className={`bg-${themeStore.getTheme()} rounded-md border border-${
@@ -203,17 +248,17 @@ const DescriptionComic = ({
             ))}
           </ul>
         </div>
-        <h1
-          className={`line-clamp-4 line`}
+        <h2
+          // className={`line-clamp-4 line`}
           title={comic.briefDescription}
           dangerouslySetInnerHTML={{ __html: comic.briefDescription }}
-        ></h1>
+        ></h2>
         {!slugChapter && (
           <div className="flex gap-2">
             <button
               className="btn-primary"
               onClick={() =>
-                navigate(`/truyen/${comic.slug}/${firstChapter?.slug}`)
+                router.push(`/truyen/${comic.slug}/${firstChapter?.slug}`)
               }
             >
               Đọc ngay
@@ -221,7 +266,7 @@ const DescriptionComic = ({
             <button
               className="btn-primary bg-green-600"
               onClick={() =>
-                navigate(`/truyen/${comic.slug}/${lastChapter?.slug}`)
+                router.push(`/truyen/${comic.slug}/${lastChapter?.slug}`)
               }
             >
               Đọc chương mới nhất
@@ -242,15 +287,15 @@ const DescriptionComic = ({
             <span>{comic.star}</span>
           </div>
           <div className="flex justify-between">
-            <h1>Lượt xem:</h1>
+            <h2>Lượt xem:</h2>
             <span>{comic.view}</span>
           </div>
           <div className="flex justify-between">
-            <h1>Lượt thích:</h1>
+            <h2>Lượt thích:</h2>
             <span>{comic.like}</span>
           </div>
           <div className="flex justify-between">
-            <h1>Lượt theo dõi:</h1>
+            <h2>Lượt theo dõi:</h2>
             <span>{comic.follow}</span>
           </div>
           <div className="flex justify-around">

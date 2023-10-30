@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /quan-ly/
+
+Sitemap: https://mangahay.top/sitemap.xml
