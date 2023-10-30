@@ -62,15 +62,13 @@ const CrawlChapter = () => {
         };
       });
       resetInput();
-    } catch (error) {}
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   const resetInput = () => {
-    setComicName("");
-    setChapterName("");
-    setQuerySelector("");
     setUrlPost("");
-    setAttribute("");
   };
 
   const getComics = async (name: string): Promise<Comic[]> => {

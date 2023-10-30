@@ -1,4 +1,6 @@
 import Head from "next/head";
+import { CreativeWork } from "schema-dts";
+import StructuredDataMarkup from "./StructuredDataMarkup";
 
 interface itemProps {
   title: string;
@@ -13,6 +15,18 @@ export default function MetaTags({
   image,
   url,
 }: itemProps) {
+  const comic: CreativeWork = {
+    "@type": "CreativeWork",
+    name: title,
+    description: description,
+    genre: "Comic",
+    publisher: {
+      "@type": "Organization",
+      name: "mangahay.top",
+    },
+    image,
+    url,
+  };
   return (
     <Head>
       <title>{title}</title>
@@ -27,13 +41,7 @@ export default function MetaTags({
           .split(" ")
           .join(",")}`}
       />
-      <script type="application/ld+json">
-        {`"@context": "${url}",
-      "@type": "Review",
-      "name": "${title}",
-      "description": "${description}"
-      `}
-      </script>
+      <StructuredDataMarkup comic={comic} />
     </Head>
   );
 }

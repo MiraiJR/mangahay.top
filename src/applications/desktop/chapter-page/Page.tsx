@@ -1,6 +1,7 @@
 import {
   convertWebpResource,
   extractIdFromSlugChapter,
+  shortImageName,
 } from "@/shared/helpers/helpers";
 import { originalURL } from "@/shared/libs/config";
 import comicService from "@/shared/services/comicService";
@@ -188,17 +189,19 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
         className={`flex flex-col items-center justify-center m-5 bg-${themeStore.getTheme()}`}
       >
         {detailChapter?.currentChapter.images ? (
-          detailChapter?.currentChapter.images.map((image, _index) => (
-            <Image
-              loading="lazy"
-              width={0}
-              height={0}
-              className="w-[80%] mobile:w-[100%] object-fit"
-              src={convertWebpResource(image)}
-              alt={`${detailChapter?.currentChapter.name}-${comic?.name}`}
-              key={_index}
-            />
-          ))
+          shortImageName(detailChapter?.currentChapter.images).map(
+            (image, _index) => (
+              <Image
+                loading="lazy"
+                width={0}
+                height={0}
+                className="w-[80%] mobile:w-[100%] object-fit"
+                src={convertWebpResource(image)}
+                alt={`${detailChapter?.currentChapter.name}-${comic?.name}`}
+                key={_index}
+              />
+            )
+          )
         ) : (
           <MyLoading />
         )}

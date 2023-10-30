@@ -62,6 +62,7 @@ const CreateComicForm = () => {
     temp = temp.replace(/color: rgb\(5, 5, 5\)/g, "");
     temp = temp.replace(/color/g, "");
     temp = temp.replace(/background-color/g, "");
+    temp += `\n Đọc truyện ${comicName};${comicAnotherName} tiếng việt chất lượng tại mangahay.top`;
     return temp;
   };
 

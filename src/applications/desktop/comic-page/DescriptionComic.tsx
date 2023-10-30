@@ -174,18 +174,17 @@ const DescriptionComic = ({
         alt={comic.name}
       />
       <div className="col-span-7 flex flex-col gap-4 mobile:col-span-12 mobile:mx-4">
-        <h1
-          className="font-bold text-2xl mobile:flex mobile:flex-col gap-2"
-          title={comic.name}
-        >
-          <span>{comic.name}</span>
+        <div className="mobile:flex mobile:flex-col gap-2">
+          <h1 className="font-bold text-2xl" title={comic.name}>
+            <span>{comic.name}</span>
+          </h1>
           <span
             className="text-sm font-thin text-yellow-500 ml-1"
             title={comic.state}
           >
             {comic.state}
           </span>
-        </h1>
+        </div>
         <div className="flex flex-wrap gap-2 items-center mobile:flex-col mobile:items-start">
           <h2 className="font-bold">Tên khác:</h2>
           <span>{comic.anotherName}</span>
