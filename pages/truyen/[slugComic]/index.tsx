@@ -37,7 +37,7 @@ export default function ComicRoute({ detailComic }: itemProps) {
         image={comic.thumb}
         url={`https://mangahay.top/truyen/${comic.slug}`}
       />
-      <ComicPage detailComic={detailComic} />;
+      <ComicPage detailComic={detailComic} />
     </>
   );
 }
