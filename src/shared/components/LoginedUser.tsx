@@ -12,8 +12,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { reduceQualityImage } from "../helpers/helpers";
+import MyLoading from "./MyLoading";
 
 const LoginedUser = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const elementRef = useRef<any>(null);
   const notifyRef = useRef<any>(null);
   const router = useRouter();
@@ -24,6 +26,7 @@ const LoginedUser = () => {
   const { setIsLogined } = globalStore();
   const [theNumberOfUnredNotifies, setTheNumberOfUnredNotifies] =
     useState<number>(0);
+
   useEffect(() => {
     const getMe = async () => {
       try {
@@ -36,6 +39,8 @@ const LoginedUser = () => {
     };
 
     const getNotifies = async () => {
+      setIsLoading(true);
+
       try {
         const { data } = await meService.getNotifies({
           page: 1,
@@ -50,6 +55,7 @@ const LoginedUser = () => {
         );
 
         setNotifies(data);
+        setIsLoading(false);
       } catch (error: any) {
         toast.error(error.mesage);
       }
@@ -107,13 +113,17 @@ const LoginedUser = () => {
             className="absolute top-0 right-0 -translate-y-1/2"
           ></Badge>
         </div>
-
         {showListNotifies && (
           <div
             className={`rounded-sm z-10 shadow-outer-lg-${themeStore.getOppositeTheme()}
-            absolute top-[100%] right-0 flex items-center bg-${themeStore.getOppositeTheme()} w-[500px]`}
+              absolute top-[100%] right-0 flex flex-col items-center bg-${themeStore.getOppositeTheme()} w-[500px]`}
           >
-            <ListNotifies notifies={notifies} />
+            {isLoading ? <MyLoading /> : <ListNotifies notifies={notifies} />}
+            <div className="bg-blue-600 flex w-[100%] items-center justify-center py-4">
+              <Link className={`text-${themeStore.getTheme()}`} href={"/me#1"}>
+                Xem tất cả
+              </Link>
+            </div>
           </div>
         )}
       </div>

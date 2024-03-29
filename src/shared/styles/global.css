@@ -21,3 +21,7 @@
 * {
   font-family: "Source Code Pro", monospace;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

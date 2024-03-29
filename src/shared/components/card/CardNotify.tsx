@@ -4,7 +4,6 @@ import NotifyService from "@/shared/services/notifyService";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { toast } from "react-toastify";
 
 interface itemProps {
   notify: Notify;
@@ -23,16 +22,17 @@ const CardNotify = ({ notify, imageWidth, imageHeight }: itemProps) => {
       setData(data);
       router.push(`${notify.redirectUrl}`);
       router.reload();
-    } catch (error: any) {
-      toast.error(error.message);
-    }
+    } catch (error: any) {}
   };
 
   return (
     <div
-      className={cn("grid grid-cols-12 gap-4 cursor-pointer", {
-        "bg-slate-400": data.isRead,
-      })}
+      className={cn(
+        "grid grid-cols-12 gap-4 cursor-pointer border border-b-1",
+        {
+          "bg-slate-400": data.isRead,
+        }
+      )}
       onClick={handleReadNotify}
     >
       <Image

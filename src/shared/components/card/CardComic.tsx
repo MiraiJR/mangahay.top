@@ -1,11 +1,9 @@
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import { cn } from "@/shared/libs/utils";
 import themeStore from "@/shared/stores/themeStore";
 import Image from "next/image";
 import Link from "next/link";
 import { Rating } from "primereact/rating";
 import { useState, useContext, useEffect } from "react";
-import { Skeleton } from "primereact/skeleton";
 import { reduceQualityImage } from "@/shared/helpers/helpers";
 
 interface itemProps {
@@ -14,10 +12,23 @@ interface itemProps {
 
 interface itemPropsPreviewComic {
   comic: Comic;
+  position: ElementPostion;
 }
 
-const PreviewComic = ({ comic }: itemPropsPreviewComic) => {
+const PreviewComic = ({ comic, position }: itemPropsPreviewComic) => {
   const { theme } = useContext(ThemeContext);
+
+  useEffect(() => {
+    const previewComicElement = document.getElementById(
+      `preview-comic-${comic.id}`
+    );
+
+    if (previewComicElement) {
+      previewComicElement.style.top = `${position.top}px`;
+      previewComicElement.style.left = `${position.left}px`;
+      previewComicElement.style.zIndex = "1000";
+    }
+  });
 
   return (
     <div
@@ -59,18 +70,17 @@ const PreviewComic = ({ comic }: itemPropsPreviewComic) => {
 const CardComic = ({ comic }: itemProps) => {
   const {} = useContext(ThemeContext);
   const [isOpenPreview, setIsOpenPreview] = useState<boolean>(false);
+  const [previewPosition, setPreviewPostion] = useState<ElementPostion>({
+    top: 0,
+    left: 0,
+  });
 
-  const openPreviewComic = (event: any) => {
+  const openPreviewComic = async (event: any) => {
     setIsOpenPreview(true);
-
-    const previewComicElement = document.getElementById(
-      `preview-comic-${comic.id}`
-    );
-    if (previewComicElement) {
-      previewComicElement.style.top = `${event.clientY + 20}px`;
-      previewComicElement.style.left = `${event.clientX + 20}px`;
-      previewComicElement.style.zIndex = "1000";
-    }
+    setPreviewPostion({
+      top: event.clientY + 20,
+      left: event.clientX + 20,
+    });
   };
 
   useEffect(() => {}, [comic]);
@@ -133,7 +143,9 @@ const CardComic = ({ comic }: itemProps) => {
         </div>
         <span>{comic.star}</span>
       </div>
-      {isOpenPreview && <PreviewComic comic={comic} />}
+      {isOpenPreview && (
+        <PreviewComic comic={comic} position={previewPosition} />
+      )}
     </div>
   );
 };

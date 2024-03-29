@@ -5,10 +5,18 @@ import EmptyImage from "@/shared/assets/empty.webp";
 import CardNotify from "@/shared/components/card/CardNotify";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { SelectButton } from "primereact/selectbutton";
+import { Check, X } from "lucide-react";
+import NotifyService from "@/shared/services/notifyService";
+import { toast } from "react-toastify";
 
 interface NotificationFilter {
   label: string;
   isRead: boolean;
+}
+
+enum NOTIFICATION_STATUS {
+  READ = "1",
+  UNREAD = "0",
 }
 
 const notificationFilterButtonDatas: NotificationFilter[] = [
@@ -28,26 +36,64 @@ const Notification = () => {
     useState<NotificationFilter | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const getNotifies = async () => {
+    try {
+      const { data } = await MeService.getNotifies(null);
+
+      setNotifies(data);
+    } catch (error: any) {}
+  };
+
   useEffect(() => {
-    const getNotifies = async () => {
-      try {
-        const { data } = await MeService.getNotifies(null);
-
-        setNotifies(data);
-      } catch (error: any) {}
-    };
-
     getNotifies();
   }, []);
 
   const filterNotification = async (isRead: boolean) => {
     setIsLoading(true);
     try {
-      const { data } = await MeService.getNotifies(null, isRead ? "1" : "0");
+      const { data } = await MeService.getNotifies(
+        null,
+        isRead ? NOTIFICATION_STATUS.READ : NOTIFICATION_STATUS.UNREAD
+      );
 
       setNotifies(data);
       setIsLoading(false);
     } catch (error: any) {}
+  };
+
+  const markAllReadNotification = async () => {
+    if (notifies?.length === 0) {
+      toast.warning("Do not have any notification to mark!");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      setNotifies([]);
+      const { data: markAllReadResult } = await NotifyService.markAllRead();
+      toast.success(markAllReadResult);
+      await getNotifies();
+
+      setIsLoading(false);
+    } catch (error) {}
+  };
+
+  const removeAll = async () => {
+    if (notifies?.length === 0) {
+      toast.warning("Do not have any notification to remove!");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      setNotifies([]);
+      const { data } = await NotifyService.removeAll();
+      toast.success(data);
+
+      setIsLoading(false);
+    } catch (error) {}
   };
 
   return (
@@ -55,7 +101,7 @@ const Notification = () => {
       <div className="pt-4 text-center font-bold text-xl">
         Danh sách thông báo
       </div>
-      <div className="my-10 card flex justify-content-center">
+      <div className="my-10 card flex justify-content-center items-center justify-between">
         <SelectButton
           value={notificationFilterData?.label}
           onChange={(e) => {
@@ -64,6 +110,23 @@ const Notification = () => {
           }}
           options={notificationFilterButtonDatas}
         />
+
+        <div className="flex gap-4">
+          <div
+            className="flex items-center text-green-600 cursor-pointer"
+            onClick={markAllReadNotification}
+          >
+            <Check />
+            <span>Đánh dấu đã đọc hết</span>
+          </div>
+          <div
+            className="flex items-center text-red-600 cursor-pointer"
+            onClick={removeAll}
+          >
+            <X />
+            <span>Xoá tất cả</span>
+          </div>
+        </div>
       </div>
       {isLoading && (
         <div className="flex items-center justify-center w-[100%] col-span-12">
@@ -76,7 +139,7 @@ const Notification = () => {
         </div>
       )}
       {notifies ? (
-        notifies.length === 0 ? (
+        notifies.length === 0 && !isLoading ? (
           <div className="text-center flex flex-col items-center justify-center">
             <Image
               width={200}
