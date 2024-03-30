@@ -1,13 +1,12 @@
 import MeService from "@/shared/services/meService";
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import EmptyImage from "@/shared/assets/empty.webp";
 import CardNotify from "@/shared/components/card/CardNotify";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { SelectButton } from "primereact/selectbutton";
 import { Check, X } from "lucide-react";
 import NotifyService from "@/shared/services/notifyService";
 import { toast } from "react-toastify";
+import EmptyComic from "@/shared/components/EmptyComic";
 
 interface NotificationFilter {
   label: string;
@@ -140,16 +139,7 @@ const Notification = () => {
       )}
       {notifies ? (
         notifies.length === 0 && !isLoading ? (
-          <div className="text-center flex flex-col items-center justify-center">
-            <Image
-              width={200}
-              height={200}
-              src={EmptyImage}
-              alt="Không có truyện"
-              priority
-            />
-            <span>Không có thông báo</span>
-          </div>
+          <EmptyComic content="Không có thông báo" />
         ) : (
           <div className="w-[100%]">
             {notifies.map((notify) => (

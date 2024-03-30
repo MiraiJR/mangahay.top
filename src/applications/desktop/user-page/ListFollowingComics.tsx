@@ -3,23 +3,25 @@ import MeService from "@/shared/services/meService";
 import themeStore from "@/shared/stores/themeStore";
 import { Rating } from "primereact/rating";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import Image from "next/image";
 import { DataScroller } from "primereact/datascroller";
 import Link from "next/link";
-import { ProgressSpinner } from "primereact/progressspinner";
+import MyLoading from "@/shared/components/MyLoading";
+import EmptyComic from "@/shared/components/EmptyComic";
 
 const ListFollowingComics = () => {
-  const [comics, setComics] = useState<Comic[] | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [comics, setComics] = useState<Comic[]>([]);
 
   useEffect(() => {
+    setIsLoading(true);
+
     const getNotifies = async () => {
       try {
         const { data } = await MeService.getFollowingComics();
         setComics(data);
-      } catch (error: any) {
-        toast.error(error.message);
-      }
+        setIsLoading(false);
+      } catch (error: any) {}
     };
 
     getNotifies();
@@ -80,7 +82,11 @@ const ListFollowingComics = () => {
 
   return (
     <div className="card">
-      {comics ? (
+      {isLoading ? (
+        <MyLoading />
+      ) : comics.length === 0 ? (
+        <EmptyComic content="Bạn chưa theo dõi truyện nào cả!!" />
+      ) : (
         <DataScroller
           pt={{
             item: {
@@ -93,15 +99,6 @@ const ListFollowingComics = () => {
           buffer={0.4}
           header="Danh sách truyện đang theo dõi"
         />
-      ) : (
-        <div className="flex items-center justify-center w-[100%] col-span-12">
-          <ProgressSpinner
-            style={{ width: "100px", height: "100px" }}
-            strokeWidth="8"
-            fill="var(--surface-ground)"
-            animationDuration=".5s"
-          />
-        </div>
       )}
     </div>
   );

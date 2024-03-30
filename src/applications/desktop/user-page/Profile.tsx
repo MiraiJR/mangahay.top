@@ -12,10 +12,6 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { reduceQualityImage } from "@/shared/helpers/helpers";
 import { userStore } from "@/shared/stores/userStore";
 
-interface itemProps {
-  user: User;
-}
-
 interface StatusLoading {
   avatar?: boolean;
   profile?: boolean;
@@ -26,7 +22,7 @@ interface ChangedProfile {
   phone: string;
 }
 
-const Profile = ({ user }: itemProps) => {
+const Profile = () => {
   const fileUploadRef = useRef<any>(null);
   const [showChangeAvatar, setShowChangeAvatar] = useState<boolean>(false);
   const [isVisibleDialog, setIsVisibleDialog] = useState<boolean>(false);
@@ -102,6 +98,10 @@ const Profile = ({ user }: itemProps) => {
   };
 
   const handleUpdateProfile = async () => {
+    if (!userProfile) {
+      return;
+    }
+
     if (changedProfile.fullname.trim() === "") {
       setErrorMessage("Tên hiển thị là bắt buộc!");
       return;
@@ -109,7 +109,7 @@ const Profile = ({ user }: itemProps) => {
 
     const regex = /^0\d{9}$/;
     if (
-      changedProfile.phone.trim() !== "" &&
+      changedProfile.phone.trim() === "" &&
       !regex.test(changedProfile.phone)
     ) {
       setErrorMessage("Số điện thoại không hợp lệ!");
@@ -147,7 +147,7 @@ const Profile = ({ user }: itemProps) => {
           className={`bg-${themeStore.getTheme()} text-${themeStore.getOppositeTheme()}`}
         >
           <div className="relative border">
-            {user.wallpaper ? (
+            {userProfile.wallpaper ? (
               <Image
                 width={100}
                 height={100}
@@ -254,7 +254,7 @@ const Profile = ({ user }: itemProps) => {
             <div className="flex flex-col gap-2 w-[100%] ">
               <div className="flex gap-3">
                 <label htmlFor="phone">Số điện thoại</label>
-                {!user.phone && (
+                {!userProfile.phone && (
                   <span className="text-red-400">*Cập nhật số điện thoại</span>
                 )}
               </div>
