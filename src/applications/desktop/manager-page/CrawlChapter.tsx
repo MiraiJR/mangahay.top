@@ -55,6 +55,9 @@ const CrawlChapter = () => {
       );
 
       toast.success(data);
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
       setLoading((pre) => {
         return {
           ...pre,
@@ -62,8 +65,6 @@ const CrawlChapter = () => {
         };
       });
       resetInput();
-    } catch (error: any) {
-      toast.error(error.message);
     }
   };
 

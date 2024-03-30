@@ -1,71 +1,83 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { TabMenu } from "primereact/tabmenu";
 import { MenuItem } from "primereact/menuitem";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 const CreateComicForm = dynamic(() => import("./CreateComicForm"));
 const CrawlChapter = dynamic(() => import("./CrawlChapter"));
 const ListCreatedComics = dynamic(() => import("./ListCreatedComics"));
 const CreateChapterForm = dynamic(() => import("./CreateChapterForm"));
 
+enum TabType {
+  CREATED_COMICS = 0,
+  CREATE_COMIC = 1,
+  CREATE_CHAPTER = 2,
+  CRAWL_CHAPTER = 3,
+}
+
 const ManagerPage = () => {
-  const [showCreateComic, setShowCreateComic] = useState<boolean>(false);
-  const [showCreateChapter, setShowCreateChapter] = useState<boolean>(false);
-  const [showListCreatedComics, setShowListCreatedComics] =
-    useState<boolean>(true);
-  const [showCrawlChapter, setShowCrawlChapter] = useState<boolean>(false);
+  const router = useRouter();
   const {} = useContext(ThemeContext);
+  const [activeTab, setActiveTab] = useState<number>(TabType.CREATED_COMICS);
+
   const items: MenuItem[] = [
     {
       label: "Truyện đã đăng",
       command: () => {
-        setShowListCreatedComics(true);
-        setShowCreateComic(false);
-        setShowCrawlChapter(false);
-        setShowCreateChapter(false);
+        setActiveTab(TabType.CREATED_COMICS);
+        router.replace(`${router.pathname}#${TabType.CREATED_COMICS}`);
       },
     },
     {
       label: "Tạo truyện",
       command: () => {
-        setShowCreateComic(true);
-        setShowCrawlChapter(false);
-        setShowListCreatedComics(false);
-        setShowCreateChapter(false);
+        setActiveTab(TabType.CREATE_COMIC);
+        router.replace(`${router.pathname}#${TabType.CREATE_COMIC}`);
       },
     },
     {
       label: "Tạo chương mới",
       command: () => {
-        setShowCreateChapter(true);
-        setShowCreateComic(false);
-        setShowCrawlChapter(false);
-        setShowListCreatedComics(false);
+        setActiveTab(TabType.CREATE_CHAPTER);
+        router.replace(`${router.pathname}#${TabType.CREATE_CHAPTER}`);
       },
     },
     {
       label: "Cào chapter",
       command: () => {
-        setShowCrawlChapter(true);
-        setShowCreateComic(false);
-        setShowListCreatedComics(false);
-        setShowCreateChapter(false);
+        setActiveTab(TabType.CRAWL_CHAPTER);
+        router.replace(`${router.pathname}#${TabType.CRAWL_CHAPTER}`);
       },
     },
   ];
 
+  useEffect(() => {
+    const tabName = router.asPath.split("#")[1] ?? TabType.CREATED_COMICS;
+    const tabNameIndex = parseInt(tabName);
+    setActiveTab(tabNameIndex);
+  }, []);
+
   return (
     <div>
       <div className="card w-[100%]">
-        <TabMenu model={items} />
+        <TabMenu
+          model={items}
+          activeIndex={activeTab}
+          onTabChange={(e) => setActiveTab(e.index)}
+        />
       </div>
       <div className="mt-5 p-2">
-        {showCreateChapter && <CreateChapterForm />}
+        {activeTab === TabType.CREATE_CHAPTER && <CreateChapterForm />}
       </div>
-      <div>{showListCreatedComics && <ListCreatedComics />}</div>
-      <div className="mt-5 p-2">{showCreateComic && <CreateComicForm />}</div>
-      <div className="p-2">{showCrawlChapter && <CrawlChapter />}</div>
+      <div>{activeTab === TabType.CREATED_COMICS && <ListCreatedComics />}</div>
+      <div className="mt-5 p-2">
+        {activeTab === TabType.CREATE_COMIC && <CreateComicForm />}
+      </div>
+      <div className="p-2">
+        {activeTab === TabType.CRAWL_CHAPTER && <CrawlChapter />}
+      </div>
     </div>
   );
 };

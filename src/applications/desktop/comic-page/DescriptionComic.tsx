@@ -146,12 +146,10 @@ const DescriptionComic = ({
   };
 
   useEffect(() => {
-    console.log(comic);
     const getInteractionWithComic = async () => {
       try {
         const { data } = await meService.getInteractionWithComic(comic.id);
 
-        console.log(data);
         setStatusInteraction(data);
       } catch (error: any) {
         toast.error(error.message);

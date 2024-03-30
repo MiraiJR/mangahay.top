@@ -28,5 +28,5 @@ export default function ForgetPasswordRoute() {
 
     getMe();
   }, []);
-  return <>{user && isShow && <UserPage user={user} />}</>;
+  return <>{user && isShow && <UserPage />}</>;
 }

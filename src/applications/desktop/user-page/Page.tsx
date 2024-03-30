@@ -20,7 +20,7 @@ const Profile = dynamic(() => import("./Profile"));
 const Notification = dynamic(() => import("./Notification"));
 const ListFollowingComics = dynamic(() => import("./ListFollowingComics"));
 
-const UserPage = ({ user }: itemProps) => {
+const UserPage = () => {
   const {} = useContext(ThemeContext);
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<number>(TabType.PROFILE);
@@ -67,7 +67,7 @@ const UserPage = ({ user }: itemProps) => {
       <div
         className={`bg-${themeStore.getTheme()} text-${themeStore.getOppositeTheme()}`}
       >
-        {activeTab === TabType.PROFILE && <Profile user={user} />}
+        {activeTab === TabType.PROFILE && <Profile />}
         {activeTab === TabType.NOTIFICATION && <Notification />}
         {activeTab === TabType.FOLLOWING_COMIC && <ListFollowingComics />}
       </div>
