@@ -29,9 +29,9 @@ runs:
       port: ${{ inputs.ssh-port }}
       script: |
         cd /mangahay/back-end
-        docker stop comic_mangahay_be || true
-        docker rm comic_mangahay_be || true
-        docker rmi miraijr/mangahay-be:main || true
+        docker stop comic_mangahay_fe || true
+        docker rm comic_mangahay_fe || true
+        docker rmi miraijr/mangahay-fe:main || true
 
         docker compose up -d
 
