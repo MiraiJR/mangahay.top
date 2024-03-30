@@ -28,7 +28,7 @@ runs:
       key: ${{ inputs.ssh-private-key }}
       port: ${{ inputs.ssh-port }}
       script: |
-        cd /mangahay/back-end
+        cd /mangahay/front-end
         docker stop comic_mangahay_fe || true
         docker rm comic_mangahay_fe || true
         docker rmi miraijr/mangahay-fe:main || true
