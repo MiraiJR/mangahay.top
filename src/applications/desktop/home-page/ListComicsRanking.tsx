@@ -25,9 +25,7 @@ const ListComicsRanking = ({ title, field, amountComic }: itemProps) => {
           amountComic
         );
         setComics(data);
-      } catch (error: any) {
-        toast.error(error.message);
-      }
+      } catch (error: any) {}
     };
 
     getComics();
@@ -61,7 +59,7 @@ const ListComicsRanking = ({ title, field, amountComic }: itemProps) => {
             <CardRanking
               comic={comic}
               position={_index + 1}
-              key={comic.id}
+              key={comic.id + title}
               isRanking={true}
             />
           ))}

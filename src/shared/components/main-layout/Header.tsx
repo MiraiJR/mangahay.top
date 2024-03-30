@@ -19,7 +19,6 @@ import ListGenres from "../ListGenres";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { InputSwitch, InputSwitchChangeEvent } from "primereact/inputswitch";
 import themeStore from "@/shared/stores/themeStore";
-import { toast } from "react-toastify";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -89,9 +88,7 @@ const Header = () => {
       });
 
       setComics(data.comics);
-    } catch (error: any) {
-      toast.error(error.message);
-    }
+    } catch (error: any) {}
   };
 
   useEffect(() => {

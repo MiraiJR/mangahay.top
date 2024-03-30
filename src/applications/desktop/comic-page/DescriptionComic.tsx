@@ -146,10 +146,12 @@ const DescriptionComic = ({
   };
 
   useEffect(() => {
+    console.log(comic);
     const getInteractionWithComic = async () => {
       try {
         const { data } = await meService.getInteractionWithComic(comic.id);
 
+        console.log(data);
         setStatusInteraction(data);
       } catch (error: any) {
         toast.error(error.message);
@@ -159,7 +161,7 @@ const DescriptionComic = ({
     if (isLogined) {
       getInteractionWithComic();
     }
-  }, []);
+  }, [isLogined]);
 
   return (
     <div
@@ -249,7 +251,6 @@ const DescriptionComic = ({
           </ul>
         </div>
         <h2
-          // className={`line-clamp-4 line`}
           title={comic.briefDescription}
           dangerouslySetInnerHTML={{ __html: comic.briefDescription }}
         ></h2>
@@ -280,6 +281,7 @@ const DescriptionComic = ({
           <div className="font-bold text-xl">Đánh giá:</div>
           <div className="flex justify-between">
             <Rating
+              disabled={statusInteractComic.isEvaluated}
               value={scoreStar}
               cancel={false}
               onChange={(e: RatingChangeEvent) => handleRatingComic(e)}

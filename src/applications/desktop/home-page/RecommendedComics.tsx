@@ -27,9 +27,7 @@ const RecommendedComics = ({ genre, title }: itemProps) => {
         });
 
         setComics(data.comics);
-      } catch (error: any) {
-        toast.error(error.message);
-      }
+      } catch (error: any) {}
     };
 
     getComics();

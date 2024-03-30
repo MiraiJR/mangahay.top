@@ -13,13 +13,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { reduceQualityImage } from "../helpers/helpers";
 import MyLoading from "./MyLoading";
+import { userStore } from "../stores/userStore";
 
 const LoginedUser = () => {
+  const { userProfile, setUserProfile } = userStore();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const elementRef = useRef<any>(null);
   const notifyRef = useRef<any>(null);
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
   const [notifies, setNotifies] = useState<Notify[]>([]);
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [showListNotifies, setShowListNotifies] = useState<boolean>(false);
@@ -32,7 +33,7 @@ const LoginedUser = () => {
       try {
         const { data } = await meService.getMe();
 
-        setUser(data);
+        setUserProfile(data);
       } catch (error: any) {
         toast.error(error.mesage);
       }
@@ -128,13 +129,13 @@ const LoginedUser = () => {
         )}
       </div>
       <div ref={elementRef}>
-        {user && (
+        {userProfile && (
           <Image
             width={50}
             height={0}
             className="mobile:w-[40px] w-[50px] h-[50px] object-cover rounded"
-            src={reduceQualityImage(user.avatar)}
-            alt={user.fullname}
+            src={reduceQualityImage(userProfile.avatar)}
+            alt={userProfile.fullname}
             onClick={() => {
               setShowMenu(!showMenu);
             }}
@@ -146,7 +147,7 @@ const LoginedUser = () => {
             className={`rounded-sm p-4 shadow-outer-lg-${themeStore.getOppositeTheme()} absolute top-max right-0 flex items-center text-center bg-${themeStore.getTheme()} w-max`}
           >
             <ul className="flex flex-col">
-              {user && (
+              {userProfile && (
                 <Link
                   rel="preload"
                   href="/me"
@@ -156,7 +157,7 @@ const LoginedUser = () => {
                   Thông tin cá nhân
                 </Link>
               )}
-              {user?.role === "admin" && (
+              {userProfile?.role === "admin" && (
                 <Link
                   rel="preload"
                   href="/quan-ly"

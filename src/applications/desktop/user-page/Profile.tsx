@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import MeService from "@/shared/services/meService";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { reduceQualityImage } from "@/shared/helpers/helpers";
+import { userStore } from "@/shared/stores/userStore";
 
 interface itemProps {
   user: User;
@@ -30,14 +31,14 @@ const Profile = ({ user }: itemProps) => {
   const [showChangeAvatar, setShowChangeAvatar] = useState<boolean>(false);
   const [isVisibleDialog, setIsVisibleDialog] = useState<boolean>(false);
   const [avatar, setAvatar] = useState<File | null>(null);
-  const [me, setMe] = useState<User>(user);
   const [loading, setLoading] = useState<StatusLoading>({
     avatar: false,
     profile: false,
   });
+  const { userProfile, setUserProfile } = userStore();
   const [changedProfile, setChangedProfile] = useState<ChangedProfile>({
-    fullname: me.fullname,
-    phone: me.phone ?? "",
+    fullname: userProfile!.fullname,
+    phone: userProfile?.phone ?? "",
   });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -57,7 +58,7 @@ const Profile = ({ user }: itemProps) => {
     try {
       const { data } = await MeService.updateAvatar(formData);
 
-      setMe(data);
+      setUserProfile(data);
       setLoading({
         avatar: false,
       });
@@ -125,7 +126,8 @@ const Profile = ({ user }: itemProps) => {
     try {
       const { fullname, phone } = changedProfile;
       const { data } = await MeService.updateProfile({ fullname, phone });
-      setMe(data);
+
+      setUserProfile(data);
       setLoading((pre) => {
         return {
           ...pre,
@@ -139,166 +141,170 @@ const Profile = ({ user }: itemProps) => {
   };
 
   return (
-    <div
-      className={`bg-${themeStore.getTheme()} text-${themeStore.getOppositeTheme()}`}
-    >
-      <div className="relative border">
-        {user.wallpaper ? (
-          <Image
-            width={100}
-            height={100}
-            className="w-[100%] h-[300px]"
-            src={me.wallpaper}
-            alt={me.fullname}
-          />
-        ) : (
-          <div
-            className={`w-[100%] h-[300px] flex flex-col items-center justify-center font-bold text-xl flex-wrap`}
-          >
-            Cảm ơn bạn đã chọn
-            <span>MangaHay.Top</span>
-          </div>
-        )}
+    <>
+      {userProfile && (
         <div
-          className={`absolute top-full -translate-y-1/2  right-1/2 translate-x-1/2 text-${themeStore.getOppositeTheme()}`}
+          className={`bg-${themeStore.getTheme()} text-${themeStore.getOppositeTheme()}`}
         >
-          <div className="flex flex-col items-center justify-center">
-            <div className="relative">
+          <div className="relative border">
+            {user.wallpaper ? (
               <Image
-                priority
-                className="w-[150px] h-[150px] object-cover rounded-full"
                 width={100}
                 height={100}
-                src={reduceQualityImage(me.avatar)}
-                alt={me.fullname}
-                onMouseOver={() => setShowChangeAvatar(true)}
-                onMouseOut={() => setShowChangeAvatar(false)}
-                onTouchStart={() => setShowChangeAvatar(true)}
+                className="w-[100%] h-[300px]"
+                src={userProfile.wallpaper}
+                alt={userProfile.fullname}
               />
-              {showChangeAvatar && (
-                <div
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-300 p-2 rounded-full cursor-pointer z-1"
-                  onClick={() => setIsVisibleDialog(true)}
-                  onMouseOver={() => setShowChangeAvatar(true)}
-                >
-                  <Camera />
-                </div>
-              )}
-              <Dialog
-                header="Thay đổi ảnh đại diện"
-                visible={isVisibleDialog}
-                onHide={() => {
-                  setIsVisibleDialog(false);
-                  setAvatar(null);
-                }}
-                style={{ width: "50vw" }}
-                breakpoints={{ "960px": "75vw", "641px": "100vw" }}
-                footer={footerContent}
+            ) : (
+              <div
+                className={`w-[100%] h-[300px] flex flex-col items-center justify-center font-bold text-xl flex-wrap`}
               >
-                {!loading.avatar ? (
-                  <FileUpload
-                    ref={fileUploadRef}
-                    onSelect={(event: FileUploadSelectEvent) =>
-                      handleUploadImage(event)
-                    }
-                    customUpload={true}
-                    accept="image/*"
-                    emptyTemplate={
-                      <p className="m-0">Có thể kéo thả ảnh vào đây</p>
-                    }
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center w-[100%] col-span-12">
-                    <ProgressSpinner
-                      style={{ width: "50px", height: "50px" }}
-                      strokeWidth="8"
-                      fill="var(--surface-ground)"
-                      animationDuration=".5s"
-                    />
-                    <span>Đang tải ảnh lên</span>
-                  </div>
-                )}
-              </Dialog>
-            </div>
-            <h2>{me.fullname}</h2>
-            <h2 className={`capitalize p-2 bg-green-400 rounded-xl`}>
-              {me.role}
-            </h2>
-          </div>
-        </div>
-      </div>
-      <div className="mt-[100px] flex flex-col gap-4 items-center">
-        {errorMessage && <div className="text-red-400">{errorMessage}</div>}
-        <div className="flex flex-col gap-2 w-[100%] ">
-          <label htmlFor="fullname">Tên hiển thị</label>
-          <InputText
-            id="fullname"
-            placeholder="Cập nhật số điện thoại"
-            aria-describedby="username-help"
-            className="w-[100%]"
-            value={changedProfile.fullname}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              setChangedProfile((pre) => {
-                return {
-                  ...pre,
-                  fullname: event.target.value,
-                };
-              })
-            }
-          />
-        </div>
-        <div className="flex flex-col gap-2 w-[100%] ">
-          <div className="flex gap-3">
-            <label htmlFor="phone">Số điện thoại</label>
-            {!user.phone && (
-              <span className="text-red-400">*Cập nhật số điện thoại</span>
+                Cảm ơn bạn đã chọn
+                <span>MangaHay.Top</span>
+              </div>
             )}
+            <div
+              className={`absolute top-full -translate-y-1/2  right-1/2 translate-x-1/2 text-${themeStore.getOppositeTheme()}`}
+            >
+              <div className="flex flex-col items-center justify-center">
+                <div className="relative">
+                  <Image
+                    priority
+                    className="w-[150px] h-[150px] object-cover rounded-full"
+                    width={100}
+                    height={100}
+                    src={reduceQualityImage(userProfile.avatar)}
+                    alt={userProfile.fullname}
+                    onMouseOver={() => setShowChangeAvatar(true)}
+                    onMouseOut={() => setShowChangeAvatar(false)}
+                    onTouchStart={() => setShowChangeAvatar(true)}
+                  />
+                  {showChangeAvatar && (
+                    <div
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-300 p-2 rounded-full cursor-pointer z-1"
+                      onClick={() => setIsVisibleDialog(true)}
+                      onMouseOver={() => setShowChangeAvatar(true)}
+                    >
+                      <Camera />
+                    </div>
+                  )}
+                  <Dialog
+                    header="Thay đổi ảnh đại diện"
+                    visible={isVisibleDialog}
+                    onHide={() => {
+                      setIsVisibleDialog(false);
+                      setAvatar(null);
+                    }}
+                    style={{ width: "50vw" }}
+                    breakpoints={{ "960px": "75vw", "641px": "100vw" }}
+                    footer={footerContent}
+                  >
+                    {!loading.avatar ? (
+                      <FileUpload
+                        ref={fileUploadRef}
+                        onSelect={(event: FileUploadSelectEvent) =>
+                          handleUploadImage(event)
+                        }
+                        customUpload={true}
+                        accept="image/*"
+                        emptyTemplate={
+                          <p className="m-0">Có thể kéo thả ảnh vào đây</p>
+                        }
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center w-[100%] col-span-12">
+                        <ProgressSpinner
+                          style={{ width: "50px", height: "50px" }}
+                          strokeWidth="8"
+                          fill="var(--surface-ground)"
+                          animationDuration=".5s"
+                        />
+                        <span>Đang tải ảnh lên</span>
+                      </div>
+                    )}
+                  </Dialog>
+                </div>
+                <h2>{userProfile.fullname}</h2>
+                <h2 className={`capitalize p-2 bg-green-400 rounded-xl`}>
+                  {userProfile.role}
+                </h2>
+              </div>
+            </div>
           </div>
-          <InputText
-            id="phone"
-            placeholder="Cập nhật số điện thoại"
-            aria-describedby="username-help"
-            className="w-[100%]"
-            value={changedProfile.phone}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              setChangedProfile((pre) => {
-                return {
-                  ...pre,
-                  phone: event.target.value,
-                };
-              })
-            }
-          />
+          <div className="mt-[100px] flex flex-col gap-4 items-center">
+            {errorMessage && <div className="text-red-400">{errorMessage}</div>}
+            <div className="flex flex-col gap-2 w-[100%] ">
+              <label htmlFor="fullname">Tên hiển thị</label>
+              <InputText
+                id="fullname"
+                placeholder="Cập nhật số điện thoại"
+                aria-describedby="username-help"
+                className="w-[100%]"
+                value={changedProfile.fullname}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  setChangedProfile((pre) => {
+                    return {
+                      ...pre,
+                      fullname: event.target.value,
+                    };
+                  })
+                }
+              />
+            </div>
+            <div className="flex flex-col gap-2 w-[100%] ">
+              <div className="flex gap-3">
+                <label htmlFor="phone">Số điện thoại</label>
+                {!user.phone && (
+                  <span className="text-red-400">*Cập nhật số điện thoại</span>
+                )}
+              </div>
+              <InputText
+                id="phone"
+                placeholder="Cập nhật số điện thoại"
+                aria-describedby="username-help"
+                className="w-[100%]"
+                value={changedProfile.phone}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  setChangedProfile((pre) => {
+                    return {
+                      ...pre,
+                      phone: event.target.value,
+                    };
+                  })
+                }
+              />
+            </div>
+            <div className="flex flex-col gap-2 w-[100%] ">
+              <label htmlFor="email">Địa chỉ email</label>
+              <InputText
+                id="email"
+                placeholder="Cập nhật số điện thoại"
+                aria-describedby="username-help"
+                className="w-[100%]"
+                disabled
+                value={userProfile.email}
+              />
+            </div>
+            <button
+              disabled={loading.profile}
+              className="btn-primary w-fit"
+              onClick={handleUpdateProfile}
+            >
+              {loading.profile ? (
+                <ProgressSpinner
+                  style={{ width: "80px", height: "30px" }}
+                  strokeWidth="10"
+                  fill="var(--surface-ground)"
+                  animationDuration=".5s"
+                />
+              ) : (
+                <span>Cập nhật</span>
+              )}
+            </button>
+          </div>
         </div>
-        <div className="flex flex-col gap-2 w-[100%] ">
-          <label htmlFor="email">Địa chỉ email</label>
-          <InputText
-            id="email"
-            placeholder="Cập nhật số điện thoại"
-            aria-describedby="username-help"
-            className="w-[100%]"
-            disabled
-            value={me.email}
-          />
-        </div>
-        <button
-          disabled={loading.profile}
-          className="btn-primary w-fit"
-          onClick={handleUpdateProfile}
-        >
-          {loading.profile ? (
-            <ProgressSpinner
-              style={{ width: "80px", height: "30px" }}
-              strokeWidth="10"
-              fill="var(--surface-ground)"
-              animationDuration=".5s"
-            />
-          ) : (
-            <span>Cập nhật</span>
-          )}
-        </button>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

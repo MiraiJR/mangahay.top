@@ -1,11 +1,13 @@
 import ManagerPage from "@/applications/desktop/manager-page/Page";
 import jwt from "@/shared/libs/jwt";
 import MeService from "@/shared/services/meService";
+import { userStore } from "@/shared/stores/userStore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function SearchRoute() {
+  const { userProfile } = userStore();
   const router = useRouter();
   const [isShow, setIsShow] = useState<boolean>(false);
 
@@ -17,9 +19,7 @@ export default function SearchRoute() {
 
     const getMe = async () => {
       try {
-        const { data } = await MeService.getMe();
-
-        if (data.role !== "admin") {
+        if (userProfile && userProfile.role !== "admin") {
           router.push("/");
           return;
         }

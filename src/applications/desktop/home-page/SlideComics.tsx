@@ -16,8 +16,10 @@ import TextAnimation from "@/shared/components/animations/TextAnimation";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-import { toast } from "react-toastify";
 import { reduceQualityImage } from "@/shared/helpers/helpers";
+import EmptyComic from "@/shared/components/EmptyComic";
+
+const THE_NUMBER_OF_COMICS_SLIDE: number = 5;
 
 const SlideComics = () => {
   const router = useRouter();
@@ -33,9 +35,7 @@ const SlideComics = () => {
         if (data.length > 0) {
           setCurrentComic(data[0]);
         }
-      } catch (error: any) {
-        toast.error(error.message);
-      }
+      } catch (error: any) {}
     };
 
     getRankingComics();
@@ -79,49 +79,53 @@ const SlideComics = () => {
           </div>
         </div>
       )}
-      <div>
-        <Swiper
-          modules={[
-            Navigation,
-            Pagination,
-            Scrollbar,
-            A11y,
-            EffectCards,
-            Autoplay,
-          ]}
-          spaceBetween={10}
-          slidesPerView={1}
-          navigation
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: true,
-          }}
-          scrollbar={{ draggable: true }}
-          onSlideChange={(swiper) =>
-            setCurrentComic(comics[swiper.activeIndex])
-          }
-          onSwiper={() => {}}
-          autoHeight
-          effect={"cards"}
-          grabCursor={true}
-          className="mobile:max-w-[300px] w-[500px]"
-        >
-          {comics.slice(0, 5).map((comic) => (
-            <SwiperSlide key={comic.id}>
-              <div className="flex items-center justify-center">
-                <Image
-                  priority
-                  width={300}
-                  height={400}
-                  src={reduceQualityImage(comic.thumb)}
-                  alt={comic.name}
-                  className="w-[300px] max-h-[400px] object-cover mobile:w-[200px]"
-                />
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+      {comics.length === 0 ? (
+        <EmptyComic />
+      ) : (
+        <div>
+          <Swiper
+            modules={[
+              Navigation,
+              Pagination,
+              Scrollbar,
+              A11y,
+              EffectCards,
+              Autoplay,
+            ]}
+            spaceBetween={10}
+            slidesPerView={1}
+            navigation
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: true,
+            }}
+            scrollbar={{ draggable: true }}
+            onSlideChange={(swiper) =>
+              setCurrentComic(comics[swiper.activeIndex])
+            }
+            onSwiper={() => {}}
+            autoHeight
+            effect={"cards"}
+            grabCursor={true}
+            className="mobile:max-w-[300px] w-[500px]"
+          >
+            {comics.slice(0, THE_NUMBER_OF_COMICS_SLIDE).map((comic) => (
+              <SwiperSlide key={comic.id}>
+                <div className="flex items-center justify-center">
+                  <Image
+                    priority
+                    width={300}
+                    height={400}
+                    src={reduceQualityImage(comic.thumb)}
+                    alt={comic.name}
+                    className="w-[300px] max-h-[400px] object-cover mobile:w-[200px]"
+                  />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      )}
     </div>
   );
 };

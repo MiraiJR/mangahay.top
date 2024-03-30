@@ -4,9 +4,11 @@ import comicService from "../services/comicService";
 import { ThemeContext } from "../contexts/ThemeContext";
 import themeStore from "../stores/themeStore";
 import { ProgressSpinner } from "primereact/progressspinner";
+import MyLoading from "./MyLoading";
 
 const ListGenres = () => {
-  const [genres, setGenres] = useState<Genre[] | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [genres, setGenres] = useState<Genre[]>([]);
   const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
@@ -14,9 +16,7 @@ const ListGenres = () => {
       try {
         const { data } = await comicService.getGenres();
         setGenres(data);
-      } catch (error: any) {
-        toast.error(error.message);
-      }
+      } catch (error: any) {}
     };
     getGenres();
   }, []);
@@ -24,8 +24,10 @@ const ListGenres = () => {
     <div
       className={`grid grid-cols-4 mobile:grid-cols-3 mobile:max-h-[300px] mobile:w-screen mobile:overflow-y-scroll gap-2 shadow-outer-lg-${themeStore.getOppositeTheme()} bg-${theme} p-2 z-10`}
     >
-      {genres ? (
-        genres?.map((genre) => (
+      {isLoading ? (
+        <MyLoading />
+      ) : genres.length !== 0 ? (
+        genres.map((genre) => (
           <a
             href={`/tim-kiem?filterGenres=${genre.slug}`}
             title={genre.name}
@@ -37,14 +39,7 @@ const ListGenres = () => {
           </a>
         ))
       ) : (
-        <div className="flex items-center justify-center w-[100%] col-span-12">
-          <ProgressSpinner
-            style={{ width: "50px", height: "50px" }}
-            strokeWidth="8"
-            fill="var(--surface-ground)"
-            animationDuration=".5s"
-          />
-        </div>
+        <span className="col-span-4 mobile:col-span-3">Không có thể loại</span>
       )}
     </div>
   );

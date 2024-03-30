@@ -4,9 +4,9 @@ import { ChevronsRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import EmptyImage from "@/shared/assets/empty.webp";
 import themeStore from "@/shared/stores/themeStore";
-import { toast } from "react-toastify";
 import Image from "next/image";
 import Link from "next/link";
+import EmptyComic from "@/shared/components/EmptyComic";
 
 interface itemProps {
   title: string;
@@ -21,9 +21,7 @@ const BoxComics = ({ title, field }: itemProps) => {
       try {
         const { data } = await comicService.getRankingComics(field, 5);
         setComics(data);
-      } catch (error: any) {
-        toast.error(error.message);
-      }
+      } catch (error: any) {}
     };
 
     getComics();
@@ -52,15 +50,7 @@ const BoxComics = ({ title, field }: itemProps) => {
             </Link>
           </div>
           {comics.length === 0 ? (
-            <div className="text-center flex flex-col items-center justify-center">
-              <Image
-                priority
-                width={200}
-                src={EmptyImage}
-                alt="Không có truyện"
-              />
-              <span>Không có truyện</span>
-            </div>
+            <EmptyComic />
           ) : (
             <div className="grid grid-cols-5 mobile:grid-cols-3 gap-5 mobile:gap-1">
               {comics.slice(0, 5).map((comic) => (
