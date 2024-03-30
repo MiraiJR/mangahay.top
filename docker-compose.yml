@@ -5,6 +5,6 @@ services:
     image: miraijr/mangahay-fe:main
     container_name: comic_mangahay_fe
     env_file:
-      - .docker.env
+      - .env
     ports:
       - "3001:3001"
