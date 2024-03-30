@@ -1,10 +1,10 @@
-version: '3'
+version: "3"
 
 services:
   frontend:
     build: .
     container_name: comic_mangahay_fe
     env_file:
-      - .env
+      - .docker.env
     ports:
-      - '3001:3001'
+      - "3001:3001"
