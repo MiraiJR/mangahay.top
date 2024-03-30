@@ -44,9 +44,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      # - name: Deploy to Server
-      #   uses: ./.github/actions/deploy-server
-      #   with:
-      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     ssh-host: ${{ secrets.SSH_HOST }}
+      - name: Deploy to Server
+        uses: ./.github/actions/deploy-server
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-host: ${{ secrets.SSH_HOST }}
       

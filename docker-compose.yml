@@ -2,7 +2,7 @@ version: "3"
 
 services:
   frontend:
-    build: .
+    image: miraijr/mangahay-fe:main
     container_name: comic_mangahay_fe
     env_file:
       - .docker.env
