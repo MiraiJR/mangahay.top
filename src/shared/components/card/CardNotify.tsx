@@ -21,14 +21,13 @@ const CardNotify = ({ notify, imageWidth, imageHeight }: itemProps) => {
 
       setData(data);
       router.push(`${notify.redirectUrl}`);
-      router.reload();
     } catch (error: any) {}
   };
 
   return (
     <div
       className={cn(
-        "grid grid-cols-12 gap-4 cursor-pointer border border-b-1",
+        "grid grid-cols-12 gap-4 cursor-pointer border border-b-1 items-center",
         {
           "bg-slate-400": data.isRead,
         }
@@ -38,7 +37,7 @@ const CardNotify = ({ notify, imageWidth, imageHeight }: itemProps) => {
       <Image
         width={1}
         height={1}
-        className={`col-span-2 col w-[100%] h-[${imageHeight}px] object-cover`}
+        className={`col-span-2 col w-[100%] h-[${imageHeight}px] object-cover object-top`}
         src={reduceQualityImage(data.thumb)}
         alt="thông báo"
       />

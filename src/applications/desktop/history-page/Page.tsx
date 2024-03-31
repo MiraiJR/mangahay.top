@@ -5,7 +5,9 @@ import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import dynamic from "next/dynamic";
 import MyLoading from "@/shared/components/MyLoading";
 
-const ListComics = dynamic(() => import("../search-page/ListComics"));
+const ListComics = dynamic(
+  () => import("../../../shared/components/ListComics")
+);
 
 const HistoryPage = () => {
   const [comics, setComics] = useState<Comic[] | null>(null);
