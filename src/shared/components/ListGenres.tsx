@@ -13,9 +13,12 @@ const ListGenres = () => {
 
   useEffect(() => {
     const getGenres = async () => {
+      setIsLoading(true);
+
       try {
         const { data } = await comicService.getGenres();
         setGenres(data);
+        setIsLoading(false);
       } catch (error: any) {}
     };
     getGenres();
