@@ -15,6 +15,8 @@ import { reduceQualityImage } from "../helpers/helpers";
 import MyLoading from "./MyLoading";
 import { userStore } from "../stores/userStore";
 
+const INTERVAL_REFRESH_NOTIFICATION: number = 5 * 60 * 1000;
+
 const LoginedUser = () => {
   const { userProfile, setUserProfile } = userStore();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -28,35 +30,37 @@ const LoginedUser = () => {
   const [theNumberOfUnredNotifies, setTheNumberOfUnredNotifies] =
     useState<number>(0);
 
+  const getNotifies = async (isToast: boolean = false) => {
+    setIsLoading(true);
+
+    try {
+      const { data } = await meService.getNotifies({
+        page: 1,
+        limit: 10,
+      });
+      const newTheNumberOfUnreadNotifies = data.reduce(
+        (previousValue, curNotify) =>
+          curNotify.isRead ? previousValue : previousValue + 1,
+        0
+      );
+
+      if (isToast && newTheNumberOfUnreadNotifies > theNumberOfUnredNotifies) {
+        toast.success("Bạn có thông báo mới!");
+      }
+
+      setTheNumberOfUnredNotifies(newTheNumberOfUnreadNotifies);
+
+      setNotifies(data);
+      setIsLoading(false);
+    } catch (error: any) {}
+  };
+
   useEffect(() => {
     const getMe = async () => {
       try {
         const { data } = await meService.getMe();
 
         setUserProfile(data);
-      } catch (error: any) {
-        toast.error(error.mesage);
-      }
-    };
-
-    const getNotifies = async () => {
-      setIsLoading(true);
-
-      try {
-        const { data } = await meService.getNotifies({
-          page: 1,
-          limit: 10,
-        });
-        setTheNumberOfUnredNotifies(
-          data.reduce(
-            (previousValue, curNotify) =>
-              curNotify.isRead ? previousValue : previousValue + 1,
-            0
-          )
-        );
-
-        setNotifies(data);
-        setIsLoading(false);
       } catch (error: any) {
         toast.error(error.mesage);
       }
@@ -79,6 +83,10 @@ const LoginedUser = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
+
+  useEffect(() => {
+    setInterval(() => getNotifies(true), INTERVAL_REFRESH_NOTIFICATION);
   }, []);
 
   const handleLogout = async () => {

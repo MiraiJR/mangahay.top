@@ -5,7 +5,9 @@ import MyLoading from "@/shared/components/MyLoading";
 import MetaTags from "@/shared/components/MetaTags";
 
 const BoxSearch = dynamic(() => import("./BoxSearch"));
-const ListComics = dynamic(() => import("./ListComics"));
+const ListComics = dynamic(
+  () => import("../../../shared/components/ListComics")
+);
 
 const SearchPage = () => {
   const resultRef = useRef<any>(null);
