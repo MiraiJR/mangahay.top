@@ -19,7 +19,7 @@ interface itemProps {
 }
 
 const CreateComicForm = ({ comic = null }: itemProps) => {
-  const { changeVisible } = useDialogContext();
+  const { changeVisible, changeIsUpdateData } = useDialogContext();
   const fileUploadRef = useRef<any>(null);
   const { genres } = globalStore();
   const [comicName, setComicName] = useState<string>("");
@@ -107,6 +107,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
       if (comic) {
         await comicService.updateComic(comic.id, formData);
         changeVisible(false);
+        changeIsUpdateData(true);
       } else {
         await comicService.createComic(formData);
         toast.success("Tạo truyện mới thành công!");
@@ -133,7 +134,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
       const response = await fetch(urlImage);
       const blob = await response.blob();
 
-      const file = new File([blob], `${comic!.slug}.jpg`, {
+      const file = new File([blob], `${comic!.id}.jpg`, {
         type: "image/jpeg",
         lastModified: Date.now(),
       });
@@ -275,7 +276,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
       </div>
       <div className="flex items-center justify-center">
         <button className="btn-primary w-fit" onClick={handleCreateComic}>
-          Tạo truyện
+          {comic ? "Cập nhật truyện" : "Tạo truyện"}
         </button>
       </div>
     </div>

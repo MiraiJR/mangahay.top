@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { DataScroller } from "primereact/datascroller";
 import { Rating } from "primereact/rating";
 import Image from "next/image";
@@ -6,29 +6,29 @@ import { formatDate } from "@/shared/helpers/helpers";
 import ComicService from "@/shared/services/comicService";
 import themeStore from "@/shared/stores/themeStore";
 import DialogUpdateComic from "@/shared/components/dialog/DialogUpdateComic";
-import {
-  DialogProvider,
-  useDialogContext,
-} from "@/shared/contexts/DialogContext";
+import { useDialogContext } from "@/shared/contexts/DialogContext";
 
 const ListCreatedComics = () => {
-  const { changeVisible } = useDialogContext();
+  const { changeVisible, isUpdateData, changeIsUpdateData } =
+    useDialogContext();
   const [comics, setComics] = useState<Comic[]>([]);
   const [showDetail, setShowDetail] = useState<boolean>(false);
-  const [visibleUpdateComic, setVisibleUpdateComic] = useState<boolean>(false);
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
 
   useEffect(() => {
-    const getComics = async () => {
-      try {
-        const { data } = await ComicService.getComicsCreatedByMe();
+    if (isUpdateData) {
+      const getComics = async () => {
+        try {
+          const { data } = await ComicService.getComicsCreatedByMe();
 
-        setComics(data);
-      } catch (error: any) {}
-    };
+          setComics(data);
+        } catch (error: any) {}
+      };
 
-    getComics();
-  }, []);
+      getComics();
+      changeIsUpdateData(false);
+    }
+  }, [isUpdateData]);
 
   const itemTemplate = (comic: Comic) => {
     return (
@@ -100,25 +100,21 @@ const ListCreatedComics = () => {
   };
 
   return (
-    <>
-      <DialogProvider>
-        <div className="card">
-          <DataScroller
-            pt={{
-              item: {
-                className: `bg-${themeStore.getTheme()} text-${themeStore.getOppositeTheme()}`,
-              },
-            }}
-            value={comics}
-            itemTemplate={itemTemplate}
-            rows={5}
-            buffer={0.4}
-            header="Danh sách truyện bạn đã đăng"
-          />
-        </div>
-        {selectedComic && <DialogUpdateComic comic={selectedComic} />}
-      </DialogProvider>
-    </>
+    <div className="card">
+      <DataScroller
+        pt={{
+          item: {
+            className: `bg-${themeStore.getTheme()} text-${themeStore.getOppositeTheme()}`,
+          },
+        }}
+        value={comics}
+        itemTemplate={itemTemplate}
+        rows={5}
+        buffer={0.4}
+        header="Danh sách truyện bạn đã đăng"
+      />
+      {selectedComic && <DialogUpdateComic comic={selectedComic} />}
+    </div>
   );
 };
 

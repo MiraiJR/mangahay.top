@@ -4,6 +4,7 @@ import { MenuItem } from "primereact/menuitem";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import { DialogProvider } from "@/shared/contexts/DialogContext";
 
 const CreateComicForm = dynamic(() => import("./CreateComicForm"));
 const CrawlChapter = dynamic(() => import("./CrawlChapter"));
@@ -60,25 +61,29 @@ const ManagerPage = () => {
   }, []);
 
   return (
-    <div>
-      <div className="card w-[100%]">
-        <TabMenu
-          model={items}
-          activeIndex={activeTab}
-          onTabChange={(e) => setActiveTab(e.index)}
-        />
+    <DialogProvider>
+      <div>
+        <div className="card w-[100%]">
+          <TabMenu
+            model={items}
+            activeIndex={activeTab}
+            onTabChange={(e) => setActiveTab(e.index)}
+          />
+        </div>
+        <div className="mt-5 p-2">
+          {activeTab === TabType.CREATE_CHAPTER && <CreateChapterForm />}
+        </div>
+        <div>
+          {activeTab === TabType.CREATED_COMICS && <ListCreatedComics />}
+        </div>
+        <div className="mt-5 p-2">
+          {activeTab === TabType.CREATE_COMIC && <CreateComicForm />}
+        </div>
+        <div className="p-2">
+          {activeTab === TabType.CRAWL_CHAPTER && <CrawlChapter />}
+        </div>
       </div>
-      <div className="mt-5 p-2">
-        {activeTab === TabType.CREATE_CHAPTER && <CreateChapterForm />}
-      </div>
-      <div>{activeTab === TabType.CREATED_COMICS && <ListCreatedComics />}</div>
-      <div className="mt-5 p-2">
-        {activeTab === TabType.CREATE_COMIC && <CreateComicForm />}
-      </div>
-      <div className="p-2">
-        {activeTab === TabType.CRAWL_CHAPTER && <CrawlChapter />}
-      </div>
-    </div>
+    </DialogProvider>
   );
 };
 
