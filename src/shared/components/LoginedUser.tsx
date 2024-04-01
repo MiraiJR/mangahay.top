@@ -166,14 +166,32 @@ const LoginedUser = () => {
                 </Link>
               )}
               {userProfile?.role === "admin" && (
-                <Link
-                  rel="preload"
-                  href="/quan-ly"
-                  className="p-2 hover:bg-slate-400"
-                  hrefLang="vi"
-                >
-                  Đăng truyện
-                </Link>
+                <div className="flex flex-col">
+                  <Link
+                    rel="preload"
+                    href="/quan-ly#1"
+                    className="p-2 hover:bg-slate-400"
+                    hrefLang="vi"
+                  >
+                    Đăng truyện
+                  </Link>
+                  <Link
+                    rel="preload"
+                    href="/quan-ly#2"
+                    className="p-2 hover:bg-slate-400"
+                    hrefLang="vi"
+                  >
+                    Đăng chương mới
+                  </Link>
+                  <Link
+                    rel="preload"
+                    href="/quan-ly#3"
+                    className="p-2 hover:bg-slate-400"
+                    hrefLang="vi"
+                  >
+                    Crawl chương
+                  </Link>
+                </div>
               )}
               <li className="p-2 hover:bg-slate-400" onClick={handleLogout}>
                 Đăng xuất

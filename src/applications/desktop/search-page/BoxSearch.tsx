@@ -6,6 +6,7 @@ import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import { toast } from "react-toastify";
 import comicService from "@/shared/services/comicService";
 import themeStore from "@/shared/stores/themeStore";
+import { globalStore } from "@/shared/stores/globalStore";
 
 interface itemProps {
   setComics: any;
@@ -29,7 +30,7 @@ const BoxSearch = ({
   selectedAuthor,
   resultRef,
 }: itemProps) => {
-  const [genres, setGenres] = useState<Genre[]>([]);
+  const { genres } = globalStore();
   const [comicName, setComicName] = useState<string>("");
   const [filterAuthor, setFilterAuthor] = useState<string>(
     selectedAuthor ?? ""
@@ -76,15 +77,6 @@ const BoxSearch = ({
     setFilterAuthor(selectedAuthor ?? "");
     setFilterGenres(selectedGenres);
 
-    const getGenres = async () => {
-      try {
-        const { data } = await comicService.getGenres();
-
-        setGenres(data);
-      } catch (error: any) {
-        toast.error(error.message);
-      }
-    };
     const searchComics = async () => {
       try {
         const { data } = await await comicService.searchComics({
@@ -98,7 +90,6 @@ const BoxSearch = ({
       }
     };
 
-    getGenres();
     searchComics();
   }, [selectedGenres, selectedAuthor]);
 

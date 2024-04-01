@@ -42,6 +42,12 @@ const ComicService = {
         "content-type": "multipart/form-data",
       },
     }),
+  updateComic: (comicId: number, formData: FormData) =>
+    axiosClient.put<Comic>(`/comics/${comicId}`, formData, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    }),
   crawlChapter: (
     comicId: number,
     urlPost: string,

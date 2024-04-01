@@ -22,6 +22,7 @@ import themeStore from "@/shared/stores/themeStore";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import ComicService from "@/shared/services/comicService";
 
 type Item = {
   id: number;
@@ -32,6 +33,7 @@ type Item = {
 };
 
 const Header = () => {
+  const { genres, setGenres } = globalStore();
   const inputRef = useRef<any>(null);
   const genreRef = useRef<any>(null);
   const [inputSearch, setInputSearch] = useState<string>("");
@@ -72,6 +74,20 @@ const Header = () => {
       Icon: History,
     },
   ];
+
+  useEffect(() => {
+    const getGenres = async () => {
+      try {
+        const { data } = await ComicService.getGenres();
+
+        setGenres(data);
+      } catch (error) {}
+    };
+
+    if (genres.length === 0) {
+      getGenres();
+    }
+  }, [genres]);
 
   const handleSearchComic = async (comicName: string) => {
     if (comicName.trim() === "") {
