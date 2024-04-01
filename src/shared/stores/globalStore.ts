@@ -5,6 +5,8 @@ interface globalStore {
   setIsLogined: (data: boolean) => void;
   isLight: boolean;
   setIsLight: (data: boolean) => void;
+  genres: Genre[];
+  setGenres: (data: Genre[]) => void;
 }
 
 export const globalStore = create<globalStore>((set) => ({
@@ -19,6 +21,13 @@ export const globalStore = create<globalStore>((set) => ({
     set((state) => ({
       ...state,
       isLight: data,
+    }));
+  },
+  genres: [],
+  setGenres: (data) => {
+    set((state) => ({
+      ...state,
+      genres: data,
     }));
   },
 }));

@@ -1,6 +1,5 @@
 import ManagerPage from "@/applications/desktop/manager-page/Page";
 import jwt from "@/shared/libs/jwt";
-import MeService from "@/shared/services/meService";
 import { userStore } from "@/shared/stores/userStore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";

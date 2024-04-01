@@ -7,11 +7,21 @@ import { toast } from "react-toastify";
 import { Chips, ChipsChangeEvent } from "primereact/chips";
 import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
 import themeStore from "@/shared/stores/themeStore";
-import { useRouter } from "next/router";
+import { globalStore } from "@/shared/stores/globalStore";
+import {
+  removeAccentsAndLowerCase,
+  removeAccentsAndLowerCaseArray,
+} from "@/shared/helpers/StringHelper";
+import { useDialogContext } from "@/shared/contexts/DialogContext";
 
-const CreateComicForm = () => {
+interface itemProps {
+  comic?: Comic | null;
+}
+
+const CreateComicForm = ({ comic = null }: itemProps) => {
+  const { changeVisible, changeIsUpdateData } = useDialogContext();
   const fileUploadRef = useRef<any>(null);
-  const [genres, setGenres] = useState<Genre[]>([]);
+  const { genres } = globalStore();
   const [comicName, setComicName] = useState<string>("");
   const [comicAnotherName, setComicAnotherName] = useState<string>("");
   const [comicGenres, setComicGenres] = useState<string[]>([]);
@@ -19,21 +29,19 @@ const CreateComicForm = () => {
   const [comicTranslators, setComicTranslators] = useState<string[]>([]);
   const [comicBriefDescription, setBriefDescription] = useState<string>("");
   const [comicThumb, setComicThumb] = useState<File | null>(null);
-  const router = useRouter();
+  const [isUpdateImage, setIsUpdateImage] = useState<string>("0");
 
   useEffect(() => {
-    const getGenres = async () => {
-      try {
-        const { data } = await comicService.getGenres();
-
-        setGenres(data);
-      } catch (error: any) {
-        toast.error(error.message);
-      }
-    };
-
-    getGenres();
-  }, []);
+    if (comic) {
+      setComicName(comic.name);
+      setComicAnotherName(comic.anotherName);
+      setBriefDescription(comic.briefDescription);
+      setComicAuthors(comic.authors);
+      setComicTranslators(comic.translators);
+      setComicGenres(comic.genres);
+      addExistedImageUrlToUpload(comic.thumb);
+    }
+  }, [comic]);
 
   const handleUploadImage = (e: FileUploadSelectEvent) => {
     if (e.files.length > 1) {
@@ -92,13 +100,19 @@ const CreateComicForm = () => {
       formData.append("translators[]", translator);
     });
     formData.append("briefDescription", handleBriefDescription());
+    formData.append("isUpdateImage", isUpdateImage);
     formData.append("file", comicThumb);
 
     try {
-      await comicService.createComic(formData);
-
-      toast.success("Tạo truyện mới thành công!");
-      resetInput();
+      if (comic) {
+        await comicService.updateComic(comic.id, formData);
+        changeVisible(false);
+        changeIsUpdateData(true);
+      } else {
+        await comicService.createComic(formData);
+        toast.success("Tạo truyện mới thành công!");
+        resetInput();
+      }
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -113,6 +127,27 @@ const CreateComicForm = () => {
     setComicThumb(null);
     setComicTranslators([]);
     fileUploadRef.current.clear();
+  };
+
+  const addExistedImageUrlToUpload = async (urlImage: string) => {
+    try {
+      const response = await fetch(urlImage);
+      const blob = await response.blob();
+
+      const file = new File([blob], `${comic!.id}.jpg`, {
+        type: "image/jpeg",
+        lastModified: Date.now(),
+      });
+
+      if (fileUploadRef.current) {
+        fileUploadRef.current.setFiles([file]);
+
+        handleUploadImage({
+          originalEvent: {} as DragEvent,
+          files: [file],
+        });
+      }
+    } catch (error) {}
   };
 
   return (
@@ -159,7 +194,9 @@ const CreateComicForm = () => {
               inputId="authors"
               max={10}
               value={comicAuthors}
-              onChange={(e: ChipsChangeEvent) => setComicAuthors(e.value ?? [])}
+              onChange={(e: ChipsChangeEvent) => {
+                setComicAuthors(e.value ?? []);
+              }}
             />
           </div>
           <div className="flex flex-col gap-2 w-[100%]">
@@ -195,7 +232,9 @@ const CreateComicForm = () => {
                   inputId={genre.slug}
                   value={genre.name}
                   onChange={onIngredientsChange}
-                  checked={comicGenres.includes(genre.name)}
+                  checked={removeAccentsAndLowerCaseArray(comicGenres).includes(
+                    removeAccentsAndLowerCase(genre.name)
+                  )}
                 />
                 <label htmlFor={genre.slug} className="ml-2 mobile:text-xs">
                   {genre.name}
@@ -226,7 +265,10 @@ const CreateComicForm = () => {
         <label htmlFor="iamge">Ảnh mô tả</label>
         <FileUpload
           ref={fileUploadRef}
-          onSelect={(event: FileUploadSelectEvent) => handleUploadImage(event)}
+          onSelect={(event: FileUploadSelectEvent) => {
+            handleUploadImage(event);
+            setIsUpdateImage("1");
+          }}
           customUpload={true}
           accept="image/*"
           emptyTemplate={<p className="m-0">Có thể kéo thả ảnh vào đây</p>}
@@ -234,7 +276,7 @@ const CreateComicForm = () => {
       </div>
       <div className="flex items-center justify-center">
         <button className="btn-primary w-fit" onClick={handleCreateComic}>
-          Tạo truyện
+          {comic ? "Cập nhật truyện" : "Tạo truyện"}
         </button>
       </div>
     </div>

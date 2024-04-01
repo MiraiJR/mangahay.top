@@ -1,33 +1,18 @@
-import { useEffect, useState, useContext } from "react";
-import { toast } from "react-toastify";
-import comicService from "../services/comicService";
+import { useState, useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import themeStore from "../stores/themeStore";
-import { ProgressSpinner } from "primereact/progressspinner";
 import MyLoading from "./MyLoading";
+import { globalStore } from "../stores/globalStore";
 
 const ListGenres = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [genres, setGenres] = useState<Genre[]>([]);
+  const { genres } = globalStore();
   const { theme } = useContext(ThemeContext);
 
-  useEffect(() => {
-    const getGenres = async () => {
-      setIsLoading(true);
-
-      try {
-        const { data } = await comicService.getGenres();
-        setGenres(data);
-        setIsLoading(false);
-      } catch (error: any) {}
-    };
-    getGenres();
-  }, []);
   return (
     <div
       className={`grid grid-cols-4 mobile:grid-cols-3 mobile:max-h-[300px] mobile:w-screen mobile:overflow-y-scroll gap-2 shadow-outer-lg-${themeStore.getOppositeTheme()} bg-${theme} p-2 z-10`}
     >
-      {isLoading ? (
+      {!genres ? (
         <MyLoading />
       ) : genres.length !== 0 ? (
         genres.map((genre) => (
