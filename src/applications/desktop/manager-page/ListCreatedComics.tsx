@@ -15,20 +15,24 @@ const ListCreatedComics = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
 
+  const getComics = async () => {
+    try {
+      const { data } = await ComicService.getComicsCreatedByMe();
+
+      setComics(data);
+    } catch (error: any) {}
+  };
+
   useEffect(() => {
     if (isUpdateData) {
-      const getComics = async () => {
-        try {
-          const { data } = await ComicService.getComicsCreatedByMe();
-
-          setComics(data);
-        } catch (error: any) {}
-      };
-
       getComics();
       changeIsUpdateData(false);
     }
   }, [isUpdateData]);
+
+  useEffect(() => {
+    getComics();
+  }, []);
 
   const itemTemplate = (comic: Comic) => {
     return (
