@@ -1,24 +1,27 @@
 import ChapterPage from "@/applications/desktop/chapter-page/Page";
 import MetaTags from "@/shared/components/MetaTags";
+import { getNextPreAofChapterFromId } from "@/shared/helpers/ChapterHelper";
 import { extractIdFromSlugChapter } from "@/shared/helpers/helpers";
 import ComicService from "@/shared/services/comicService";
+
 interface itemProps {
-  detailComic: ComicDetail;
-  detailChapterA: DetailChapter;
+  detailComic: Comic;
+  detailChapter: DetailChapter;
 }
+
 export async function getServerSideProps(context: any) {
   try {
     const { slugComic, slugChapter } = context.query;
-    const { data } = await ComicService.getComicBySlug(slugComic);
-    const chapter = await ComicService.getChapterOfComic(
-      data.comic.id,
-      extractIdFromSlugChapter(slugChapter as string)
-    );
+    const { data: comic } = await ComicService.getComicBySlug(slugComic);
+    const currentChapterId = extractIdFromSlugChapter(slugChapter as string);
 
     return {
       props: {
-        detailComic: data,
-        detailChapterA: chapter.data,
+        detailComic: comic,
+        detailChapter: getNextPreAofChapterFromId(
+          currentChapterId,
+          comic.chapters
+        ),
       },
     };
   } catch (error) {
@@ -33,19 +36,18 @@ export async function getServerSideProps(context: any) {
 
 export default function ChapterRoute({
   detailComic,
-  detailChapterA,
+  detailChapter,
 }: itemProps) {
-  const { currentChapter } = detailChapterA;
-  const { comic } = detailComic;
+  const { currentChapter } = detailChapter;
   return (
     <>
       <MetaTags
-        title={`${comic.name} - ${currentChapter.name} | MangaHay - Đọc truyện tranh mới nhất`}
-        description={`Đọc truyện tranh ${comic.name} [${comic.anotherName}] - ${currentChapter.name}  vietsub, chất lượng cao, không quảng cáo tại mangahay.top`}
-        image={comic.thumb}
-        url={`https://mangahay.top/truyen/${comic.slug}/${currentChapter.slug}`}
+        title={`${detailComic.name} - ${currentChapter.name} | MangaHay - Đọc truyện tranh mới nhất`}
+        description={`Đọc truyện tranh ${detailComic.name} [${detailComic.anotherName}] - ${currentChapter.name}  vietsub, chất lượng cao, không quảng cáo tại mangahay.top`}
+        image={detailComic.thumb}
+        url={`https://mangahay.top/truyen/${detailComic.slug}/${currentChapter.slug}`}
       />
-      <ChapterPage detailComic={detailComic} detailChapterA={detailChapterA} />
+      <ChapterPage detailComic={detailComic} detailChapterA={detailChapter} />
     </>
   );
 }

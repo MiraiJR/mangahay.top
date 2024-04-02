@@ -8,6 +8,7 @@ interface itemProps {
 const CardChapter = ({ chapter }: itemProps) => {
   const router = useRouter();
   const { slugComic } = router.query;
+
   return (
     <Link
       rel="preload"

@@ -7,11 +7,10 @@ import { toast } from "react-toastify";
 import comicService from "@/shared/services/comicService";
 import themeStore from "@/shared/stores/themeStore";
 import { globalStore } from "@/shared/stores/globalStore";
+import { useRouter } from "next/router";
 
 interface itemProps {
   setComics: any;
-  selectedGenres: string[];
-  selectedAuthor: string | null;
   resultRef: any;
 }
 
@@ -24,22 +23,14 @@ interface OptionSort {
   code: string;
 }
 
-const BoxSearch = ({
-  setComics,
-  selectedGenres,
-  selectedAuthor,
-  resultRef,
-}: itemProps) => {
+const BoxSearch = ({ setComics, resultRef }: itemProps) => {
+  const [isQueryFromUrl, setIsQueryFromUrl] = useState<boolean>(false);
   const { genres } = globalStore();
   const [comicName, setComicName] = useState<string>("");
-  const [filterAuthor, setFilterAuthor] = useState<string>(
-    selectedAuthor ?? ""
-  );
+  const [filterAuthor, setFilterAuthor] = useState<string>("");
   const [filterState, setFilterState] = useState<OptionStatus | null>(null);
   const [filterSort, setFilterSort] = useState<OptionSort | null>(null);
-  const [filterGenres, setFilterGenres] = useState<string[]>(
-    selectedGenres ?? []
-  );
+  const [filterGenres, setFilterGenres] = useState<string[]>([]);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
   const optionStatus: OptionStatus[] = [
     { name: "Đang tiến hành" },
@@ -73,25 +64,35 @@ const BoxSearch = ({
     },
   ];
 
-  useEffect(() => {
-    setFilterAuthor(selectedAuthor ?? "");
-    setFilterGenres(selectedGenres);
+  const router = useRouter();
 
+  useEffect(() => {
+    const authorFromUrl = router.query.filterAuthor as string;
+    setFilterAuthor(authorFromUrl);
+    const genresFromUrl: string[] = router.query.filterGenres
+      ? (router.query.filterGenres as string).split(",")
+      : [];
+    setFilterGenres(genresFromUrl);
+    setIsQueryFromUrl(true);
+  }, [router]);
+
+  useEffect(() => {
     const searchComics = async () => {
       try {
-        const { data } = await await comicService.searchComics({
-          filterGenres: selectedGenres,
-          filterAuthor: selectedAuthor ?? "",
+        const { data } = await comicService.searchComics({
+          filterGenres,
+          filterAuthor,
         });
 
         setComics(data.comics);
+        setIsQueryFromUrl(false);
       } catch (error: any) {
         toast.error(error.message);
       }
     };
 
     searchComics();
-  }, [selectedGenres, selectedAuthor]);
+  }, [isQueryFromUrl]);
 
   const onIngredientsChange = (e: CheckboxChangeEvent) => {
     let _filterGenres = [...filterGenres];

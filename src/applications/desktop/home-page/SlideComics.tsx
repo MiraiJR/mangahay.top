@@ -110,7 +110,7 @@ const SlideComics = () => {
             className="mobile:max-w-[300px] w-[500px]"
           >
             {comics.slice(0, THE_NUMBER_OF_COMICS_SLIDE).map((comic) => (
-              <SwiperSlide key={comic.id}>
+              <SwiperSlide key={comic.id + "-slide-comic"}>
                 <div className="flex items-center justify-center">
                   <Image
                     priority

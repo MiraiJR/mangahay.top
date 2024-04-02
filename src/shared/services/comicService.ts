@@ -18,8 +18,7 @@ const ComicService = {
         ...query,
       },
     }),
-  getComicBySlug: (slug: string) =>
-    axiosClient.get<ComicDetail>(`/comics/${slug}`),
+  getComicBySlug: (slug: string) => axiosClient.get<Comic>(`/comics/${slug}`),
   increaseField: (comicId: number, field: string, jump: number) =>
     axiosClient.patch<string>(
       `/comics/${comicId}/increment?field=${field}&jump=${jump}`
@@ -48,6 +47,8 @@ const ComicService = {
         "content-type": "multipart/form-data",
       },
     }),
+  deleteComic: (comicId: number) =>
+    axiosClient.delete<string>(`/comics/${comicId}`),
   crawlChapter: (
     comicId: number,
     urlPost: string,

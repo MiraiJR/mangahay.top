@@ -21,9 +21,10 @@ import MyLoading from "@/shared/components/MyLoading";
 import dynamic from "next/dynamic";
 import ListComicsOfAuthor from "../comic-page/ListComicsOfAuthor";
 import ListComicsRanking from "../home-page/ListComicsRanking";
+import { getNextPreAofChapterFromId } from "@/shared/helpers/ChapterHelper";
 
 interface itemProps {
-  detailComic: ComicDetail;
+  detailComic: Comic;
   detailChapterA: DetailChapter;
 }
 
@@ -37,15 +38,15 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
   const menuChapterRef = useRef<any>(null);
   const router = useRouter();
   const { slugChapter, slugComic } = router.query;
-  const [comic, setComic] = useState<Comic>(detailComic.comic);
+  const [comic, setComic] = useState<Comic>(detailComic);
   const [contentComment, setContentComment] = useState<string>("");
   const [detailChapter, setDetailChapter] = useState<DetailChapter | null>(
     detailChapterA
   );
-  const [chapters, setChapters] = useState<Chapter[]>(detailComic.chapters);
   const [comments, setComments] = useState<UserComment[]>(detailComic.comments);
   const [showMenuChapter, setShowMenuChapter] = useState<boolean>(false);
   const { isLogined } = globalStore();
+
   const items: MenuItem[] = [
     { label: "Truyện" },
     { label: comic?.name, url: `${originalURL}/truyen/${comic?.slug}` },
@@ -75,26 +76,15 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
 
   useEffect(() => {
     setShowMenuChapter(false);
+
     const increaseView = async (comicId: number) => {
       try {
         await comicService.increaseField(comicId, "view", 1);
-      } catch (error: any) {
-        toast.error(error.message);
-      }
+      } catch (error: any) {}
     };
 
-    const getChapter = async (comicId: number, chapterId: number) => {
-      try {
-        const { data } = await comicService.getChapterOfComic(
-          comicId,
-          chapterId
-        );
-
-        setDetailChapter(data);
-      } catch (error) {}
-    };
-
-    getChapter(comic.id, extractIdFromSlugChapter(slugChapter as string));
+    const chapterId = extractIdFromSlugChapter(slugChapter as string);
+    setDetailChapter(getNextPreAofChapterFromId(chapterId, comic.chapters));
     increaseView(comic.id);
   }, [slugChapter, slugComic]);
 
@@ -131,8 +121,8 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
       </div>
       {comic && (
         <DescriptionComic
-          firstChapter={chapters[chapters.length - 1] ?? null}
-          lastChapter={chapters[0] ?? null}
+          firstChapter={comic.chapters[comic.chapters.length - 1] ?? null}
+          lastChapter={comic.chapters[0] ?? null}
           comic={comic}
           setComic={setComic}
         />
@@ -167,7 +157,7 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
             >
               <MenuSquare />
             </button>
-            {showMenuChapter && <MenuChapter chapters={chapters} />}
+            {showMenuChapter && <MenuChapter chapters={comic.chapters} />}
           </div>
           <button
             className={cn("btn-primary", {
@@ -228,7 +218,7 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
             title="Chapter trước"
             onClick={() =>
               router.push(
-                `/truyen/${comic?.slug}/${detailChapter?.previousChapter?.slug}`
+                `/truyen/${comic.slug}/${detailChapter?.previousChapter?.slug}`
               )
             }
             disabled={!detailChapter?.previousChapter}
@@ -243,7 +233,7 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
             >
               <MenuSquare />
             </button>
-            {showMenuChapter && <MenuChapter chapters={chapters} />}
+            {showMenuChapter && <MenuChapter chapters={comic.chapters} />}
           </div>
           <button
             className={cn("btn-primary", {
@@ -252,7 +242,7 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
             title="Chapter tiếp theo"
             onClick={() => {
               router.push(
-                `/truyen/${comic?.slug}/${detailChapter?.nextChapter?.slug}`
+                `/truyen/${comic.slug}/${detailChapter?.nextChapter?.slug}`
               );
             }}
             disabled={!detailChapter?.nextChapter}

@@ -17,5 +17,6 @@ type Comic = {
   updatedAt: Date;
   translators: string[];
   newestChapter?: Chapter;
-  chapters?: Chapter[];
+  chapters: Chapter[];
+  comments: UserComment[];
 };
