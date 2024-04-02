@@ -16,6 +16,13 @@ type Comic = {
   createdAt: Date;
   updatedAt: Date;
   translators: string[];
-  newestChapter?: Chapter;
-  chapters?: Chapter[];
+  chapters: Chapter[];
+  comments: UserComment[];
+};
+
+type PagingComic = {
+  page: number;
+  limit: number;
+  total: number;
+  comics: Comic[];
 };

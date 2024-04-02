@@ -119,20 +119,22 @@ const CardComic = ({ comic }: itemProps) => {
           {comic.name}
         </h2>
       </Link>
-      {comic.newestChapter && (
+      {comic.chapters.length > 0 ? (
         <Link
           rel="preload"
           hrefLang="vi"
-          href={`/truyen/${comic.slug}/${comic.newestChapter.slug}`}
+          href={`/truyen/${comic.slug}/${comic.chapters[0].slug}`}
           lang="vi"
         >
           <h3
             className={`text-${themeStore.getOppositeTheme()} line-clamp-1 mobile:text-sm`}
-            title={comic.newestChapter.name}
+            title={comic.chapters[0].name}
           >
-            {comic.newestChapter.name}
+            {comic.chapters[0].name}
           </h3>
         </Link>
+      ) : (
+        <span>Chưa có chapter</span>
       )}
       <div className="flex justify-between items-center">
         <div className="mobile:hidden">

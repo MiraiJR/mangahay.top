@@ -1,13 +1,13 @@
 import CardComic from "@/shared/components/card/CardComic";
 import CardHighlightComic from "@/shared/components/card/CardHighlightComic";
 import { ChevronsRight } from "lucide-react";
-import EmptyImage from "@/shared/assets/empty.webp";
 import themeStore from "@/shared/stores/themeStore";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ComicService from "@/shared/services/comicService";
-import { toast } from "react-toastify";
+import EmptyComic from "@/shared/components/EmptyComic";
+
+const MAX_THE_NUMBER_OF_COMICS: number = 11;
 
 interface itemProps {
   genre: string;
@@ -51,29 +51,8 @@ const RecommendedComics = ({ genre, title }: itemProps) => {
           <ChevronsRight size={20} />
         </Link>
       </div>
-      {comics.length === 0 && (
-        <div className="text-center flex flex-col items-center justify-center">
-          <Image
-            priority
-            width={200}
-            height={200}
-            src={EmptyImage}
-            alt="Không có truyện"
-          />
-          <span>Không có truyện</span>
-        </div>
-      )}
-      {!comics ? (
-        <div className="text-center flex flex-col items-center justify-center">
-          <Image
-            width={200}
-            height={200}
-            src={EmptyImage}
-            alt="Không có truyện"
-            priority
-          />
-          <span>Không có truyện</span>
-        </div>
+      {comics.length === 0 ? (
+        <EmptyComic />
       ) : (
         <div className="grid grid-cols-12 gap-2">
           <div className="col-span-3 mobile:col-span-12">
@@ -81,7 +60,7 @@ const RecommendedComics = ({ genre, title }: itemProps) => {
           </div>
           <div className="col-span-9 mobile:col-span-12">
             <div className="grid grid-cols-5 mobile:grid-cols-3 grid-rows-2 gap-2">
-              {comics.slice(1, 11).map((comic) => (
+              {comics.slice(1, MAX_THE_NUMBER_OF_COMICS).map((comic) => (
                 <CardComic comic={comic} key={comic.id} />
               ))}
             </div>

@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { DataScroller } from "primereact/datascroller";
 import { Rating } from "primereact/rating";
 import Image from "next/image";
-import { formatDate } from "@/shared/helpers/helpers";
+import { convertWebpResource, formatDate } from "@/shared/helpers/helpers";
 import ComicService from "@/shared/services/comicService";
 import themeStore from "@/shared/stores/themeStore";
 import DialogUpdateComic from "@/shared/components/dialog/DialogUpdateComic";
 import { useDialogContext } from "@/shared/contexts/DialogContext";
+import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
+import { toast } from "react-toastify";
 
 const ListCreatedComics = () => {
   const { changeVisible, isUpdateData, changeIsUpdateData } =
@@ -34,6 +36,29 @@ const ListCreatedComics = () => {
     getComics();
   }, []);
 
+  const confirmDeleteComic = (event: any, comicId: number) => {
+    confirmPopup({
+      target: event.currentTarget,
+      message: "Do you want to delete this record?",
+      icon: "pi pi-info-circle",
+      acceptClassName: "p-button-danger",
+      accept: () => {
+        handleDeleteComic(comicId);
+      },
+    });
+  };
+
+  const handleDeleteComic = async (comicId: number) => {
+    try {
+      const { data } = await ComicService.deleteComic(comicId);
+
+      toast.success(data);
+      getComics();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
   const itemTemplate = (comic: Comic) => {
     return (
       <>
@@ -43,7 +68,7 @@ const ListCreatedComics = () => {
               width={0}
               height={0}
               className="w-[100%]"
-              src={comic.thumb}
+              src={convertWebpResource(comic.thumb)}
               alt={comic.name}
             />
           </div>
@@ -94,7 +119,13 @@ const ListCreatedComics = () => {
               >
                 Sửa
               </button>
-              <button className="btn-primary bg-red-400">Xoá</button>
+              <button
+                className="btn-primary bg-red-400"
+                onClick={(e) => confirmDeleteComic(e, comic.id)}
+              >
+                Xoá
+              </button>
+              <ConfirmPopup />
             </div>
             <span className="text-orange-400">{comic.state}</span>
           </div>

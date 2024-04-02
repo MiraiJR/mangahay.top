@@ -2,24 +2,23 @@ import axiosClient from "../libs/axiosClient";
 
 const ComicService = {
   getComics: (paging: Paging) =>
-    axiosClient.get<PagingComicsResponse>(`/comics`, {
+    axiosClient.get<PagingComic>(`/comics`, {
       params: paging,
     }),
   getRankingComics: (field: string, limit: number) =>
-    axiosClient.get<Comic[]>(`/comics/ranking`, {
+    axiosClient.get<PagingComic>(`/comics/ranking`, {
       params: {
         field,
         limit,
       },
     }),
   searchComics: (query: QuerySearch) =>
-    axiosClient.get<PagingComicsResponse>(`/comics/search`, {
+    axiosClient.get<PagingComic>(`/comics/search`, {
       params: {
         ...query,
       },
     }),
-  getComicBySlug: (slug: string) =>
-    axiosClient.get<ComicDetail>(`/comics/${slug}`),
+  getComicBySlug: (slug: string) => axiosClient.get<Comic>(`/comics/${slug}`),
   increaseField: (comicId: number, field: string, jump: number) =>
     axiosClient.patch<string>(
       `/comics/${comicId}/increment?field=${field}&jump=${jump}`
@@ -48,6 +47,8 @@ const ComicService = {
         "content-type": "multipart/form-data",
       },
     }),
+  deleteComic: (comicId: number) =>
+    axiosClient.delete<string>(`/comics/${comicId}`),
   crawlChapter: (
     comicId: number,
     urlPost: string,

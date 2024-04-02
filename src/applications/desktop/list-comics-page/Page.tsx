@@ -54,7 +54,7 @@ const ListComicsPage = ({ genres, dataComics }: itemProps) => {
         if (field) {
           const { data } = await ComicService.getRankingComics(field, 1000);
 
-          setComics(data);
+          setComics(data.comics);
         } else {
           const { data } = await ComicService.getComicsWithChapters();
 

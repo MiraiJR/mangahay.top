@@ -31,9 +31,10 @@ const SlideComics = () => {
     const getRankingComics = async () => {
       try {
         const { data } = await comicService.getRankingComics("view", 5);
-        setComics(data);
-        if (data.length > 0) {
-          setCurrentComic(data[0]);
+        setComics(data.comics);
+
+        if (data.comics.length > 0) {
+          setCurrentComic(data.comics[0]);
         }
       } catch (error: any) {}
     };
@@ -110,7 +111,7 @@ const SlideComics = () => {
             className="mobile:max-w-[300px] w-[500px]"
           >
             {comics.slice(0, THE_NUMBER_OF_COMICS_SLIDE).map((comic) => (
-              <SwiperSlide key={comic.id}>
+              <SwiperSlide key={comic.id + "-slide-comic"}>
                 <div className="flex items-center justify-center">
                   <Image
                     priority

@@ -14,7 +14,7 @@ import dynamic from "next/dynamic";
 import MyLoading from "@/shared/components/MyLoading";
 
 interface itemProps {
-  detailComic: ComicDetail;
+  detailComic: Comic;
 }
 
 const DescriptionComic = dynamic(() => import("./DescriptionComic"), {
@@ -39,11 +39,11 @@ const ListComicsRanking = dynamic(
 const ComicPage = ({ detailComic }: itemProps) => {
   const router = useRouter();
   const { slugComic } = router.query;
-  const [comic, setComic] = useState<Comic>(detailComic.comic);
+  const [comic, setComic] = useState<Comic>(detailComic);
   const [comments, setComments] = useState<UserComment[]>(detailComic.comments);
-  const [chapters, setChapters] = useState<Chapter[]>(detailComic.chapters);
   const [contentComment, setContentComment] = useState<string>("");
   const { isLogined } = globalStore();
+
   const items: MenuItem[] = [
     { label: "Truyện" },
     { label: comic?.name, url: `${originalURL}/truyen/${comic?.slug}` },
@@ -52,14 +52,12 @@ const ComicPage = ({ detailComic }: itemProps) => {
   const {} = useContext(ThemeContext);
 
   useEffect(() => {
-    historyStore.setHistoryComics(detailComic.comic);
+    historyStore.setHistoryComics(detailComic);
 
     const increaseView = async (comicId: number) => {
       try {
         await comicService.increaseField(comicId, "view", 1);
-      } catch (error: any) {
-        toast.error(error.message);
-      }
+      } catch (error: any) {}
     };
 
     increaseView(comic.id);
@@ -98,15 +96,17 @@ const ComicPage = ({ detailComic }: itemProps) => {
       </div>
       {comic && (
         <DescriptionComic
-          firstChapter={chapters[chapters.length - 1] ?? null}
-          lastChapter={chapters[0] ?? null}
+          firstChapter={
+            detailComic.chapters[detailComic.chapters.length - 1] ?? null
+          }
+          lastChapter={detailComic.chapters[0] ?? null}
           comic={comic}
           setComic={setComic}
         />
       )}
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-8 mt-10 mobile:col-span-12">
-          <ListChapters chapters={chapters} />
+          <ListChapters chapters={detailComic.chapters} />
         </div>
         <div className="col-span-4 mt-10 mobile:col-span-12">
           {comic && (

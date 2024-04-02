@@ -2,9 +2,7 @@ import CardComic from "@/shared/components/card/CardComic";
 import comicService from "@/shared/services/comicService";
 import { ChevronsRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import EmptyImage from "@/shared/assets/empty.webp";
 import themeStore from "@/shared/stores/themeStore";
-import Image from "next/image";
 import Link from "next/link";
 import EmptyComic from "@/shared/components/EmptyComic";
 
@@ -20,7 +18,8 @@ const BoxComics = ({ title, field }: itemProps) => {
     const getComics = async () => {
       try {
         const { data } = await comicService.getRankingComics(field, 5);
-        setComics(data);
+
+        setComics(data.comics);
       } catch (error: any) {}
     };
 
