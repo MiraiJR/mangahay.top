@@ -32,15 +32,17 @@ const CardSearchingComic = ({ comic }: itemProps) => {
             {comic.name}
           </h1>
         </Link>
-        <Link
-          rel="preload"
-          hrefLang="vi"
-          href={`/truyen/${comic.slug}/${comic.newestChapter?.slug}`}
-        >
-          <h2 className="text-left font-thin capitalize">
-            {comic.newestChapter?.name}
-          </h2>
-        </Link>
+        {comic.chapters.length > 0 && (
+          <Link
+            rel="preload"
+            hrefLang="vi"
+            href={`/truyen/${comic.slug}/${comic.chapters[0].slug}`}
+          >
+            <h2 className="text-left font-thin capitalize">
+              {comic.chapters[0].name}
+            </h2>
+          </Link>
+        )}
       </div>
     </div>
   );

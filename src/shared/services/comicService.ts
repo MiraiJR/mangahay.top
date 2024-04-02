@@ -2,18 +2,18 @@ import axiosClient from "../libs/axiosClient";
 
 const ComicService = {
   getComics: (paging: Paging) =>
-    axiosClient.get<PagingComicsResponse>(`/comics`, {
+    axiosClient.get<PagingComic>(`/comics`, {
       params: paging,
     }),
   getRankingComics: (field: string, limit: number) =>
-    axiosClient.get<Comic[]>(`/comics/ranking`, {
+    axiosClient.get<PagingComic>(`/comics/ranking`, {
       params: {
         field,
         limit,
       },
     }),
   searchComics: (query: QuerySearch) =>
-    axiosClient.get<PagingComicsResponse>(`/comics/search`, {
+    axiosClient.get<PagingComic>(`/comics/search`, {
       params: {
         ...query,
       },

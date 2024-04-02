@@ -24,7 +24,8 @@ const ListComicsRanking = ({ title, field, amountComic }: itemProps) => {
           field,
           amountComic
         );
-        setComics(data);
+
+        setComics(data.comics);
       } catch (error: any) {}
     };
 

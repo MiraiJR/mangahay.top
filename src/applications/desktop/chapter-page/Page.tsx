@@ -28,9 +28,10 @@ interface itemProps {
   detailChapterA: DetailChapter;
 }
 
-const DescriptionComic = dynamic(
-  () => import("../comic-page/DescriptionComic")
-);
+// const DescriptionComic = dynamic(
+//   () => import("../comic-page/DescriptionComic")
+// );
+
 const ListComments = dynamic(() => import("../comic-page/ListComments"));
 const MenuChapter = dynamic(() => import("./MenuChapter"));
 
@@ -119,14 +120,14 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
       <div className="mb-5">
         <BreadCrumb model={items} home={home} />
       </div>
-      {comic && (
+      {/* {comic && (
         <DescriptionComic
           firstChapter={comic.chapters[comic.chapters.length - 1] ?? null}
           lastChapter={comic.chapters[0] ?? null}
           comic={comic}
           setComic={setComic}
         />
-      )}
+      )} */}
       <div className="flex justify-between items-center mobile:flex-col mobile:items-start">
         <h2
           title={detailChapter?.currentChapter.name}

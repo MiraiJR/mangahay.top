@@ -30,18 +30,20 @@ const CardRanking = ({ comic, position, isRanking }: itemProps) => {
             {comic.name}
           </h2>
         </a>
-        <a
-          rel="preload"
-          href={`/truyen/${comic.slug}/${comic.newestChapter?.slug}`}
-          hrefLang="vi"
-        >
-          <h2
-            className={`font-light line-clamp-1 text-${themeStore.getOppositeTheme()}`}
-            title={comic.newestChapter?.name}
+        {comic.chapters.length > 0 && (
+          <a
+            rel="preload"
+            href={`/truyen/${comic.slug}/${comic.chapters[0].slug}`}
+            hrefLang="vi"
           >
-            {comic.newestChapter?.name}
-          </h2>
-        </a>
+            <h2
+              className={`font-light line-clamp-1 text-${themeStore.getOppositeTheme()}`}
+              title={comic.chapters[0].name}
+            >
+              {comic.chapters[0].name}
+            </h2>
+          </a>
+        )}
       </div>
     </div>
   );
