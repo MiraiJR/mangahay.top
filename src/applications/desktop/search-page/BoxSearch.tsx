@@ -24,7 +24,6 @@ interface OptionSort {
 }
 
 const BoxSearch = ({ setComics, resultRef }: itemProps) => {
-  const [isQueryFromUrl, setIsQueryFromUrl] = useState<boolean>(false);
   const { genres } = globalStore();
   const [comicName, setComicName] = useState<string>("");
   const [filterAuthor, setFilterAuthor] = useState<string>("");
@@ -63,36 +62,33 @@ const BoxSearch = ({ setComics, resultRef }: itemProps) => {
       code: "updatedAt",
     },
   ];
-
   const router = useRouter();
 
+  const searchComics = async (genresData: string[], authorData: string) => {
+    try {
+      const { data } = await comicService.searchComics({
+        filterGenres: genresData,
+        filterAuthor: authorData,
+      });
+
+      setComics(data.comics);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
-    const authorFromUrl = router.query.filterAuthor as string;
-    setFilterAuthor(authorFromUrl);
+    const authorFromUrl = (router.query.filterAuthor as string) ?? "";
     const genresFromUrl: string[] = router.query.filterGenres
       ? (router.query.filterGenres as string).split(",")
       : [];
+    setFilterAuthor(authorFromUrl);
     setFilterGenres(genresFromUrl);
-    setIsQueryFromUrl(true);
+
+    if (genresFromUrl.length !== 0 || authorFromUrl.length !== 0) {
+      searchComics(genresFromUrl, authorFromUrl);
+    }
   }, [router]);
-
-  useEffect(() => {
-    const searchComics = async () => {
-      try {
-        const { data } = await comicService.searchComics({
-          filterGenres,
-          filterAuthor,
-        });
-
-        setComics(data.comics);
-        setIsQueryFromUrl(false);
-      } catch (error: any) {
-        toast.error(error.message);
-      }
-    };
-
-    searchComics();
-  }, [isQueryFromUrl]);
 
   const onIngredientsChange = (e: CheckboxChangeEvent) => {
     let _filterGenres = [...filterGenres];
