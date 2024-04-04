@@ -3,6 +3,7 @@ import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import dynamic from "next/dynamic";
 import MyLoading from "@/shared/components/MyLoading";
 import MetaTags from "@/shared/components/MetaTags";
+import { originalURL } from "@/shared/libs/config";
 
 const BoxSearch = dynamic(() => import("./BoxSearch"));
 const ListComics = dynamic(
@@ -22,7 +23,7 @@ const SearchPage = () => {
           "Web đọc truyện tranh online lớn nhất được cập nhật liên tục mỗi ngày. Đa dạng thể loại từ manga (truyện Nhật), manhwa (truyện Hàn), manhua (Truyện trung)."
         }
         image={""}
-        url={"https://mangahay.top/tim-kiem"}
+        url={`${originalURL}/tim-kiem`}
       />
       <BoxSearch resultRef={resultRef} setComics={setComics} />
       <div ref={resultRef}>

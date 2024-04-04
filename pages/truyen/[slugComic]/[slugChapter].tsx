@@ -2,6 +2,7 @@ import ChapterPage from "@/applications/desktop/chapter-page/Page";
 import MetaTags from "@/shared/components/MetaTags";
 import { getNextPreAofChapterFromId } from "@/shared/helpers/ChapterHelper";
 import { extractIdFromSlugChapter } from "@/shared/helpers/helpers";
+import { originalURL } from "@/shared/libs/config";
 import ComicService from "@/shared/services/comicService";
 
 interface itemProps {
@@ -45,7 +46,7 @@ export default function ChapterRoute({
         title={`${detailComic.name} - ${currentChapter.name} | MangaHay - Đọc truyện tranh mới nhất`}
         description={`Đọc truyện tranh ${detailComic.name} [${detailComic.anotherName}] - ${currentChapter.name}  vietsub, chất lượng cao, không quảng cáo tại mangahay.top`}
         image={detailComic.thumb}
-        url={`https://mangahay.top/truyen/${detailComic.slug}/${currentChapter.slug}`}
+        url={`${originalURL}/truyen/${detailComic.slug}/${currentChapter.slug}`}
       />
       <ChapterPage detailComic={detailComic} detailChapterA={detailChapter} />
     </>

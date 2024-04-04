@@ -1,3 +1,4 @@
+import { originalURL } from "@/shared/libs/config";
 import ComicService from "@/shared/services/comicService";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -58,7 +59,7 @@ export async function getServerSideProps({
   req: NextApiRequest;
   res: NextApiResponse;
 }) {
-  const hostname = "https://mangahay.top";
+  const hostname = originalURL ?? "https://mangahay.top";
 
   const comics = await ComicService.getComicsWithChapters();
   const genres = await ComicService.getGenres();

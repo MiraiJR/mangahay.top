@@ -1,4 +1,5 @@
 import MetaTags from "@/shared/components/MetaTags";
+import { originalURL } from "@/shared/libs/config";
 import ComicService from "@/shared/services/comicService";
 import dynamic from "next/dynamic";
 
@@ -35,7 +36,7 @@ export default function ListRoute({ genres }: itemProps) {
       <MetaTags
         title={`Danh sách truyện - MangaHay`}
         description=""
-        url="https://mangahay.top/danh-sach-truyen"
+        url={`${originalURL}/danh-sach-truyen`}
         image=""
       />
       <ListComicsPage genres={genres} />;

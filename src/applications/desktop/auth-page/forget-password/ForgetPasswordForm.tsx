@@ -6,6 +6,7 @@ import { useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { toast } from "react-toastify";
 import AuthService from "@/shared/services/authService";
+import { originalURL } from "@/shared/libs/config";
 
 const ForgetPasswordForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -40,7 +41,7 @@ const ForgetPasswordForm = () => {
         title={"Quên mật khẩu - mangahay"}
         description={"Trang quên mật khẩu"}
         image={""}
-        url={"https://mangahay.top/quen-mat-khau"}
+        url={`${originalURL}/quen-mat-khau`}
       />
       <div className="flex justify-center items-center">
         <Image

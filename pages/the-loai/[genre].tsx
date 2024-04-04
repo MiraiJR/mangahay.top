@@ -1,4 +1,5 @@
 import MetaTags from "@/shared/components/MetaTags";
+import { originalURL } from "@/shared/libs/config";
 import ComicService from "@/shared/services/comicService";
 import dynamic from "next/dynamic";
 
@@ -48,7 +49,7 @@ export default function GenreRoute({
       <MetaTags
         title={`Thể loại - ${currentGenre.toLocaleUpperCase()} | MangaHay - Web truyện tranh mới nhất`}
         description={`Đọc truyện thể loại ${currentGenre} vietsub, chất lượng cao, không quản cáo tai mangahay.top`}
-        url={`https://mangahay.top/the-loại/${currentGenre}`}
+        url={`${originalURL}/the-loại/${currentGenre}`}
         image=""
       />
       <ListComicsPage genres={genres} dataComics={comics} />;

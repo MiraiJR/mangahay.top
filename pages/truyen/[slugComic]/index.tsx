@@ -1,5 +1,6 @@
 import ComicPage from "@/applications/desktop/comic-page/Page";
 import MetaTags from "@/shared/components/MetaTags";
+import { originalURL } from "@/shared/libs/config";
 import ComicService from "@/shared/services/comicService";
 
 interface itemProps {
@@ -33,7 +34,7 @@ export default function ComicRoute({ detailComic }: itemProps) {
         title={`${detailComic.name} | MangaHay - Đọc truyện tranh mới nhất`}
         description={`Đọc truyện tranh ${detailComic.name} [${detailComic.anotherName}] vietsub, chất lượng cao, không quảnq cáo tại mangahay.top`}
         image={detailComic.thumb}
-        url={`https://mangahay.top/truyen/${detailComic.slug}`}
+        url={`${originalURL}/truyen/${detailComic.slug}`}
       />
       <ComicPage detailComic={detailComic} />
     </>

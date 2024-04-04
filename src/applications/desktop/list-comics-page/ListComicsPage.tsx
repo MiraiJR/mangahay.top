@@ -25,7 +25,7 @@ const ListComicsPage = ({ genres, dataComics }: itemProps) => {
   const { genre } = useParams();
   const currentGenre = genre ?? null;
   const items: MenuItem[] = [
-    { label: "Danh sách truyện", url: "https://mangahay.top/danh-sach-truyen" },
+    { label: "Danh sách truyện", url: `${originalURL}/danh-sach-truyen` },
   ];
   const home: MenuItem = { icon: "pi pi-home", url: originalURL };
   const {} = useContext(ThemeContext);

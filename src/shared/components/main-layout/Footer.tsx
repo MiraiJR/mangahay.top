@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Footer = () => {
+  const ORIGINAL_HOST = originalURL as string;
   return (
     <div className="container mx-auto bg-slate-200 p-5">
       <div className=" flex desktop:items-center desktop:justify-around mobile:flex-col">
@@ -29,7 +30,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 truyện tranh
@@ -39,7 +40,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 truyện tranh online
@@ -49,7 +50,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 đọc truyện tranh
@@ -59,7 +60,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 đọc truyện hay
@@ -69,7 +70,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 manga world
@@ -79,7 +80,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 nettruyen
@@ -89,7 +90,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 nhattruyen
@@ -99,7 +100,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 blogtruyen
@@ -109,7 +110,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 truyentranhlh
@@ -119,7 +120,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 otakusan
@@ -129,7 +130,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 toptruyen
@@ -139,7 +140,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 mi2manga
@@ -149,7 +150,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 manhwa
@@ -159,7 +160,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 manhua
@@ -169,7 +170,7 @@ const Footer = () => {
               <Link
                 rel="preload"
                 hrefLang="vi"
-                href={originalURL ? originalURL : "https://mangahay.top"}
+                href={ORIGINAL_HOST}
                 className="mobile:text-sm capitalize"
               >
                 manga
