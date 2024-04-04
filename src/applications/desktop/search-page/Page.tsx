@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import MyLoading from "@/shared/components/MyLoading";
 import MetaTags from "@/shared/components/MetaTags";
 import { originalURL } from "@/shared/libs/config";
+import EmptyComic from "@/shared/components/EmptyComic";
 
 const BoxSearch = dynamic(() => import("./BoxSearch"));
 const ListComics = dynamic(
@@ -12,7 +13,7 @@ const ListComics = dynamic(
 
 const SearchPage = () => {
   const resultRef = useRef<any>(null);
-  const [comics, setComics] = useState<Comic[] | null>(null);
+  const [comics, setComics] = useState<Comic[]>([]);
   const {} = useContext(ThemeContext);
 
   return (
@@ -27,11 +28,7 @@ const SearchPage = () => {
       />
       <BoxSearch resultRef={resultRef} setComics={setComics} />
       <div ref={resultRef}>
-        {comics ? (
-          <ListComics title="Kết quả tìm kiếm" comics={comics} />
-        ) : (
-          <MyLoading />
-        )}
+        <ListComics title="Kết quả tìm kiếm" comics={comics} />
       </div>
     </div>
   );
