@@ -147,6 +147,7 @@ const ListCreatedComics = () => {
         rows={5}
         buffer={0.4}
         header="Danh sách truyện bạn đã đăng"
+        loader={true}
       />
       {selectedComic && <DialogUpdateComic comic={selectedComic} />}
     </div>

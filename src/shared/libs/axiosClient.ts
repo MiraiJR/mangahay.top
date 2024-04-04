@@ -48,8 +48,11 @@ axiosClient.interceptors.response.use(
           originalRequest.headers["Authorization"] =
             "Bearer " + data.accessToken;
           return axios(originalRequest);
-        } catch (error) {
+        } catch (error: any) {
           jwt.deleteToken();
+          if (error.message === "Token không hợp lệ") {
+            window.location.reload();
+          }
         }
       }
     }
