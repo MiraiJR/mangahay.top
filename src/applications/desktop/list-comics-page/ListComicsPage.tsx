@@ -11,8 +11,9 @@ import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import EmptyImage from "@/shared/assets/empty.webp";
-import Image from "next/image";
+import EmptyComic from "@/shared/components/EmptyComic";
+import MyLoading from "@/shared/components/MyLoading";
+import { useRouter } from "next/router";
 
 interface itemProps {
   genres: Genre[];
@@ -22,6 +23,7 @@ interface itemProps {
 const THE_NUMBER_OF_COMICS_PER_PAGE: number = 30;
 
 const ListComicsPage = ({ genres, dataComics }: itemProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { genre } = useParams();
   const currentGenre = genre ?? null;
   const items: MenuItem[] = [
@@ -29,9 +31,10 @@ const ListComicsPage = ({ genres, dataComics }: itemProps) => {
   ];
   const home: MenuItem = { icon: "pi pi-home", url: originalURL };
   const {} = useContext(ThemeContext);
-  const [comics, setComics] = useState<Comic[] | null>(dataComics ?? null);
+  const [comics, setComics] = useState<Comic[]>(dataComics ?? []);
   const [first, setFirst] = useState<number>(0);
   const [pageComics, setPageComics] = useState<Comic[]>([]);
+  const router = useRouter();
 
   const onPageChange = (event: PaginatorPageChangeEvent) => {
     setFirst(event.first);
@@ -46,12 +49,11 @@ const ListComicsPage = ({ genres, dataComics }: itemProps) => {
   };
 
   useEffect(() => {
-    const currentUrl = new URL(window.location.href);
-    const field = currentUrl.searchParams.get("field")?.split(",")[0] ?? null;
+    const field = (router.query.field as string) ?? "";
 
-    const getComics = async (field: string | null) => {
+    const getComics = async (field: string) => {
       try {
-        if (field) {
+        if (field === "") {
           const { data } = await ComicService.getRankingComics(field, 1000);
 
           setComics(data.comics);
@@ -60,12 +62,13 @@ const ListComicsPage = ({ genres, dataComics }: itemProps) => {
 
           setComics(data);
         }
-      } catch (error: any) {
-        toast.error(error.message);
-      }
+
+        setIsLoading(true);
+      } catch (error: any) {}
     };
 
     if (!dataComics) {
+      setIsLoading(false);
       getComics(field);
     }
   }, []);
@@ -86,30 +89,14 @@ const ListComicsPage = ({ genres, dataComics }: itemProps) => {
               Danh sách truyện
             </h2>
             <div className="grid grid-cols-5 mobile:grid-cols-2 relative gap-4 p-4">
-              {comics?.length === 0 && (
-                <div className="col-span-5 text-center flex flex-col items-center justify-center">
-                  <Image
-                    width={100}
-                    src={EmptyImage}
-                    alt="Không có truyện"
-                    priority
-                  />
-                  <span>Không có truyện</span>
-                </div>
-              )}
-              {comics ? (
+              {isLoading ? (
+                <MyLoading />
+              ) : comics.length !== 0 ? (
                 comics.map((comic) => (
                   <CardComic comic={comic} key={comic.id} />
                 ))
               ) : (
-                <div className="flex items-center justify-center w-[100%] col-span-12">
-                  <ProgressSpinner
-                    style={{ width: "50px", height: "50px" }}
-                    strokeWidth="8"
-                    fill="var(--surface-ground)"
-                    animationDuration=".5s"
-                  />
-                </div>
+                <EmptyComic />
               )}
             </div>
             {comics && comics.length !== 0 && (

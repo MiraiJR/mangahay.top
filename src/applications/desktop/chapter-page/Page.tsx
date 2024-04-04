@@ -179,8 +179,8 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
       <div
         className={`flex flex-col items-center justify-center m-5 bg-${themeStore.getTheme()}`}
       >
-        {detailChapter?.currentChapter.images ? (
-          shortImageName(detailChapter?.currentChapter.images).map(
+        {detailChapter && detailChapter.currentChapter.images ? (
+          shortImageName(detailChapter.currentChapter.images).map(
             (image, _index) => (
               <Image
                 loading="lazy"
@@ -188,7 +188,7 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
                 height={0}
                 className="w-[80%] mobile:w-[100%] object-fit"
                 src={convertWebpResource(image)}
-                alt={`${detailChapter?.currentChapter.name}-${comic?.name}`}
+                alt={`${detailChapter.currentChapter.name}-${comic?.name}`}
                 key={_index}
               />
             )
