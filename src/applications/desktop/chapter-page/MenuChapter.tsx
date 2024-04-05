@@ -11,7 +11,9 @@ const MenuChapter = ({ chapters }: itemProps) => {
 
   return (
     <div
-      className={`absolute w-max flex flex-col max-h-[400px] overflow-y-scroll top-13 right-0 translate-x-12 mobile:translate-x-6 scrollbar-hide bg-${themeStore.getOppositeTheme()} text-${themeStore.getTheme()} shadow-outer-lg-${themeStore.getOppositeTheme()}`}
+      className={`z-[100] absolute w-max flex flex-col max-h-[400px]
+       overflow-y-scroll top-13 right-0 translate-x-12 mobile:translate-x-6 
+       scrollbar-hide bg-${themeStore.getOppositeTheme()} text-${themeStore.getTheme()} shadow-outer-lg-${themeStore.getOppositeTheme()}`}
     >
       {chapters.map((chapter) => (
         <Link

@@ -1,8 +1,4 @@
-import {
-  convertWebpResource,
-  extractIdFromSlugChapter,
-  shortImageName,
-} from "@/shared/helpers/helpers";
+import { extractIdFromSlugChapter } from "@/shared/helpers/helpers";
 import { originalURL } from "@/shared/libs/config";
 import comicService from "@/shared/services/comicService";
 import { BreadCrumb } from "primereact/breadcrumb";
@@ -14,14 +10,14 @@ import { cn } from "@/shared/libs/utils";
 import { Editor, EditorTextChangeEvent } from "primereact/editor";
 import { globalStore } from "@/shared/stores/globalStore";
 import themeStore from "@/shared/stores/themeStore";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import MyLoading from "@/shared/components/MyLoading";
 import dynamic from "next/dynamic";
 import ListComicsOfAuthor from "../comic-page/ListComicsOfAuthor";
 import ListComicsRanking from "../home-page/ListComicsRanking";
 import { getNextPreAofChapterFromId } from "@/shared/helpers/ChapterHelper";
+import EmptyComic from "@/shared/components/EmptyComic";
+import ChapterViewTypeIndex from "./chapter-view-type/IndexComponent";
 
 interface itemProps {
   detailComic: Comic;
@@ -36,7 +32,8 @@ const ListComments = dynamic(() => import("../comic-page/ListComments"));
 const MenuChapter = dynamic(() => import("./MenuChapter"));
 
 const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
-  const menuChapterRef = useRef<any>(null);
+  const menuChapterRefTop = useRef<any>(null);
+  const menuChapterRefBottom = useRef<any>(null);
   const router = useRouter();
   const { slugChapter, slugComic } = router.query;
   const [comic, setComic] = useState<Comic>(detailComic);
@@ -45,7 +42,9 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
     detailChapterA
   );
   const [comments, setComments] = useState<UserComment[]>(detailComic.comments);
-  const [showMenuChapter, setShowMenuChapter] = useState<boolean>(false);
+  const [showMenuChapterTop, setShowMenuChapterTop] = useState<boolean>(false);
+  const [showMenuChapterBottom, setShowMenuChapterBottm] =
+    useState<boolean>(false);
   const { isLogined } = globalStore();
 
   const items: MenuItem[] = [
@@ -59,24 +58,35 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
   const home: MenuItem = { icon: "pi pi-home", url: originalURL };
   const {} = useContext(ThemeContext);
 
-  useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (
-        menuChapterRef.current &&
-        !menuChapterRef.current.contains(event.target)
-      ) {
-        setShowMenuChapter(false);
+  const handleClickOutsideForMenuChapter = (
+    ref: any,
+    setShowMenu: Function
+  ) => {
+    const handleClickOutsideMenuChapterTop = (event: any) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setShowMenu(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutsideMenuChapterTop);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutsideMenuChapterTop
+      );
     };
+  };
+
+  useEffect(() => {
+    handleClickOutsideForMenuChapter(menuChapterRefTop, setShowMenuChapterTop);
+    handleClickOutsideForMenuChapter(
+      menuChapterRefBottom,
+      setShowMenuChapterBottm
+    );
   }, []);
 
   useEffect(() => {
-    setShowMenuChapter(false);
+    setShowMenuChapterTop(false);
 
     const increaseView = async (comicId: number) => {
       try {
@@ -150,15 +160,15 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
           >
             <ArrowLeftCircle />
           </button>
-          <div className="relative" ref={menuChapterRef}>
+          <div className="relative" ref={menuChapterRefTop}>
             <button
               className="btn-primary"
               title="Danh sách chương"
-              onClick={() => setShowMenuChapter(!showMenuChapter)}
+              onClick={() => setShowMenuChapterTop(!showMenuChapterTop)}
             >
               <MenuSquare />
             </button>
-            {showMenuChapter && <MenuChapter chapters={comic.chapters} />}
+            {showMenuChapterTop && <MenuChapter chapters={comic.chapters} />}
           </div>
           <button
             className={cn("btn-primary", {
@@ -180,21 +190,13 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
         className={`flex flex-col items-center justify-center m-5 bg-${themeStore.getTheme()}`}
       >
         {detailChapter && detailChapter.currentChapter.images ? (
-          shortImageName(detailChapter.currentChapter.images).map(
-            (image, _index) => (
-              <Image
-                loading="lazy"
-                width={0}
-                height={0}
-                className="w-[80%] mobile:w-[100%] object-fit"
-                src={convertWebpResource(image)}
-                alt={`${detailChapter.currentChapter.name}-${comic?.name}`}
-                key={_index}
-              />
-            )
-          )
+          <ChapterViewTypeIndex
+            images={detailChapter.currentChapter.images}
+            chapterName={detailChapter?.currentChapter.name}
+            comicName={comic.name}
+          />
         ) : (
-          <MyLoading />
+          <EmptyComic content="Không có ảnh!" />
         )}
 
         <div
@@ -226,15 +228,15 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
           >
             <ArrowLeftCircle />
           </button>
-          <div className="relative" ref={menuChapterRef}>
+          <div className="relative" ref={menuChapterRefBottom}>
             <button
               className="btn-primary"
               title="Danh sách chương"
-              onClick={() => setShowMenuChapter(!showMenuChapter)}
+              onClick={() => setShowMenuChapterBottm(!showMenuChapterBottom)}
             >
               <MenuSquare />
             </button>
-            {showMenuChapter && <MenuChapter chapters={comic.chapters} />}
+            {showMenuChapterBottom && <MenuChapter chapters={comic.chapters} />}
           </div>
           <button
             className={cn("btn-primary", {

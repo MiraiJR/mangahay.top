@@ -8,4 +8,5 @@ type User = {
   role: string;
   createdAt: Date;
   updatedAt: Date;
+  setting: UserSetting;
 };
