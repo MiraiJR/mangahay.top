@@ -141,7 +141,7 @@ const LoginedUser = () => {
           <Image
             width={50}
             height={0}
-            className="mobile:w-[36px] w-[50px] h-[36px] object-cover rounded"
+            className="mobile:w-[36px] w-[50px] mobile:h-[36px] h-[50px] object-cover rounded"
             src={reduceQualityImage(userProfile.avatar)}
             alt={userProfile.fullname}
             onClick={() => {

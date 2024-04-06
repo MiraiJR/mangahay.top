@@ -29,7 +29,10 @@ export const reduceQualityImage = (imageUrl: string): string => {
   return result.startsWith("https") ? result : result.replace("http", "https");
 };
 
-export const convertWebpResource = (imageUrl: string): string => {
+export const convertWebpResource = (
+  imageUrl: string,
+  q_auto: string = "good"
+): string => {
   if (imageUrl.includes(`${baseURL?.slice(0, baseURL.lastIndexOf("/"))}`)) {
     return imageUrl;
   }
@@ -40,7 +43,7 @@ export const convertWebpResource = (imageUrl: string): string => {
 
   const result =
     imageUrl.slice(0, indexOfUploadWord) +
-    "q_auto:good/" +
+    `q_auto:${q_auto}/` +
     imageUrl.slice(indexOfUploadWord, lastIndexOfDot) +
     ".webp";
 

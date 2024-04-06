@@ -5,15 +5,13 @@ import { useContext, useEffect, useState } from "react";
 import themeStore from "@/shared/stores/themeStore";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-
-interface itemProps {
-  user: User;
-}
+import UserSettingPage from "./setting-page/Page";
 
 enum TabType {
   PROFILE = 0,
   NOTIFICATION = 1,
   FOLLOWING_COMIC = 2,
+  SETTING = 3,
 }
 
 const Profile = dynamic(() => import("./Profile"));
@@ -47,6 +45,13 @@ const UserPage = () => {
         router.replace(`${router.pathname}#${TabType.FOLLOWING_COMIC}`);
       },
     },
+    {
+      label: "Cài đặt",
+      command: () => {
+        setActiveTab(TabType.SETTING);
+        router.replace(`${router.pathname}#${TabType.SETTING}`);
+      },
+    },
   ];
 
   useEffect(() => {
@@ -70,6 +75,7 @@ const UserPage = () => {
         {activeTab === TabType.PROFILE && <Profile />}
         {activeTab === TabType.NOTIFICATION && <Notification />}
         {activeTab === TabType.FOLLOWING_COMIC && <ListFollowingComics />}
+        {activeTab === TabType.SETTING && <UserSettingPage />}
       </div>
     </div>
   );
