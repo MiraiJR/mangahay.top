@@ -5,19 +5,26 @@ import { useEffect, useState } from "react";
 import themeStore from "@/shared/stores/themeStore";
 import Link from "next/link";
 import EmptyComic from "@/shared/components/EmptyComic";
+import { globalStore } from "@/shared/stores/globalStore";
 
 interface itemProps {
   title: string;
   field: string;
 }
 
+const MAX_THE_NUMBER_OF_COMICS: number = 6;
+
 const BoxComics = ({ title, field }: itemProps) => {
   const [comics, setComics] = useState<Comic[]>([]);
+  const { isMobile } = globalStore();
 
   useEffect(() => {
     const getComics = async () => {
       try {
-        const { data } = await comicService.getRankingComics(field, 5);
+        const { data } = await comicService.getRankingComics(
+          field,
+          MAX_THE_NUMBER_OF_COMICS
+        );
 
         setComics(data.comics);
       } catch (error: any) {}
@@ -52,9 +59,16 @@ const BoxComics = ({ title, field }: itemProps) => {
             <EmptyComic />
           ) : (
             <div className="grid grid-cols-5 mobile:grid-cols-3 gap-5 mobile:gap-1">
-              {comics.slice(0, 5).map((comic) => (
-                <CardComic comic={comic} key={comic.id} />
-              ))}
+              {comics
+                .slice(
+                  0,
+                  isMobile
+                    ? MAX_THE_NUMBER_OF_COMICS
+                    : MAX_THE_NUMBER_OF_COMICS - 1
+                )
+                .map((comic) => (
+                  <CardComic comic={comic} key={comic.id} />
+                ))}
             </div>
           )}
         </div>

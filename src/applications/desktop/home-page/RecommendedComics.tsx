@@ -6,16 +6,23 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import ComicService from "@/shared/services/comicService";
 import EmptyComic from "@/shared/components/EmptyComic";
+import { globalStore } from "@/shared/stores/globalStore";
 
 const MAX_THE_NUMBER_OF_COMICS: number = 11;
 
 interface itemProps {
   genre: string;
   title: string;
+  isShowHighlight?: boolean;
 }
 
-const RecommendedComics = ({ genre, title }: itemProps) => {
+const RecommendedComics = ({
+  genre,
+  title,
+  isShowHighlight = true,
+}: itemProps) => {
   const [comics, setComics] = useState<Comic[]>([]);
+  const { isMobile } = globalStore();
 
   useEffect(() => {
     const getComics = async () => {
@@ -23,7 +30,7 @@ const RecommendedComics = ({ genre, title }: itemProps) => {
         const { data } = await ComicService.searchComics({
           filterGenres: [genre],
           page: 1,
-          limit: 11,
+          limit: MAX_THE_NUMBER_OF_COMICS,
         });
 
         setComics(data.comics);
@@ -55,14 +62,25 @@ const RecommendedComics = ({ genre, title }: itemProps) => {
         <EmptyComic />
       ) : (
         <div className="grid grid-cols-12 gap-2">
-          <div className="col-span-3 mobile:col-span-12">
-            {comics.length !== 0 && <CardHighlightComic comic={comics[0]} />}
-          </div>
+          {isShowHighlight && (
+            <div className="col-span-3 mobile:col-span-12">
+              {comics.length !== 0 && <CardHighlightComic comic={comics[0]} />}
+            </div>
+          )}
           <div className="col-span-9 mobile:col-span-12">
-            <div className="grid grid-cols-5 mobile:grid-cols-3 grid-rows-2 gap-2">
-              {comics.slice(1, MAX_THE_NUMBER_OF_COMICS).map((comic) => (
-                <CardComic comic={comic} key={comic.id} />
-              ))}
+            <div className={`grid grid-cols-5 mobile:grid-cols-3 gap-2 `}>
+              {comics
+                .slice(
+                  isShowHighlight ? 1 : 0,
+                  isMobile
+                    ? isShowHighlight
+                      ? MAX_THE_NUMBER_OF_COMICS - 1
+                      : MAX_THE_NUMBER_OF_COMICS - 2
+                    : MAX_THE_NUMBER_OF_COMICS
+                )
+                .map((comic) => (
+                  <CardComic comic={comic} key={comic.id} />
+                ))}
             </div>
           </div>
         </div>

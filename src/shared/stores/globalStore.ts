@@ -7,6 +7,8 @@ interface globalStore {
   setIsLight: (data: boolean) => void;
   genres: Genre[];
   setGenres: (data: Genre[]) => void;
+  isMobile: boolean;
+  setIsMobile: (data: boolean) => void;
 }
 
 export const globalStore = create<globalStore>((set) => ({
@@ -28,6 +30,13 @@ export const globalStore = create<globalStore>((set) => ({
     set((state) => ({
       ...state,
       genres: data,
+    }));
+  },
+  isMobile: false,
+  setIsMobile: (data) => {
+    set((state) => ({
+      ...state,
+      isMobile: data,
     }));
   },
 }));

@@ -141,7 +141,9 @@ const ListComicsPage = ({ genres, dataComics }: itemProps) => {
                       "p-1 cursor-pointer hover:bg-slate-500 hover:text-red-400 mobile:text-sm",
                       {
                         "bg-slate-500 text-red-400":
-                          currentGenre && currentGenre === genre.slug,
+                          currentGenre &&
+                          (currentGenre === genre.slug ||
+                            currentGenre === genre.name),
                       }
                     )}
                     hrefLang="vi"
