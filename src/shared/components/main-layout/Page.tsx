@@ -5,6 +5,9 @@ import { cn } from "@/shared/libs/utils";
 import { ArrowUpCircle } from "lucide-react";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import themeStore from "@/shared/stores/themeStore";
+import { globalStore } from "@/shared/stores/globalStore";
+
+const MOBILE_MAX_SIZE_SCREEN: number = 1007;
 
 const MainLayout = ({
   children,
@@ -15,6 +18,8 @@ const MainLayout = ({
 }) => {
   const [isScroll, setIsScroll] = useState<boolean>(false);
   const {} = useContext(ThemeContext);
+  const { setIsMobile } = globalStore();
+
   useEffect(() => {
     window.addEventListener("scroll", () => {
       if (window.scrollY > 200) {
@@ -27,6 +32,21 @@ const MainLayout = ({
       }
     });
   }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < MOBILE_MAX_SIZE_SCREEN);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div
       id="main-layout"

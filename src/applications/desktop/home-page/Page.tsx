@@ -49,6 +49,11 @@ const HomePage = () => {
         </div>
       </div>
       <div>
+        <RecommendedComicsComponent
+          genre={"One shot"}
+          title="Tuyển tập One Shot"
+          isShowHighlight={false}
+        />
         <RecommendedComicsComponent genre={"manga"} title="Truyện Nhật" />
         <RecommendedComicsComponent genre={"manhwa"} title="Truyện Hàn" />
         <RecommendedComicsComponent
