@@ -18,6 +18,7 @@ import ListComicsRanking from "../home-page/ListComicsRanking";
 import { getNextPreAofChapterFromId } from "@/shared/helpers/ChapterHelper";
 import EmptyComic from "@/shared/components/EmptyComic";
 import ChapterViewTypeIndex from "./chapter-view-type/IndexComponent";
+import historyStore from "@/shared/stores/historyStore";
 
 interface itemProps {
   detailComic: Comic;
@@ -98,6 +99,15 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
     setDetailChapter(getNextPreAofChapterFromId(chapterId, comic.chapters));
     increaseView(comic.id);
   }, [slugChapter, slugComic]);
+
+  useEffect(() => {
+    historyStore.setHistoryComics({
+      ...detailComic,
+      chapters: detailChapter
+        ? [detailChapter.currentChapter]
+        : [detailComic.chapters[0]],
+    });
+  }, []);
 
   const handleCommentOnComic = async () => {
     if (!isLogined) {

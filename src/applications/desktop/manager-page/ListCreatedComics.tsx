@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  DataScroller,
-  DataScrollerLazyLoadEvents,
-} from "primereact/datascroller";
+import { DataScroller } from "primereact/datascroller";
 import { Rating } from "primereact/rating";
 import Image from "next/image";
 import { convertWebpResource, formatDate } from "@/shared/helpers/helpers";
