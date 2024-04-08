@@ -13,6 +13,7 @@ import {
   removeAccentsAndLowerCaseArray,
 } from "@/shared/helpers/StringHelper";
 import { useDialogContext } from "@/shared/contexts/DialogContext";
+import { Button } from "primereact/button";
 
 interface itemProps {
   comic?: Comic | null;
@@ -30,6 +31,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
   const [comicBriefDescription, setBriefDescription] = useState<string>("");
   const [comicThumb, setComicThumb] = useState<File | null>(null);
   const [isUpdateImage, setIsUpdateImage] = useState<string>("0");
+  const [isCreating, setIsCreating] = useState<boolean>(false);
 
   useEffect(() => {
     if (comic) {
@@ -87,6 +89,8 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
       return;
     }
 
+    setIsCreating(true);
+
     let formData = new FormData();
     formData.append("name", comicName);
     formData.append("anotherName", comicAnotherName);
@@ -113,6 +117,8 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
         toast.success("Tạo truyện mới thành công!");
         resetInput();
       }
+
+      setIsCreating(false);
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -275,9 +281,12 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
         />
       </div>
       <div className="flex items-center justify-center">
-        <button className="btn-primary w-fit" onClick={handleCreateComic}>
-          {comic ? "Cập nhật truyện" : "Tạo truyện"}
-        </button>
+        <Button
+          label={comic ? "Cập nhật truyện" : "Tạo truyện"}
+          icon="pi pi-check"
+          loading={isCreating}
+          onClick={handleCreateComic}
+        />
       </div>
     </div>
   );

@@ -67,7 +67,7 @@ const PreviewComic = ({ comic, position }: itemPropsPreviewComic) => {
   );
 };
 
-const CardComic = ({ comic }: itemProps) => {
+const CardComicHistory = ({ comic }: itemProps) => {
   const {} = useContext(ThemeContext);
   const [isOpenPreview, setIsOpenPreview] = useState<boolean>(false);
   const [previewPosition, setPreviewPostion] = useState<ElementPostion>({
@@ -130,11 +130,11 @@ const CardComic = ({ comic }: itemProps) => {
             className={`text-${themeStore.getOppositeTheme()} line-clamp-2 mobile:text-sm`}
             title={comic.chapters[0].name}
           >
-            {comic.chapters[0].name}
+            Đang đọc {comic.chapters[0].name}
           </h3>
         </Link>
       ) : (
-        <span>Chưa có chapter</span>
+        <span>Chưa đọc chương </span>
       )}
       <div className="flex justify-between items-center">
         <div className="mobile:hidden">
@@ -152,4 +152,4 @@ const CardComic = ({ comic }: itemProps) => {
   );
 };
 
-export default CardComic;
+export default CardComicHistory;

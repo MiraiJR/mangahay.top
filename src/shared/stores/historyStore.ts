@@ -14,16 +14,20 @@ const HistoryStoreManager = () => {
     return historyComics;
   };
 
-  const setHistoryComics = (comic: Comic) => {
-    const isExisted = historyComics.find(
-      (historyComic) => historyComic.id === comic.id
-    );
+  const setHistoryComics = (comic: Comic, isNew: boolean = true) => {
+    if (!isNew) {
+      historyComics.push(comic);
+    } else {
+      historyComics = historyComics.map((comicHistory) => {
+        if (comic.id === comicHistory.id) {
+          comicHistory.chapters = [comic.chapters[0]];
+          console.log(comicHistory);
+        }
 
-    if (isExisted) {
-      return;
+        return comicHistory;
+      });
     }
 
-    historyComics.push(comic);
     isClient &&
       window.localStorage.setItem(
         HISTORY_COMICS_STORAGE,

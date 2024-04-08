@@ -1,4 +1,3 @@
-import MyLoading from "@/shared/components/MyLoading";
 import { extractComicId } from "@/shared/helpers/helpers";
 import comicService from "@/shared/services/comicService";
 import themeStore from "@/shared/stores/themeStore";
@@ -6,6 +5,7 @@ import {
   AutoComplete,
   AutoCompleteCompleteEvent,
 } from "primereact/autocomplete";
+import { Button } from "primereact/button";
 import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
 import { InputText } from "primereact/inputtext";
 import { useRef, useState } from "react";
@@ -133,13 +133,12 @@ const CreateChapterForm = () => {
         </div>
       </div>
       <div className="flex items-center justify-center">
-        {loading.isCreating ? (
-          <MyLoading />
-        ) : (
-          <button className="btn-primary w-fit" onClick={handleCreateChapter}>
-            Tạo chương
-          </button>
-        )}
+        <Button
+          label={"Tạo chương"}
+          icon="pi pi-check"
+          loading={loading.isCreating}
+          onClick={handleCreateChapter}
+        />
       </div>
     </div>
   );

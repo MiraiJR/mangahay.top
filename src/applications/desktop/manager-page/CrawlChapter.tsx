@@ -1,4 +1,3 @@
-import MyLoading from "@/shared/components/MyLoading";
 import { extractComicId } from "@/shared/helpers/helpers";
 import comicService from "@/shared/services/comicService";
 import themeStore from "@/shared/stores/themeStore";
@@ -6,6 +5,7 @@ import {
   AutoComplete,
   AutoCompleteCompleteEvent,
 } from "primereact/autocomplete";
+import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -155,13 +155,12 @@ const CrawlChapter = () => {
         </div>
       </div>
       <div className="flex items-center justify-center">
-        {loading.isCrawling ? (
-          <MyLoading />
-        ) : (
-          <button className="btn-primary w-fit" onClick={handleCrawlChapter}>
-            Cào chương
-          </button>
-        )}
+        <Button
+          label={"Cào chương"}
+          icon="pi pi-check"
+          loading={loading.isCrawling}
+          onClick={handleCrawlChapter}
+        />
       </div>
     </div>
   );

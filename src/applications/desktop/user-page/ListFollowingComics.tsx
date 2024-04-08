@@ -1,5 +1,5 @@
 import { formatDate, reduceQualityImage } from "@/shared/helpers/helpers";
-import MeService from "@/shared/services/meService";
+import MeService, { TypeComicInteraction } from "@/shared/services/meService";
 import themeStore from "@/shared/stores/themeStore";
 import { Rating } from "primereact/rating";
 import { useEffect, useState } from "react";
@@ -8,15 +8,18 @@ import { DataScroller } from "primereact/datascroller";
 import Link from "next/link";
 import MyLoading from "@/shared/components/MyLoading";
 import EmptyComic from "@/shared/components/EmptyComic";
+import { Button } from "primereact/button";
+import { toast } from "react-toastify";
 
 const ListFollowingComics = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [comics, setComics] = useState<Comic[]>([]);
+  const [isUpdateData, setIsUpdateData] = useState<boolean>(false);
 
   useEffect(() => {
     setIsLoading(true);
 
-    const getNotifies = async () => {
+    const getFollowingComics = async () => {
       try {
         const { data } = await MeService.getFollowingComics();
         setComics(data);
@@ -24,8 +27,19 @@ const ListFollowingComics = () => {
       } catch (error: any) {}
     };
 
-    getNotifies();
-  }, []);
+    getFollowingComics();
+  }, [isUpdateData]);
+
+  const unfollowedComic = async (comicId: number) => {
+    try {
+      await MeService.interactWithComic(comicId, TypeComicInteraction.unfollow);
+
+      setIsUpdateData(!isUpdateData);
+      toast.success("Huỷ theo dõi truyện thành công!");
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
   const itemTemplate = (comic: Comic) => {
     return (
@@ -75,6 +89,12 @@ const ListFollowingComics = () => {
         <div className="col-span-3 flex flex-col items-end justify-center gap-4">
           <span>{formatDate(comic.updatedAt)}</span>
           <span className="text-orange-400">{comic.state}</span>
+          <Button
+            className="!py-1 !px-2"
+            label="Huỷ theo dõi"
+            severity="danger"
+            onClick={() => unfollowedComic(comic.id)}
+          />
         </div>
       </div>
     );
