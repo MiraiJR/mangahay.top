@@ -72,16 +72,14 @@ const ManagerPage = () => {
         </div>
         <div className="mt-5 p-2">
           {activeTab === TabType.CREATE_CHAPTER && <CreateChapterForm />}
-        </div>
-        <div>
           {activeTab === TabType.CREATED_COMICS && <ListCreatedComics />}
-        </div>
-        <div className="mt-5 p-2">
           {activeTab === TabType.CREATE_COMIC && <CreateComicForm />}
         </div>
-        <div className="p-2">
-          {activeTab === TabType.CRAWL_CHAPTER && <CrawlChapter />}
-        </div>
+        {activeTab === TabType.CRAWL_CHAPTER && (
+          <div className="p-2">
+            <CrawlChapter />
+          </div>
+        )}
       </div>
     </DialogProvider>
   );
