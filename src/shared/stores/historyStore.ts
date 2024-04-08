@@ -14,18 +14,23 @@ const HistoryStoreManager = () => {
     return historyComics;
   };
 
-  const setHistoryComics = (comic: Comic, isNew: boolean = true) => {
-    if (!isNew) {
-      historyComics.push(comic);
-    } else {
+  const setHistoryComics = (comic: Comic, isUpdateChapter: boolean = false) => {
+    const matchedComicHistory = historyComics.find(
+      (comicHistory) => comicHistory.id === comic.id
+    );
+
+    if (matchedComicHistory && isUpdateChapter) {
       historyComics = historyComics.map((comicHistory) => {
         if (comic.id === comicHistory.id) {
           comicHistory.chapters = [comic.chapters[0]];
-          console.log(comicHistory);
         }
 
         return comicHistory;
       });
+    }
+
+    if (!matchedComicHistory) {
+      historyComics.push(comic);
     }
 
     isClient &&

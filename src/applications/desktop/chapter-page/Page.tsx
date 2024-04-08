@@ -101,12 +101,15 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
   }, [slugChapter, slugComic]);
 
   useEffect(() => {
-    historyStore.setHistoryComics({
-      ...detailComic,
-      chapters: detailChapter
-        ? [detailChapter.currentChapter]
-        : [detailComic.chapters[0]],
-    });
+    historyStore.setHistoryComics(
+      {
+        ...detailComic,
+        chapters: detailChapter
+          ? [detailChapter.currentChapter]
+          : [detailComic.chapters[0]],
+      },
+      true
+    );
   }, []);
 
   const handleCommentOnComic = async () => {

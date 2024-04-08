@@ -52,13 +52,10 @@ const ComicPage = ({ detailComic }: itemProps) => {
   const {} = useContext(ThemeContext);
 
   useEffect(() => {
-    historyStore.setHistoryComics(
-      {
-        ...detailComic,
-        chapters: [comic.chapters[0]],
-      },
-      false
-    );
+    historyStore.setHistoryComics({
+      ...detailComic,
+      chapters: [comic.chapters[comic.chapters.length - 1]],
+    });
 
     const increaseView = async (comicId: number) => {
       try {
