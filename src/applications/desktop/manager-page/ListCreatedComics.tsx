@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { DataScroller } from "primereact/datascroller";
+import {
+  DataScroller,
+  DataScrollerLazyLoadEvents,
+} from "primereact/datascroller";
 import { Rating } from "primereact/rating";
 import Image from "next/image";
 import { convertWebpResource, formatDate } from "@/shared/helpers/helpers";
@@ -9,6 +12,8 @@ import DialogUpdateComic from "@/shared/components/dialog/DialogUpdateComic";
 import { useDialogContext } from "@/shared/contexts/DialogContext";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
 import { toast } from "react-toastify";
+
+const THE_DEFAULT_AMOUNT_COMICS: number = 10;
 
 const ListCreatedComics = () => {
   const { changeVisible, isUpdateData, changeIsUpdateData } =
@@ -144,10 +149,10 @@ const ListCreatedComics = () => {
         }}
         value={comics}
         itemTemplate={itemTemplate}
-        rows={5}
-        buffer={0.4}
+        rows={THE_DEFAULT_AMOUNT_COMICS}
         header="Danh sách truyện bạn đã đăng"
-        loader={true}
+        inline
+        scrollHeight="1000px"
       />
       {selectedComic && <DialogUpdateComic comic={selectedComic} />}
     </div>
