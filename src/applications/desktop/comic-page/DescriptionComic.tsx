@@ -12,6 +12,8 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { convertWebpResource } from "@/shared/helpers/helpers";
+import { FacebookIcon, FacebookShareButton } from "react-share";
+import { originalURL } from "@/shared/libs/config";
 
 interface itemProps {
   comic: Comic;
@@ -315,6 +317,10 @@ const DescriptionComic = ({
               style={{ fontSize: "2.5rem" }}
               onClick={handleLikeComic}
             ></i>
+            <FacebookShareButton
+              children={<FacebookIcon size={40} />}
+              url={`${originalURL}/truyen/${comic.slug}`}
+            />
           </div>
         </div>
       )}

@@ -92,7 +92,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
     setIsCreating(true);
 
     let formData = new FormData();
-    formData.append("name", comicName);
+    formData.append("name", comicName.replaceAll("/", ""));
     formData.append("anotherName", comicAnotherName);
     comicGenres.forEach((genre) => {
       formData.append("genres[]", genre.toLocaleLowerCase());

@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Footer = () => {
-  const ORIGINAL_HOST = originalURL as string;
+  const ORIGINAL_HOST = `${originalURL}/` as string;
   return (
     <div className="container mx-auto bg-slate-200 p-5">
       <div className=" flex desktop:items-center desktop:justify-around mobile:flex-col">

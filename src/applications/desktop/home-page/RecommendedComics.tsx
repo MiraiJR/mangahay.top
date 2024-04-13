@@ -14,12 +14,14 @@ interface itemProps {
   genre: string;
   title: string;
   isShowHighlight?: boolean;
+  comicPerRow?: number;
 }
 
 const RecommendedComics = ({
   genre,
   title,
   isShowHighlight = true,
+  comicPerRow = 5,
 }: itemProps) => {
   const [comics, setComics] = useState<Comic[]>([]);
   const { isMobile } = globalStore();
@@ -67,8 +69,14 @@ const RecommendedComics = ({
               {comics.length !== 0 && <CardHighlightComic comic={comics[0]} />}
             </div>
           )}
-          <div className="col-span-9 mobile:col-span-12">
-            <div className={`grid grid-cols-5 mobile:grid-cols-3 gap-2 `}>
+          <div
+            className={`col-span-${
+              isShowHighlight ? 9 : 12
+            } mobile:col-span-12`}
+          >
+            <div
+              className={`grid grid-cols-${comicPerRow} mobile:grid-cols-3 gap-2 `}
+            >
               {comics
                 .slice(
                   isShowHighlight ? 1 : 0,

@@ -1,4 +1,5 @@
 import CardChapter from "@/shared/components/card/CardChapter";
+import EmptyComic from "@/shared/components/EmptyComic";
 import themeStore from "@/shared/stores/themeStore";
 
 interface itemProps {
@@ -14,11 +15,15 @@ const ListChapters = ({ chapters }: itemProps) => {
           Danh sách chương ({chapters.length})
         </div>
       </div>
-      <div className="grid grid-cols-3 mobile:grid-cols-2 gap-3 mt-5 max-h-[800px] overflow-y-scroll">
-        {chapters.map((chapter) => (
-          <CardChapter chapter={chapter} key={chapter.id} />
-        ))}
-      </div>
+      {chapters.length === 0 ? (
+        <EmptyComic content="Không có chương!" />
+      ) : (
+        <div className="grid grid-cols-3 mobile:grid-cols-2 gap-3 mt-5 max-h-[800px] overflow-y-scroll">
+          {chapters.map((chapter) => (
+            <CardChapter chapter={chapter} key={chapter.id} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

@@ -53,7 +53,7 @@ const CreateChapterForm = () => {
     });
 
     const formData = new FormData();
-    formData.append("nameChapter", chapterName);
+    formData.append("nameChapter", chapterName.replaceAll("/", ""));
     chapterImages.forEach((image) => {
       formData.append("files", image);
     });

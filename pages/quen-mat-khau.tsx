@@ -1,5 +1,8 @@
 import ForgetPasswordPage from "@/applications/desktop/auth-page/forget-password/Page";
+import useAuthHook from "@/shared/hooks/AuthHook";
 
 export default function ForgetPasswordRoute() {
-  return <ForgetPasswordPage />;
+  const component = useAuthHook({ component: <ForgetPasswordPage /> });
+
+  return <>{component}</>;
 }

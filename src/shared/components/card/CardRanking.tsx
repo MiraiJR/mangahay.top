@@ -1,6 +1,5 @@
 import { cn } from "@/shared/libs/utils";
 import themeStore from "@/shared/stores/themeStore";
-import Link from "next/link";
 
 interface itemProps {
   comic: Comic;
@@ -30,7 +29,9 @@ const CardRanking = ({ comic, position, isRanking }: itemProps) => {
             {comic.name}
           </h2>
         </a>
-        {comic.chapters.length > 0 && (
+        {comic.chapters.length === 0 ? (
+          <span>Không có chương!</span>
+        ) : (
           <a
             rel="preload"
             href={`/truyen/${comic.slug}/${comic.chapters[0].slug}`}
