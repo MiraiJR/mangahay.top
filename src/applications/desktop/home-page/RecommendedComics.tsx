@@ -8,7 +8,7 @@ import ComicService from "@/shared/services/comicService";
 import EmptyComic from "@/shared/components/EmptyComic";
 import { globalStore } from "@/shared/stores/globalStore";
 
-const MAX_THE_NUMBER_OF_COMICS: number = 11;
+const MAX_THE_NUMBER_OF_COMICS: number = 12;
 
 interface itemProps {
   genre: string;
@@ -82,9 +82,9 @@ const RecommendedComics = ({
                   isShowHighlight ? 1 : 0,
                   isMobile
                     ? isShowHighlight
-                      ? MAX_THE_NUMBER_OF_COMICS - 1
-                      : MAX_THE_NUMBER_OF_COMICS - 2
-                    : MAX_THE_NUMBER_OF_COMICS
+                      ? MAX_THE_NUMBER_OF_COMICS - 2
+                      : MAX_THE_NUMBER_OF_COMICS
+                    : MAX_THE_NUMBER_OF_COMICS - 1
                 )
                 .map((comic) => (
                   <CardComic comic={comic} key={comic.id} />
