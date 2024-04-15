@@ -30,6 +30,10 @@ export default function App({
         <meta charSet="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/vite.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-6188777334311255"
+        ></meta>
       </Head>
       <StoreContext.Provider value={store}>
         <ThemProvider>
@@ -39,6 +43,11 @@ export default function App({
           </MainLayout>
         </ThemProvider>
       </StoreContext.Provider>
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6188777334311255"
+        crossOrigin="anonymous"
+      ></script>
     </>
   );
 }
