@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import meService from "../services/meService";
 import authService from "../services/authService";
 import jwt from "../libs/jwt";
 import { toast } from "react-toastify";
@@ -14,6 +13,8 @@ import { useRouter } from "next/router";
 import { reduceQualityImage } from "../helpers/helpers";
 import MyLoading from "./MyLoading";
 import { userStore } from "../stores/userStore";
+import MeService from "../services/meService";
+import { NOTIFICATION_STATUS } from "@/applications/desktop/user-page/Notification";
 
 const INTERVAL_REFRESH_NOTIFICATION: number = 5 * 60 * 1000;
 
@@ -34,10 +35,10 @@ const LoginedUser = () => {
     setIsLoading(true);
 
     try {
-      const { data } = await meService.getNotifies({
+      const { data } = await MeService.getNotifies({
         page: 1,
         limit: 10,
-      });
+      }, NOTIFICATION_STATUS.UNREAD);
       const newTheNumberOfUnreadNotifies = data.reduce(
         (previousValue, curNotify) =>
           curNotify.isRead ? previousValue : previousValue + 1,
@@ -58,7 +59,7 @@ const LoginedUser = () => {
   useEffect(() => {
     const getMe = async () => {
       try {
-        const { data } = await meService.getMe();
+        const { data } = await MeService.getMe();
 
         setUserProfile(data);
       } catch (error: any) {

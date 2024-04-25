@@ -13,7 +13,7 @@ interface NotificationFilter {
   isRead: boolean;
 }
 
-enum NOTIFICATION_STATUS {
+export enum NOTIFICATION_STATUS {
   READ = "1",
   UNREAD = "0",
 }
