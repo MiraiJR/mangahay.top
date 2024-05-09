@@ -12,6 +12,10 @@ export const extractIdFromSlugChapter = (slug: string): number => {
 };
 
 export const reduceQualityImage = (imageUrl: string): string => {
+  if (!imageUrl.includes("res.cloudinary.com")) {
+    return imageUrl;
+  }
+
   if (imageUrl.includes(`${baseURL?.slice(0, baseURL.lastIndexOf("/"))}`)) {
     return imageUrl;
   }
@@ -33,6 +37,10 @@ export const convertWebpResource = (
   imageUrl: string,
   q_auto: string = "good"
 ): string => {
+  if (!imageUrl.includes("res.cloudinary.com")) {
+    return imageUrl;
+  }
+
   if (imageUrl.includes(`${baseURL?.slice(0, baseURL.lastIndexOf("/"))}`)) {
     return imageUrl;
   }
