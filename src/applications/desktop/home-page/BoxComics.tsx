@@ -41,29 +41,28 @@ const BoxComics = ({ title, field }: itemProps) => {
 
   return (
     <>
-      {isLoading && <MyLoading />}
-      {!isLoading && comics.length === 0 && <EmptyComic />}
-      {!isLoading && comics.length > 0 && (
-        <div className="mb-20">
-          <div className="border-s-4 border-orange-500 my-4 flex justify-between items-center text-xl pl-4">
-            <div
-              className={`text-${themeStore.getOppositeTheme()} font-bold text-3xl mobile:text-xl`}
-            >
-              {title}
-            </div>
-            <Link
-              rel="preload"
-              className="flex items-center text-red-400"
-              href={`/danh-sach-truyen?field=${field}`}
-              hrefLang="vi"
-            >
-              <span className="text-sm mobile:text-xs not-italic">
-                Xem thêm
-              </span>
-              <ChevronsRight size={20} />
-            </Link>
+      <div className="mb-20">
+        <div className="border-s-4 border-orange-500 my-4 flex justify-between items-center text-xl pl-4">
+          <div
+            className={`text-${themeStore.getOppositeTheme()} font-bold text-3xl mobile:text-xl`}
+          >
+            {title}
           </div>
-          {comics.length === 0 ? (
+          <Link
+            rel="preload"
+            className="flex items-center text-red-400"
+            href={`/danh-sach-truyen?field=${field}`}
+            hrefLang="vi"
+          >
+            <span className="text-sm mobile:text-xs not-italic">Xem thêm</span>
+            <ChevronsRight size={20} />
+          </Link>
+        </div>
+        {isLoading && <MyLoading />}
+        {!isLoading && comics.length === 0 && <EmptyComic />}
+        {!isLoading &&
+          comics.length > 0 &&
+          (comics.length === 0 ? (
             <EmptyComic />
           ) : (
             <div className="grid grid-cols-5 mobile:grid-cols-3 gap-5 mobile:gap-1">
@@ -78,9 +77,8 @@ const BoxComics = ({ title, field }: itemProps) => {
                   <CardComic comic={comic} key={comic.id} />
                 ))}
             </div>
-          )}
-        </div>
-      )}
+          ))}
+      </div>
     </>
   );
 };
