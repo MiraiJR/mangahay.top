@@ -121,6 +121,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
       setIsCreating(false);
     } catch (error: any) {
       toast.error(error.message);
+      setIsCreating(false);
     }
   };
 

@@ -6,6 +6,7 @@ import themeStore from "@/shared/stores/themeStore";
 import Link from "next/link";
 import EmptyComic from "@/shared/components/EmptyComic";
 import { globalStore } from "@/shared/stores/globalStore";
+import MyLoading from "@/shared/components/MyLoading";
 
 interface itemProps {
   title: string;
@@ -17,17 +18,22 @@ const MAX_THE_NUMBER_OF_COMICS: number = 6;
 const BoxComics = ({ title, field }: itemProps) => {
   const [comics, setComics] = useState<Comic[]>([]);
   const { isMobile } = globalStore();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const getComics = async () => {
       try {
+        setIsLoading(true);
         const { data } = await comicService.getRankingComics(
           field,
           MAX_THE_NUMBER_OF_COMICS
         );
 
         setComics(data.comics);
-      } catch (error: any) {}
+      } catch (error: any) {
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     getComics();
@@ -35,7 +41,9 @@ const BoxComics = ({ title, field }: itemProps) => {
 
   return (
     <>
-      {comics && (
+      {isLoading && <MyLoading />}
+      {!isLoading && comics.length === 0 && <EmptyComic />}
+      {!isLoading && comics.length > 0 && (
         <div className="mb-20">
           <div className="border-s-4 border-orange-500 my-4 flex justify-between items-center text-xl pl-4">
             <div

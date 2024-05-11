@@ -18,6 +18,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { reduceQualityImage } from "@/shared/helpers/helpers";
 import EmptyComic from "@/shared/components/EmptyComic";
+import MyLoading from "@/shared/components/MyLoading";
 
 const THE_NUMBER_OF_COMICS_SLIDE: number = 5;
 
@@ -26,17 +27,22 @@ const SlideComics = () => {
   const [comics, setComics] = useState<Comic[]>([]);
   const [currentComic, setCurrentComic] = useState<Comic>(comics[0]);
   const { theme } = useContext(ThemeContext);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const getRankingComics = async () => {
       try {
+        setIsLoading(true);
         const { data } = await comicService.getRankingComics("view", 5);
         setComics(data.comics);
 
         if (data.comics.length > 0) {
           setCurrentComic(data.comics[0]);
         }
-      } catch (error: any) {}
+      } catch (error: any) {
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     getRankingComics();
@@ -46,7 +52,8 @@ const SlideComics = () => {
     <div
       className={`bg-${themeStore.getOppositeTheme()} text-${theme} rounded-xl flex items-center mobile:flex-col-reverse justify-between h-max p-10`}
     >
-      {currentComic && (
+      {isLoading && <MyLoading />}
+      {!isLoading && currentComic && (
         <div className="flex flex-col px-10 w-max gap-5 mobile:w-fit mobile:mt-4">
           <h2
             className="font-bold desktop:text-4xl mobile:text-xl"
@@ -80,9 +87,8 @@ const SlideComics = () => {
           </div>
         </div>
       )}
-      {comics.length === 0 ? (
-        <EmptyComic />
-      ) : (
+      {!isLoading && comics.length === 0 && <EmptyComic />}
+      {!isLoading && comics.length > 0 && (
         <div>
           <Swiper
             modules={[

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import ComicService from "@/shared/services/comicService";
 import EmptyComic from "@/shared/components/EmptyComic";
 import { globalStore } from "@/shared/stores/globalStore";
+import MyLoading from "@/shared/components/MyLoading";
 
 const MAX_THE_NUMBER_OF_COMICS: number = 12;
 
@@ -25,10 +26,12 @@ const RecommendedComics = ({
 }: itemProps) => {
   const [comics, setComics] = useState<Comic[]>([]);
   const { isMobile } = globalStore();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const getComics = async () => {
       try {
+        setIsLoading(true);
         const { data } = await ComicService.searchComics({
           filterGenres: [genre],
           page: 1,
@@ -36,7 +39,10 @@ const RecommendedComics = ({
         });
 
         setComics(data.comics);
-      } catch (error: any) {}
+      } catch (error: any) {
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     getComics();
@@ -60,9 +66,9 @@ const RecommendedComics = ({
           <ChevronsRight size={20} />
         </Link>
       </div>
-      {comics.length === 0 ? (
-        <EmptyComic />
-      ) : (
+      {isLoading && <MyLoading />}
+      {!isLoading && comics.length === 0 && <EmptyComic />}
+      {!isLoading && comics.length > 0 && (
         <div className="grid grid-cols-12 gap-2">
           {isShowHighlight && (
             <div className="col-span-3 mobile:col-span-12">

@@ -7,6 +7,8 @@ import themeStore from "@/shared/stores/themeStore";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import Link from "next/link";
+import MyLoading from "@/shared/components/MyLoading";
+import EmptyComic from "@/shared/components/EmptyComic";
 
 interface itemProps {
   title: string;
@@ -16,17 +18,22 @@ interface itemProps {
 
 const ListComicsRanking = ({ title, field, amountComic }: itemProps) => {
   const [comics, setComics] = useState<Comic[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const getComics = async () => {
       try {
+        setIsLoading(true);
         const { data } = await comicService.getRankingComics(
           field,
           amountComic
         );
 
         setComics(data.comics);
-      } catch (error: any) {}
+      } catch (error: any) {
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     getComics();
@@ -49,12 +56,9 @@ const ListComicsRanking = ({ title, field, amountComic }: itemProps) => {
           <ChevronsRight size={20} />
         </Link>
       </div>
-      {comics.length === 0 ? (
-        <div className="text-center flex flex-col items-center justify-center">
-          <Image priority width={200} src={EmptyImage} alt="Không có truyện" />
-          <span>Không có truyện</span>
-        </div>
-      ) : (
+      {isLoading && <MyLoading />}
+      {!isLoading && comics.length === 0 && <EmptyComic />}
+      {!isLoading && comics.length > 0 && (
         <div className="">
           {comics.map((comic, _index) => (
             <CardRanking

@@ -16,7 +16,7 @@ const ListCreatedComics = () => {
   const { changeVisible, isUpdateData, changeIsUpdateData } =
     useDialogContext();
   const [comics, setComics] = useState<Comic[]>([]);
-  const [showDetail, setShowDetail] = useState<boolean>(false);
+  const [_showDetail, setShowDetail] = useState<boolean>(false);
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
 
   const getComics = async () => {
