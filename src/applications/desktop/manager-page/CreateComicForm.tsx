@@ -14,6 +14,8 @@ import {
 } from "@/shared/helpers/StringHelper";
 import { useDialogContext } from "@/shared/contexts/DialogContext";
 import { Button } from "primereact/button";
+import { StatusComic } from "@/shared/types/enums/StatusComic";
+import { RadioButton } from "primereact/radiobutton";
 
 interface itemProps {
   comic?: Comic | null;
@@ -32,6 +34,9 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
   const [comicThumb, setComicThumb] = useState<File | null>(null);
   const [isUpdateImage, setIsUpdateImage] = useState<string>("0");
   const [isCreating, setIsCreating] = useState<boolean>(false);
+  const [statusComic, setStatusComic] = useState<string>(
+    StatusComic.PROCESSING
+  );
 
   useEffect(() => {
     if (comic) {
@@ -42,6 +47,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
       setComicTranslators(comic.translators);
       setComicGenres(comic.genres);
       addExistedImageUrlToUpload(comic.thumb);
+      setStatusComic(comic.state);
     }
   }, [comic]);
 
@@ -82,7 +88,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
       comicAnotherName.trim() === "" ||
       comicGenres.length === 0 ||
       comicBriefDescription.trim() === "" ||
-      !comicThumb ||
+      (!comic && !comicThumb) ||
       comicTranslators.length === 0
     ) {
       toast.warn("Vui lòng điền đầy đủ thông tin!");
@@ -105,7 +111,10 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
     });
     formData.append("briefDescription", handleBriefDescription());
     formData.append("isUpdateImage", isUpdateImage);
-    formData.append("file", comicThumb);
+    if (comicThumb) {
+      formData.append("file", comicThumb);
+    }
+    formData.append("state", statusComic);
 
     try {
       if (comic) {
@@ -117,10 +126,9 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
         toast.success("Tạo truyện mới thành công!");
         resetInput();
       }
-
-      setIsCreating(false);
     } catch (error: any) {
       toast.error(error.message);
+    } finally {
       setIsCreating(false);
     }
   };
@@ -133,6 +141,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
     setBriefDescription("");
     setComicThumb(null);
     setComicTranslators([]);
+    setStatusComic(StatusComic.PROCESSING);
     fileUploadRef.current.clear();
   };
 
@@ -221,6 +230,25 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
               }
             />
           </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-4">
+        <label htmlFor="translators">Trạng thái truyện</label>
+        <div className="flex flex-wrap gap-3">
+          {Object.values(StatusComic).map((status, _index) => (
+            <div className="flex align-items-center" key={_index}>
+              <RadioButton
+                inputId={`status-${_index}`}
+                name={`status-${_index}`}
+                value={status}
+                onChange={(e) => setStatusComic(e.value)}
+                checked={status === statusComic}
+              />
+              <label htmlFor={`status-${_index}`} className="ml-2">
+                {status}
+              </label>
+            </div>
+          ))}
         </div>
       </div>
       <div
