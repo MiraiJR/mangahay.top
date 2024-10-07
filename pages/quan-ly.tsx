@@ -1,7 +1,7 @@
 import ManagerPage from "@/applications/desktop/manager-page/Page";
 import jwt from "@/shared/libs/jwt";
 import { userStore } from "@/shared/stores/userStore";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 

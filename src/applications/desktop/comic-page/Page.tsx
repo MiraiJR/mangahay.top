@@ -8,7 +8,7 @@ import { Editor, EditorTextChangeEvent } from "primereact/editor";
 import { globalStore } from "@/shared/stores/globalStore";
 import historyStore from "@/shared/stores/historyStore";
 import themeStore from "@/shared/stores/themeStore";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import dynamic from "next/dynamic";
 import MyLoading from "@/shared/components/MyLoading";

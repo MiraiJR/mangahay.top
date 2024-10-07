@@ -2,38 +2,15 @@ import MetaTags from "@/shared/components/MetaTags";
 import LoginImage from "@/shared/assets/login.webp";
 import Image from "next/image";
 import themeStore from "@/shared/stores/themeStore";
-import { useState } from "react";
-import { InputText } from "primereact/inputtext";
-import { toast } from "react-toastify";
-import AuthService from "@/shared/services/authService";
 import { originalURL } from "@/shared/libs/config";
+import { useTranslation } from "react-i18next";
+import { InputText } from "primereact/inputtext";
+import { useForgetPassword } from "../../hooks/useForgetPassword";
 
 const ForgetPasswordForm = () => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [email, setEmail] = useState<string>("");
-  const [titleButton, setTitleButton] = useState<string>("Quên mật khẩu");
-  const handleForgetPassword = async () => {
-    if (email.trim() === "") {
-      setErrorMessage("Vui lòng nhập địa chỉ email!");
-      return;
-    }
-
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if (!regex.test(email)) {
-      setErrorMessage("Vui lòng nhập đúng cấu trúc mail!");
-      return;
-    }
-
-    setErrorMessage(null);
-
-    try {
-      const { data } = await AuthService.forgetPassword(email);
-      toast.success(data);
-      setTitleButton("Gửi lại");
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-  };
+  const { t } = useTranslation();
+  const { email, setEmail, errorMessage, titleButton, handleForgetPassword } =
+    useForgetPassword();
 
   return (
     <div>
@@ -56,7 +33,9 @@ const ForgetPasswordForm = () => {
             <div
               className={`text-center text-4xl font-bold mb-5 text-${themeStore.getOppositeTheme()}`}
             >
-              {"Quên mật khẩu".toLocaleUpperCase()}
+              {t("forgetPassword.forgetPassword", {
+                ns: "auth",
+              }).toLocaleUpperCase()}
             </div>
             {errorMessage && (
               <small id="username-help" className="text-red-400">
@@ -75,7 +54,7 @@ const ForgetPasswordForm = () => {
               <InputText
                 id="email"
                 type="email"
-                placeholder="Nhập email"
+                placeholder={t("forgetPassword.inputEmail", { ns: "auth" })}
                 aria-describedby="username-help"
                 className="mobile:w-[100%] w-[455px]"
                 value={email}

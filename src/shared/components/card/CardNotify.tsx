@@ -2,7 +2,7 @@ import { formatDate, reduceQualityImage } from "@/shared/helpers/helpers";
 import { cn } from "@/shared/libs/utils";
 import NotifyService from "@/shared/services/notifyService";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface itemProps {

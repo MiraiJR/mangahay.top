@@ -3,7 +3,7 @@ import { TabMenu } from "primereact/tabmenu";
 import { MenuItem } from "primereact/menuitem";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { DialogProvider } from "@/shared/contexts/DialogContext";
 
 const CreateComicForm = dynamic(() => import("./CreateComicForm"));

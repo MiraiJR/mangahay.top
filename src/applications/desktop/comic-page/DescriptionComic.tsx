@@ -5,7 +5,7 @@ import { globalStore } from "@/shared/stores/globalStore";
 import themeStore from "@/shared/stores/themeStore";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Rating, RatingChangeEvent } from "primereact/rating";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";

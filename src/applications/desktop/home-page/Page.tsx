@@ -4,7 +4,7 @@ import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { useContext } from "react";
 import dynamic from "next/dynamic";
 import MyLoading from "@/shared/components/MyLoading";
-import PageFacebookPlugin from "@/shared/components/socials/PageFacebookPlugin";
+// import PageFacebookPlugin from "@/shared/components/socials/PageFacebookPlugin";
 
 const SlideComicsComponent = dynamic(() => import("./SlideComics"), {
   loading: () => <MyLoading />,
@@ -45,7 +45,7 @@ const HomePage = () => {
             field={"view"}
             amountComic={10}
           />
-          <PageFacebookPlugin />
+          {/* <PageFacebookPlugin /> */}
         </div>
       </div>
       <div>

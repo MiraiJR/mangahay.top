@@ -7,8 +7,8 @@ import JWTManager from "@/shared/libs/jwt";
 import { globalStore } from "@/shared/stores/globalStore";
 import themeStore from "@/shared/stores/themeStore";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const title = "Đăng nhập";
 

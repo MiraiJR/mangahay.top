@@ -1,22 +1,20 @@
 import CardComic from "@/shared/components/card/CardComic";
-import EmptyComic from "@/shared/components/EmptyComic";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import themeStore from "@/shared/stores/themeStore";
 import { Divider } from "primereact/divider";
 import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import { useEffect, useContext, useState } from "react";
+import EmptyComic from "../EmptyComic";
+import { THE_NUMBER_OF_COMICS_PER_PAGE } from "@/shared/settings/CommonConfig";
 
 interface itemProps {
   comics: Comic[];
   title: string;
 }
 
-const THE_NUMBER_OF_COMICS_PER_PAGE: number = 12;
-
 const ListComics = ({ comics, title }: itemProps) => {
   const [first, setFirst] = useState<number>(0);
   const [pageComics, setPageComics] = useState<Comic[]>([]);
-  const {} = useContext(ThemeContext);
+  const { oppositeTheme } = useContext(ThemeContext);
 
   const onPageChange = (event: PaginatorPageChangeEvent) => {
     setFirst(event.first);
@@ -30,9 +28,9 @@ const ListComics = ({ comics, title }: itemProps) => {
   }, [comics]);
 
   return (
-    <div className={`border border-${themeStore.getOppositeTheme()} mt-4 p-4`}>
+    <div className={`border border-${oppositeTheme} mt-4 p-4`}>
       <div
-        className={`text-${themeStore.getOppositeTheme()} font-bold text-xl mobile:lg`}
+        className={`text-${oppositeTheme} font-bold text-xl mobile:lg`}
         title={title}
       >
         {title}

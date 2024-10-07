@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import comicService from "@/shared/services/comicService";
 import themeStore from "@/shared/stores/themeStore";
 import { globalStore } from "@/shared/stores/globalStore";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface itemProps {
   setComics: any;

@@ -13,7 +13,7 @@ import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import EmptyComic from "@/shared/components/EmptyComic";
 import MyLoading from "@/shared/components/MyLoading";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface itemProps {
   genres: Genre[];

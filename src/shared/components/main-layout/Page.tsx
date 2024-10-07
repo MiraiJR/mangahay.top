@@ -1,13 +1,11 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 import { cn } from "@/shared/libs/utils";
-import { ArrowUpCircle } from "lucide-react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import themeStore from "@/shared/stores/themeStore";
 import { globalStore } from "@/shared/stores/globalStore";
-
-const MOBILE_MAX_SIZE_SCREEN: number = 1007;
+import { ScrollToTop } from "./components/scroll-to-top/ScrollToTop";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { MOBILE_MAX_SIZE_SCREEN } from "@/shared/settings/CommonConfig";
 
 const MainLayout = ({
   children,
@@ -16,22 +14,8 @@ const MainLayout = ({
   children: React.ReactNode;
   className?: string;
 }) => {
-  const [isScroll, setIsScroll] = useState<boolean>(false);
-  const {} = useContext(ThemeContext);
   const { setIsMobile } = globalStore();
-
-  useEffect(() => {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 200) {
-        setIsScroll(true);
-        return;
-      }
-      if (window.scrollY === 0) {
-        setIsScroll(false);
-        return;
-      }
-    });
-  }, []);
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     const handleResize = () => {
@@ -50,13 +34,9 @@ const MainLayout = ({
   return (
     <div
       id="main-layout"
-      className={`min-h-screen relative bg-${themeStore.getTheme()} ${className}`}
+      className={`min-h-screen relative bg-${theme} ${className}`}
     >
-      <div
-        className={cn(
-          `bg-${themeStore.getTheme()} relative drop-shadow-lg z-50`
-        )}
-      >
+      <div className={cn(`bg-${theme} relative drop-shadow-lg z-50`)}>
         <Header />
       </div>
       <div className={cn("container relative mx-auto my-10 mobile:p-2")}>
@@ -65,17 +45,7 @@ const MainLayout = ({
       <div className="bg-slate-200">
         <Footer />
       </div>
-      {isScroll && (
-        <div
-          className={`fixed bottom-0 m-4 right-0 cursor-pointer z-50`}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        >
-          <ArrowUpCircle
-            size={50}
-            color={themeStore.getTheme() === "light" ? "black" : "white"}
-          />
-        </div>
-      )}
+      <ScrollToTop />
     </div>
   );
 };

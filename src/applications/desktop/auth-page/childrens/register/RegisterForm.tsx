@@ -7,7 +7,7 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const title = "Đăng ký";
 

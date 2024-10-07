@@ -6,8 +6,7 @@ import { Divider } from "primereact/divider";
 import EmptyComic from "@/shared/components/EmptyComic";
 import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import CardComicHistory from "@/shared/components/card/CardHistory";
-
-const THE_NUMBER_OF_COMICS_PER_PAGE: number = 12;
+import { THE_NUMBER_OF_COMICS_PER_PAGE } from "@/shared/settings/CommonConfig";
 
 const HistoryPage = () => {
   const [comics, setComics] = useState<Comic[]>([]);

@@ -1,18 +1,18 @@
-import { useState, useContext } from "react";
-import { ThemeContext } from "../contexts/ThemeContext";
-import themeStore from "../stores/themeStore";
-import MyLoading from "./MyLoading";
-import { globalStore } from "../stores/globalStore";
+import MyLoading from "@/shared/components/MyLoading";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useGetGenres } from "@/shared/hooks/useGetGenres";
+import themeStore from "@/shared/stores/themeStore";
+import { useContext } from "react";
 
 const ListGenres = () => {
-  const { genres } = globalStore();
+  const { genres, isLoading } = useGetGenres();
   const { theme } = useContext(ThemeContext);
 
   return (
     <div
       className={`grid grid-cols-4 mobile:grid-cols-3 mobile:max-h-[300px] mobile:w-screen mobile:overflow-y-scroll gap-2 shadow-outer-lg-${themeStore.getOppositeTheme()} bg-${theme} p-2 z-10`}
     >
-      {!genres ? (
+      {isLoading ? (
         <MyLoading />
       ) : genres.length !== 0 ? (
         genres.map((genre) => (

@@ -13,7 +13,7 @@ import {
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import themeStore from "@/shared/stores/themeStore";
 import TextAnimation from "@/shared/components/animations/TextAnimation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { reduceQualityImage } from "@/shared/helpers/helpers";

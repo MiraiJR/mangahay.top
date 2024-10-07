@@ -8,7 +8,7 @@ import EmptyComic from "@/shared/components/EmptyComic";
 
 const BoxSearch = dynamic(() => import("./BoxSearch"));
 const ListComics = dynamic(
-  () => import("../../../shared/components/ListComics")
+  () => import("../../../shared/components/list-comics/ListComics")
 );
 
 const SearchPage = () => {

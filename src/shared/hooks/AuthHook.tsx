@@ -1,5 +1,4 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { userStore } from "../stores/userStore";
 import { originalURL } from "../libs/config";
 import MyLoading from "../components/MyLoading";
 import MeService from "../services/meService";

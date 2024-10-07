@@ -4,7 +4,7 @@ import { TabMenu } from "primereact/tabmenu";
 import { useContext, useEffect, useState } from "react";
 import themeStore from "@/shared/stores/themeStore";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import UserSettingPage from "./setting-page/Page";
 
 enum TabType {
