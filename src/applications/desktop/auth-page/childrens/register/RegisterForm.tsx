@@ -1,51 +1,30 @@
 import LoginImage from "@/shared/assets/login.webp";
-import authService from "@/shared/services/authService";
-import themeStore from "@/shared/stores/themeStore";
 import { InputText } from "primereact/inputtext";
-import { useState } from "react";
 import { Helmet } from "react-helmet";
-import { toast } from "react-toastify";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRegister } from "./useRegister";
+import { useContext } from "react";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 const title = "Đăng ký";
 
 const RegisterForm = () => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [password, setPassword] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [fullname, setFullname] = useState<string>("");
-  const router = useRouter();
-
-  const handleRegister = async () => {
-    try {
-      if (
-        email.trim() === "" ||
-        confirmPassword.trim() === "" ||
-        fullname.trim() === "" ||
-        password.trim() === ""
-      ) {
-        throw new Error("Vui điền đầy đủ thông tin!");
-      }
-
-      if (confirmPassword !== password) {
-        throw new Error("Nhập lại mật khẩu không khớp!");
-      }
-
-      const { data } = await authService.register({
-        password,
-        email,
-        fullname,
-      });
-
-      toast.success(data);
-      router.push("/dang-nhap");
-    } catch (error: any) {
-      setErrorMessage(error.message);
-    }
-  };
+  const {
+    errorMessage,
+    password,
+    setPassword,
+    email,
+    setEmail,
+    confirmPassword,
+    setConfirmPassword,
+    fullname,
+    setFullname,
+    handleRegister,
+  } = useRegister();
+  const { oppositeTheme } = useContext(ThemeContext);
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -59,12 +38,12 @@ const RegisterForm = () => {
           priority
           className="mobile:hidden"
           src={LoginImage}
-          alt="Đăng ký"
+          alt={t("register.label", { ns: "auth" })}
           width={300}
         />
         <div className="flex flex-col gap-4">
           <div
-            className={`text-center text-4xl font-bold mb-5 text-${themeStore.getOppositeTheme()}`}
+            className={`text-center text-4xl font-bold mb-5 text-${oppositeTheme}`}
           >
             {title.toLocaleUpperCase()}
           </div>
@@ -75,14 +54,11 @@ const RegisterForm = () => {
           )}
           <div className="card flex justify-content-center">
             <div className="flex flex-col gap-2">
-              <label
-                htmlFor="fullname"
-                className={`text-${themeStore.getOppositeTheme()}`}
-              >
-                Họ và tên
+              <label htmlFor="fullname" className={`text-${oppositeTheme}`}>
+                {t("fullName.label", { ns: "auth" })}
               </label>
               <InputText
-                placeholder="Nhập họ và tên"
+                placeholder={t("fullName.placeholder", { ns: "auth" })}
                 id="fullname"
                 aria-describedby="username-help"
                 className="w-[455px] mobile:w-[235px]"
@@ -96,14 +72,11 @@ const RegisterForm = () => {
           </div>
           <div className="card flex justify-content-center">
             <div className="flex flex-col gap-2">
-              <label
-                htmlFor="email"
-                className={`text-${themeStore.getOppositeTheme()}`}
-              >
-                Email
+              <label htmlFor="email" className={`text-${oppositeTheme}`}>
+                {t("email.label", { ns: "auth" })}
               </label>
               <InputText
-                placeholder="Nhập địa chỉ email"
+                placeholder={t("email.placeholder", { ns: "auth" })}
                 id="email"
                 type="email"
                 aria-describedby="username-help"
@@ -117,16 +90,13 @@ const RegisterForm = () => {
           </div>
           <div className="card flex justify-content-center">
             <div className="flex flex-col gap-2">
-              <label
-                htmlFor="password"
-                className={`text-${themeStore.getOppositeTheme()}`}
-              >
-                Mật khẩu
+              <label htmlFor="password" className={`text-${oppositeTheme}`}>
+                {t("password.label", { ns: "auth" })}
               </label>
               <InputText
                 type="password"
                 id="password"
-                placeholder="Nhập mật khẩu"
+                placeholder={t("password.placeholder", { ns: "auth" })}
                 aria-describedby="username-help"
                 className="mobile:w-[235px] w-[455px]"
                 value={password}
@@ -140,14 +110,14 @@ const RegisterForm = () => {
             <div className="flex flex-col gap-2">
               <label
                 htmlFor="confirmPassword"
-                className={`text-${themeStore.getOppositeTheme()}`}
+                className={`text-${oppositeTheme}`}
               >
-                Nhập lại mật khẩu
+                {t("confirmPassword.label", { ns: "auth" })}
               </label>
               <InputText
                 type="password"
                 id="confirmPassword"
-                placeholder="Nhập lại mật khẩu"
+                placeholder={t("confirmPassword.placeholder", { ns: "auth" })}
                 aria-describedby="username-help"
                 className="mobile:w-[235px] w-[455px]"
                 value={confirmPassword}
@@ -164,11 +134,11 @@ const RegisterForm = () => {
               href={"/dang-nhap"}
               className="text-red-600 font-bold float-right"
             >
-              Đăng nhập
+              {t("login.label", { ns: "auth" })}
             </Link>
           </div>
-          <button className="btn-primary p-4" onClick={handleRegister}>
-            Đăng ký
+          <button className="btn-primary p-4" onClick={() => handleRegister()}>
+            {t("register.label", { ns: "auth" })}
           </button>
         </div>
       </div>

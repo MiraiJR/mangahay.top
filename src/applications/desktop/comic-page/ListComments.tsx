@@ -1,29 +1,14 @@
 import CardComment from "@/shared/components/card/CardComment";
-import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
-import { useEffect, useState } from "react";
+import { THE_NUMBER_OF_COMMENTS_PER_PAGE } from "@/shared/settings/CommonConfig";
+import { Paginator } from "primereact/paginator";
+import { useListComment } from "./useListComments";
 
 interface itemProps {
   comments: UserComment[];
 }
 
-const THE_NUMBER_OF_COMMENTS_PER_PAGE: number = 10;
-
 const ListComments = ({ comments }: itemProps) => {
-  const [first, setFirst] = useState<number>(0);
-  const [pageComments, setPageComments] = useState<UserComment[]>([]);
-
-  const onPageChange = (event: PaginatorPageChangeEvent) => {
-    setFirst(event.first);
-    setPageComments(
-      comments.slice(event.first, event.first + THE_NUMBER_OF_COMMENTS_PER_PAGE)
-    );
-  };
-
-  useEffect(() => {
-    setPageComments(
-      comments.slice(first, first + THE_NUMBER_OF_COMMENTS_PER_PAGE)
-    );
-  }, [comments]);
+  const { onPageChange, pageComments, first } = useListComment(comments);
 
   return (
     <div className="flex flex-col mt-10 w-[100%] mobile:px-2">

@@ -1,46 +1,20 @@
 import LoginImage from "@/shared/assets/login.webp";
-import authService from "@/shared/services/authService";
 import { InputText } from "primereact/inputtext";
-import { useState } from "react";
 import { Helmet } from "react-helmet";
-import JWTManager from "@/shared/libs/jwt";
-import { globalStore } from "@/shared/stores/globalStore";
-import themeStore from "@/shared/stores/themeStore";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useLogin } from "./useLogin";
+import { useContext } from "react";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 const title = "Đăng nhập";
 
 const LoginForm = () => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [password, setPassword] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const router = useRouter();
-  const { setIsLogined } = globalStore();
-
-  const handleLogin = async () => {
-    try {
-      if (email.trim() === "") {
-        throw new Error("Vui lòng nhập email!");
-      }
-
-      if (password.trim() === "") {
-        throw new Error("Vui lòng nhập mật khẩu!");
-      }
-
-      const { data } = await authService.login({
-        password,
-        email,
-      });
-
-      JWTManager.setToken(data);
-      setIsLogined(true);
-      router.push("/");
-    } catch (error: any) {
-      setErrorMessage(error.message);
-    }
-  };
+  const { password, setPassword, email, setEmail, errorMessage, handleLogin } =
+    useLogin();
+  const { oppositeTheme } = useContext(ThemeContext);
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -54,12 +28,12 @@ const LoginForm = () => {
           priority
           className="mobile:hidden"
           src={LoginImage}
-          alt="Đăng nhập"
+          alt={t("login.label", { ns: "auth" })}
           width={300}
         />
         <div className="flex flex-col gap-4">
           <div
-            className={`text-center text-4xl font-bold mb-5 text-${themeStore.getOppositeTheme()}`}
+            className={`text-center text-4xl font-bold mb-5 text-${oppositeTheme}`}
           >
             {title.toLocaleUpperCase()}
           </div>
@@ -70,15 +44,12 @@ const LoginForm = () => {
           )}
           <div className="card flex justify-content-center">
             <div className="flex flex-col gap-2">
-              <label
-                htmlFor="username"
-                className={`text-${themeStore.getOppositeTheme()}`}
-              >
-                Email
+              <label htmlFor="username" className={`text-${oppositeTheme}`}>
+                {t("email.label", { ns: "auth" })}
               </label>
               <InputText
                 id="username"
-                placeholder="Nhập email"
+                placeholder={t("email.placeholder", { ns: "auth" })}
                 aria-describedby="username-help"
                 className="mobile:w-[235px] w-[455px]"
                 value={email}
@@ -90,16 +61,13 @@ const LoginForm = () => {
           </div>
           <div className="card flex justify-content-center">
             <div className="flex flex-col gap-2">
-              <label
-                htmlFor="password"
-                className={`text-${themeStore.getOppositeTheme()}`}
-              >
-                Mật khẩu
+              <label htmlFor="password" className={`text-${oppositeTheme}`}>
+                {t("password.label", { ns: "auth" })}
               </label>
               <InputText
                 type="password"
                 id="password"
-                placeholder="Nhập mật khẩu"
+                placeholder={t("password.placeholder", { ns: "auth" })}
                 aria-describedby="username-help"
                 className="mobile:w-[235px] w-[455px]"
                 value={password}
@@ -117,7 +85,7 @@ const LoginForm = () => {
               href={"/dang-ky"}
               className="text-red-600 font-bold"
             >
-              Đăng ký
+              {t("register.label", { ns: "auth" })}
             </Link>
             <Link
               rel="preload"
@@ -125,11 +93,11 @@ const LoginForm = () => {
               href={"/quen-mat-khau"}
               className="text-blue-400"
             >
-              Quên mật khẩu?
+              {t("forgetPassword.label", { ns: "auth" })}
             </Link>
           </div>
-          <button className="btn-primary p-4" onClick={handleLogin}>
-            Đăng nhập
+          <button className="btn-primary p-4" onClick={() => handleLogin()}>
+            {t("login.label", { ns: "auth" })}
           </button>
         </div>
       </div>

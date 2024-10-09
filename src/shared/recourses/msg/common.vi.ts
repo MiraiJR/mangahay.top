@@ -35,6 +35,15 @@ export const common = {
     },
   },
   viewAll: "Xem tất cả",
+  requiredLogin: "Bạn phải đăng nhập để thực hiện thao tác này!",
+  comicInteraction: {
+    evaluated: "Bạn đã đánh giá truyện này rồi!",
+    follow: "Theo dõi thành công!",
+    unfollow: "Huỷ theo dõi thành công!",
+    like: "Thích thành công!",
+    unlike: "Huỷ thích thành công!",
+  },
+  viewMore: "Xem thêm",
 };
 
 export type CommonResouce = typeof common;

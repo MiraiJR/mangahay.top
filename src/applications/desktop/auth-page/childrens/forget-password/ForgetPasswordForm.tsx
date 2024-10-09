@@ -5,7 +5,7 @@ import themeStore from "@/shared/stores/themeStore";
 import { originalURL } from "@/shared/libs/config";
 import { useTranslation } from "react-i18next";
 import { InputText } from "primereact/inputtext";
-import { useForgetPassword } from "../../hooks/useForgetPassword";
+import { useForgetPassword } from "./useForgetPassword";
 
 const ForgetPasswordForm = () => {
   const { t } = useTranslation();

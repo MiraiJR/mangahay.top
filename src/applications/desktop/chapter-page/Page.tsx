@@ -3,14 +3,11 @@ import { originalURL } from "@/shared/libs/config";
 import comicService from "@/shared/services/comicService";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { MenuItem } from "primereact/menuitem";
-import { useContext, useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { useContext, useEffect, useState } from "react";
 import { ArrowLeftCircle, ArrowRightCircle, MenuSquare } from "lucide-react";
 import { cn } from "@/shared/libs/utils";
 import { Editor, EditorTextChangeEvent } from "primereact/editor";
-import { globalStore } from "@/shared/stores/globalStore";
 import themeStore from "@/shared/stores/themeStore";
-import { useRouter } from "next/navigation";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import dynamic from "next/dynamic";
 import ListComicsOfAuthor from "../comic-page/ListComicsOfAuthor";
@@ -19,26 +16,22 @@ import { getNextPreAofChapterFromId } from "@/shared/helpers/ChapterHelper";
 import EmptyComic from "@/shared/components/EmptyComic";
 import ChapterViewTypeIndex from "./chapter-view-type/IndexComponent";
 import historyStore from "@/shared/stores/historyStore";
+import { useRouter } from "next/router";
+import { useClickOutside } from "@/shared/hooks/useClickOutside";
+import { useComment } from "@/shared/hooks/useComment";
 
 interface itemProps {
   detailComic: Comic;
   detailChapterA: DetailChapter;
 }
 
-// const DescriptionComic = dynamic(
-//   () => import("../comic-page/DescriptionComic")
-// );
-
 const ListComments = dynamic(() => import("../comic-page/ListComments"));
 const MenuChapter = dynamic(() => import("./MenuChapter"));
 
 const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
-  const menuChapterRefTop = useRef<any>(null);
-  const menuChapterRefBottom = useRef<any>(null);
   const router = useRouter();
   const { slugChapter, slugComic } = router.query;
   const [comic, setComic] = useState<Comic>(detailComic);
-  const [contentComment, setContentComment] = useState<string>("");
   const [detailChapter, setDetailChapter] = useState<DetailChapter | null>(
     detailChapterA
   );
@@ -46,8 +39,10 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
   const [showMenuChapterTop, setShowMenuChapterTop] = useState<boolean>(false);
   const [showMenuChapterBottom, setShowMenuChapterBottm] =
     useState<boolean>(false);
-  const { isLogined } = globalStore();
-
+  const { contentComment, setContentComment, handleComment } = useComment(
+    detailComic.id,
+    setComments
+  );
   const items: MenuItem[] = [
     { label: "Truyện" },
     { label: comic?.name, url: `${originalURL}/truyen/${comic?.slug}` },
@@ -58,33 +53,12 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
   ];
   const home: MenuItem = { icon: "pi pi-home", url: originalURL };
   const {} = useContext(ThemeContext);
-
-  const handleClickOutsideForMenuChapter = (
-    ref: any,
-    setShowMenu: Function
-  ) => {
-    const handleClickOutsideMenuChapterTop = (event: any) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setShowMenu(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutsideMenuChapterTop);
-    return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutsideMenuChapterTop
-      );
-    };
-  };
-
-  useEffect(() => {
-    handleClickOutsideForMenuChapter(menuChapterRefTop, setShowMenuChapterTop);
-    handleClickOutsideForMenuChapter(
-      menuChapterRefBottom,
-      setShowMenuChapterBottm
-    );
-  }, []);
+  const { elementRef: menuChapterRefTop } = useClickOutside(
+    setShowMenuChapterTop
+  );
+  const { elementRef: menuChapterRefBottom } = useClickOutside(
+    setShowMenuChapterBottm
+  );
 
   useEffect(() => {
     setShowMenuChapterTop(false);
@@ -111,32 +85,6 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
       true
     );
   }, []);
-
-  const handleCommentOnComic = async () => {
-    if (!isLogined) {
-      toast.warn("Bạn phải đăng nhập để thực hiện thao tác này!");
-      return;
-    }
-
-    if (contentComment.trim() === "") {
-      toast.warn("Vui lòng nhập nội dung bình luận!");
-      return;
-    }
-
-    try {
-      if (comic) {
-        const { data } = await comicService.commentOnComic(
-          comic.id,
-          contentComment
-        );
-
-        setComments((pre) => [data, ...pre]);
-        setContentComment("");
-      }
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-  };
 
   return (
     <div>
@@ -286,7 +234,12 @@ const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
             style={{ height: "100px" }}
             className="mt-10"
           />
-          <div className="w-[100%]" onClick={handleCommentOnComic}>
+          <div
+            className="w-[100%]"
+            onClick={() => {
+              handleComment();
+            }}
+          >
             <button className="btn-primary w-fit mt-2 float-right">
               Bình luận
             </button>
