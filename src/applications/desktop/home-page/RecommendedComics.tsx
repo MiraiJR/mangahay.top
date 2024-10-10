@@ -3,11 +3,10 @@ import CardHighlightComic from "@/shared/components/card/CardHighlightComic";
 import { ChevronsRight } from "lucide-react";
 import themeStore from "@/shared/stores/themeStore";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import ComicService from "@/shared/services/comicService";
 import EmptyComic from "@/shared/components/EmptyComic";
 import { globalStore } from "@/shared/stores/globalStore";
 import MyLoading from "@/shared/components/MyLoading";
+import { useSearchComic } from "@/shared/hooks/useSearchComic";
 
 const MAX_THE_NUMBER_OF_COMICS: number = 12;
 
@@ -24,29 +23,12 @@ const RecommendedComics = ({
   isShowHighlight = true,
   comicPerRow = 5,
 }: itemProps) => {
-  const [comics, setComics] = useState<Comic[]>([]);
   const { isMobile } = globalStore();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const getComics = async () => {
-      try {
-        setIsLoading(true);
-        const { data } = await ComicService.searchComics({
-          filterGenres: [genre],
-          page: 1,
-          limit: MAX_THE_NUMBER_OF_COMICS,
-        });
-
-        setComics(data.comics);
-      } catch (error: any) {
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getComics();
-  }, []);
+  const { comics, isLoading } = useSearchComic({
+    filterGenres: [genre],
+    page: 1,
+    limit: MAX_THE_NUMBER_OF_COMICS,
+  });
 
   return (
     <div>

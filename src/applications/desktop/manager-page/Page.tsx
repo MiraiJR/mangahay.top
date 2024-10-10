@@ -3,8 +3,8 @@ import { TabMenu } from "primereact/tabmenu";
 import { MenuItem } from "primereact/menuitem";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 import { DialogProvider } from "@/shared/contexts/DialogContext";
+import { useRouter } from "next/router";
 
 const CreateComicForm = dynamic(() => import("./CreateComicForm"));
 const CrawlChapter = dynamic(() => import("./CrawlChapter"));

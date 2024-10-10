@@ -1,25 +1,21 @@
 import historyStore from "@/shared/stores/historyStore";
 import { useEffect, useState, useContext } from "react";
-import themeStore from "@/shared/stores/themeStore";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { Divider } from "primereact/divider";
 import EmptyComic from "@/shared/components/EmptyComic";
 import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import CardComicHistory from "@/shared/components/card/CardHistory";
-
-const THE_NUMBER_OF_COMICS_PER_PAGE: number = 12;
+import { THE_NUMBER_OF_COMICS_PER_PAGE } from "@/shared/settings/CommonConfig";
 
 const HistoryPage = () => {
   const [comics, setComics] = useState<Comic[]>([]);
-  const {} = useContext(ThemeContext);
+  const { oppositeTheme, theme } = useContext(ThemeContext);
+  const [first, setFirst] = useState<number>(0);
+  const [pageComics, setPageComics] = useState<Comic[]>([]);
 
   useEffect(() => {
     setComics(historyStore.getHistoryComics());
   }, []);
-
-  const [first, setFirst] = useState<number>(0);
-  const [pageComics, setPageComics] = useState<Comic[]>([]);
-  const {} = useContext(ThemeContext);
 
   const onPageChange = (event: PaginatorPageChangeEvent) => {
     setFirst(event.first);
@@ -34,12 +30,10 @@ const HistoryPage = () => {
 
   return (
     <>
-      <div className={`bg-${themeStore.getTheme()}`}>
-        <div
-          className={`border border-${themeStore.getOppositeTheme()} mt-4 p-4`}
-        >
+      <div className={`bg-${theme}`}>
+        <div className={`border border-${oppositeTheme} mt-4 p-4`}>
           <div
-            className={`text-${themeStore.getOppositeTheme()} font-bold text-xl mobile:lg`}
+            className={`text-${oppositeTheme} font-bold text-xl mobile:lg`}
             title={"Lịch sử đọc truyện"}
           >
             Lịch sử đọc truyện

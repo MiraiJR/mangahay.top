@@ -1,5 +1,4 @@
-import comicService from "@/shared/services/comicService";
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Chip } from "primereact/chip";
 import {
@@ -11,46 +10,32 @@ import {
   Autoplay,
 } from "swiper/modules";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import themeStore from "@/shared/stores/themeStore";
 import TextAnimation from "@/shared/components/animations/TextAnimation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { reduceQualityImage } from "@/shared/helpers/helpers";
 import EmptyComic from "@/shared/components/EmptyComic";
 import MyLoading from "@/shared/components/MyLoading";
+import { useGetRankingComics } from "@/shared/hooks/useGetRankingComics";
 
 const THE_NUMBER_OF_COMICS_SLIDE: number = 5;
 
 const SlideComics = () => {
   const router = useRouter();
-  const [comics, setComics] = useState<Comic[]>([]);
+  const { comics, isLoading } = useGetRankingComics("view", 5);
   const [currentComic, setCurrentComic] = useState<Comic>(comics[0]);
-  const { theme } = useContext(ThemeContext);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { theme, oppositeTheme } = useContext(ThemeContext);
 
   useEffect(() => {
-    const getRankingComics = async () => {
-      try {
-        setIsLoading(true);
-        const { data } = await comicService.getRankingComics("view", 5);
-        setComics(data.comics);
-
-        if (data.comics.length > 0) {
-          setCurrentComic(data.comics[0]);
-        }
-      } catch (error: any) {
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getRankingComics();
-  }, []);
+    if (comics.length >= 0) {
+      setCurrentComic(comics[0]);
+    }
+  }, [comics]);
 
   return (
     <div
-      className={`bg-${themeStore.getOppositeTheme()} text-${theme} rounded-xl flex items-center mobile:flex-col-reverse justify-between h-max p-10`}
+      className={`bg-${oppositeTheme} text-${theme} rounded-xl flex items-center mobile:flex-col-reverse justify-between h-max p-10`}
     >
       {isLoading && <MyLoading />}
       {!isLoading && currentComic && (

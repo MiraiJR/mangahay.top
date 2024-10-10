@@ -1,0 +1,17 @@
+export const keywordRelatedComic: string[] = [
+  "truyện tranh",
+  "truyện tranh online",
+  "đọc truyện tranh",
+  "đọc truyện hay",
+  "manga world",
+  "nettruyen",
+  "nhattruyen",
+  "blogtruyen",
+  "truyentranhlh",
+  "otakusan",
+  "toptruyen",
+  "mi2manga",
+  "manhwa",
+  "manhua",
+  "manga",
+];

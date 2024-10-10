@@ -1,10 +1,10 @@
 import CardRanking from "@/shared/components/card/CardRanking";
-import comicService from "@/shared/services/comicService";
-import themeStore from "@/shared/stores/themeStore";
 import { ChevronsRight } from "lucide-react";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { useContext } from "react";
 import Link from "next/link";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useListComicsOfAuthor } from "./useListComicsOfAuthor";
+import { useTranslation } from "react-i18next";
 
 interface itemProps {
   title: string;
@@ -12,31 +12,15 @@ interface itemProps {
 }
 
 const ListComicsOfAuthor = ({ title, author }: itemProps) => {
-  const [comics, setComics] = useState<Comic[]>([]);
-
-  useEffect(() => {
-    const getComics = async () => {
-      try {
-        const { data } = await comicService.searchComics({
-          filterAuthor: author,
-          page: 1,
-          limit: 5,
-        });
-
-        setComics(data.comics);
-      } catch (error: any) {
-        toast.error(error.message);
-      }
-    };
-
-    getComics();
-  }, []);
+  const { oppositeTheme } = useContext(ThemeContext);
+  const { comics } = useListComicsOfAuthor(author);
+  const { t } = useTranslation();
 
   return (
     <div>
       <div className="my-4 flex justify-between items-center text-xl">
         <div
-          className={`font-bold text-2xl mobile:text-xl text-${themeStore.getOppositeTheme()}`}
+          className={`font-bold text-2xl mobile:text-xl text-${oppositeTheme}`}
           title={`truyện tác giả ${author}`}
         >
           {title}
@@ -47,7 +31,9 @@ const ListComicsOfAuthor = ({ title, author }: itemProps) => {
           href={""}
           hrefLang="vi"
         >
-          <span className="text-sm not-italic">Xem thêm</span>
+          <span className="text-sm not-italic">
+            {t("viewMore", { ns: "common" })}
+          </span>
           <ChevronsRight size={20} />
         </Link>
       </div>

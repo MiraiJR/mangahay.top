@@ -1,18 +1,21 @@
 import CardChapter from "@/shared/components/card/CardChapter";
 import EmptyComic from "@/shared/components/EmptyComic";
-import themeStore from "@/shared/stores/themeStore";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useContext } from "react";
+import { useTranslation } from "react-i18next";
 
 interface itemProps {
   chapters: Chapter[];
 }
 const ListChapters = ({ chapters }: itemProps) => {
+  const { oppositeTheme } = useContext(ThemeContext);
+  const { t } = useTranslation();
+
   return (
     <div>
       <div className="border-s-4 border-orange-500 pl-4 font-bold">
-        <div
-          className={`text-2xl mobile:text-xl text-${themeStore.getOppositeTheme()}`}
-        >
-          Danh sách chương ({chapters.length})
+        <div className={`text-2xl mobile:text-xl text-${oppositeTheme}`}>
+          {t("listChapter.label", { ns: "chapter" })} ({chapters.length})
         </div>
       </div>
       {chapters.length === 0 ? (

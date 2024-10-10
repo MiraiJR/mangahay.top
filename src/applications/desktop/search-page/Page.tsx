@@ -1,14 +1,12 @@
 import { useContext, useRef, useState } from "react";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import dynamic from "next/dynamic";
-import MyLoading from "@/shared/components/MyLoading";
 import MetaTags from "@/shared/components/MetaTags";
 import { originalURL } from "@/shared/libs/config";
-import EmptyComic from "@/shared/components/EmptyComic";
 
 const BoxSearch = dynamic(() => import("./BoxSearch"));
 const ListComics = dynamic(
-  () => import("../../../shared/components/ListComics")
+  () => import("../../../shared/components/list-comics/ListComics")
 );
 
 const SearchPage = () => {

@@ -1,4 +1,4 @@
-import RegisterPage from "@/applications/desktop/auth-page/register/Page";
+import RegisterPage from "@/applications/desktop/auth-page/childrens/register/Page";
 import useAuthHook from "@/shared/hooks/AuthHook";
 
 export default function RegisterRoute() {

@@ -1,19 +1,21 @@
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { cn } from "@/shared/libs/utils";
-import themeStore from "@/shared/stores/themeStore";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useContext } from "react";
 
 interface itemProps {
   chapters: Chapter[];
 }
 const MenuChapter = ({ chapters }: itemProps) => {
   const { slugChapter, slugComic } = useParams();
+  const { theme, oppositeTheme } = useContext(ThemeContext);
 
   return (
     <div
       className={`z-[100] absolute w-max flex flex-col max-h-[400px]
        overflow-y-scroll top-13 right-0 translate-x-12 mobile:translate-x-6 
-       scrollbar-hide bg-${themeStore.getOppositeTheme()} text-${themeStore.getTheme()} shadow-outer-lg-${themeStore.getOppositeTheme()}`}
+       scrollbar-hide bg-${oppositeTheme} text-${theme} shadow-outer-lg-${oppositeTheme}`}
     >
       {chapters.map((chapter) => (
         <Link

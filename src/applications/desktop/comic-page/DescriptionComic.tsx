@@ -1,172 +1,24 @@
-import { cn } from "@/shared/libs/utils";
-import comicService from "@/shared/services/comicService";
-import meService, { TypeComicInteraction } from "@/shared/services/meService";
-import { globalStore } from "@/shared/stores/globalStore";
-import themeStore from "@/shared/stores/themeStore";
 import Image from "next/image";
-import { useParams } from "next/navigation";
-import { useRouter } from "next/router";
-import { Rating, RatingChangeEvent } from "primereact/rating";
-import { useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { useContext } from "react";
 import Link from "next/link";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { convertWebpResource } from "@/shared/helpers/helpers";
-import { FacebookIcon, FacebookShareButton } from "react-share";
-import { originalURL } from "@/shared/libs/config";
+import { useRouter } from "next/router";
+import { ComicInteraction } from "./ComicIntertion";
 
 interface itemProps {
   comic: Comic;
-  setComic: Function;
   firstChapter: Chapter | null;
   lastChapter: Chapter | null;
 }
 
-const DescriptionComic = ({
-  comic,
-  setComic,
-  firstChapter,
-  lastChapter,
-}: itemProps) => {
-  const {} = useContext(ThemeContext);
-  const { slugChapter } = useParams();
-  const [scoreStar, setScoreStar] = useState<number>(comic.star);
-  const { isLogined } = globalStore();
+const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
+  const { theme, oppositeTheme } = useContext(ThemeContext);
   const router = useRouter();
-  const [statusInteractComic, setStatusInteraction] =
-    useState<StatusInteractWithComic>({
-      isEvaluated: false,
-      isLiked: false,
-      isFollowed: false,
-    });
-
-  const handleRatingComic = async (event: RatingChangeEvent) => {
-    if (!isLogined) {
-      toast.warn("Bạn phải đăng nhập để thực hiện thao tác này!");
-      return;
-    }
-
-    if (statusInteractComic.isEvaluated) {
-      toast.warn("Bạn đã đánh giá truyện này rồi!");
-      return;
-    }
-
-    if (event.value) {
-      setScoreStar(event.value);
-
-      try {
-        const { data } = await comicService.evaluateComic(
-          comic.id,
-          event.value
-        );
-
-        toast.success(data);
-        setStatusInteraction({
-          ...statusInteractComic,
-          isEvaluated: true,
-        });
-      } catch (error: any) {
-        toast.error(error.message);
-      }
-    }
-  };
-
-  const handleFollowComic = async () => {
-    if (!isLogined) {
-      toast.warn("Bạn phải đăng nhập để thực hiện thao tác này!");
-      return;
-    }
-
-    try {
-      const { data } = await meService.interactWithComic(
-        comic.id,
-        statusInteractComic.isFollowed
-          ? TypeComicInteraction.unfollow
-          : TypeComicInteraction.follow
-      );
-
-      toast.success(
-        statusInteractComic.isFollowed
-          ? "Huỷ theo dõi thành công!"
-          : "Theo dõi thành công!"
-      );
-
-      if (statusInteractComic.isFollowed) {
-        setComic({
-          ...comic,
-          follow: comic.follow - 1,
-        });
-      } else {
-        setComic({
-          ...comic,
-          follow: comic.follow + 1,
-        });
-      }
-
-      setStatusInteraction(data);
-    } catch (error: any) {
-      toast.warn(error.message);
-    }
-  };
-
-  const handleLikeComic = async () => {
-    if (!isLogined) {
-      toast.warn("Bạn phải đăng nhập để thực hiện thao tác này!");
-      return;
-    }
-
-    try {
-      const { data } = await meService.interactWithComic(
-        comic.id,
-        statusInteractComic.isLiked
-          ? TypeComicInteraction.unlike
-          : TypeComicInteraction.like
-      );
-
-      toast.success(
-        statusInteractComic.isLiked
-          ? "Huỷ thích thành công!"
-          : "Thích thành công!"
-      );
-
-      if (statusInteractComic.isLiked) {
-        setComic({
-          ...comic,
-          like: comic.like - 1,
-        });
-      } else {
-        setComic({
-          ...comic,
-          like: comic.like + 1,
-        });
-      }
-
-      setStatusInteraction(data);
-    } catch (error: any) {
-      toast.warn(error.message);
-    }
-  };
-
-  useEffect(() => {
-    const getInteractionWithComic = async () => {
-      try {
-        const { data } = await meService.getInteractionWithComic(comic.id);
-
-        setStatusInteraction(data);
-      } catch (error: any) {
-        toast.error(error.message);
-      }
-    };
-
-    if (isLogined) {
-      getInteractionWithComic();
-    }
-  }, [isLogined]);
+  const { slugChapter } = router.query;
 
   return (
-    <div
-      className={`grid grid-cols-12 gap-2 text-${themeStore.getOppositeTheme()}`}
-    >
+    <div className={`grid grid-cols-12 gap-2 text-${oppositeTheme}`}>
       <Image
         priority
         width={0}
@@ -198,9 +50,7 @@ const DescriptionComic = ({
               <Link
                 key={_index}
                 href={`/tim-kiem?filterAuthor=${author}`}
-                className={`bg-${themeStore.getTheme()} rounded-md border border-${
-                  themeStore.getOppositeTheme
-                } px-1 capitalize`}
+                className={`bg-${theme} rounded-md border border-${oppositeTheme} px-1 capitalize`}
                 rel="preload"
               >
                 <h2 title={author}>{author}</h2>
@@ -218,9 +68,7 @@ const DescriptionComic = ({
                 <Link
                   key={_index}
                   href={`/nhom-dich/${translator}`}
-                  className={`font-bold bg-${themeStore.getTheme()} text-red-600 rounded-md border border-${
-                    themeStore.getOppositeTheme
-                  } px-1 capitalize`}
+                  className={`font-bold bg-${theme} text-red-600 rounded-md border border-${oppositeTheme} px-1 capitalize`}
                   rel="preload"
                 >
                   <h2 title={translator}>{translator}</h2>
@@ -240,9 +88,7 @@ const DescriptionComic = ({
               >
                 <h2
                   title={genre}
-                  className={`bg-${themeStore.getTheme()} rounded-md border border-${
-                    themeStore.getOppositeTheme
-                  } px-1 capitalize`}
+                  className={`bg-${theme} rounded-md border border-${oppositeTheme} px-1 capitalize`}
                 >
                   {genre}
                 </h2>
@@ -276,54 +122,7 @@ const DescriptionComic = ({
         )}
       </div>
 
-      {!slugChapter && (
-        <div className="col-span-2 flex flex-col gap-4 mobile:col-span-12 mobile:mx-4">
-          <div className="font-bold text-xl">Đánh giá:</div>
-          <div className="flex justify-between">
-            <Rating
-              disabled={statusInteractComic.isEvaluated}
-              value={scoreStar}
-              cancel={false}
-              onChange={(e: RatingChangeEvent) => handleRatingComic(e)}
-            />
-            <span>{comic.star}</span>
-          </div>
-          <div className="flex justify-between">
-            <h2>Lượt xem:</h2>
-            <span>{comic.view}</span>
-          </div>
-          <div className="flex justify-between">
-            <h2>Lượt thích:</h2>
-            <span>{comic.like}</span>
-          </div>
-          <div className="flex justify-between">
-            <h2>Lượt theo dõi:</h2>
-            <span>{comic.follow}</span>
-          </div>
-          <div className="flex justify-around">
-            <i
-              className={cn("pi text-red-600 cursor-pointer", {
-                "pi-heart-fill": statusInteractComic.isFollowed,
-                "pi-heart": !statusInteractComic.isFollowed,
-              })}
-              style={{ fontSize: "2.5rem" }}
-              onClick={handleFollowComic}
-            ></i>
-            <i
-              className={cn("pi text-blue-600 cursor-pointer", {
-                "pi-thumbs-up-fill": statusInteractComic.isLiked,
-                "pi-thumbs-up": !statusInteractComic.isLiked,
-              })}
-              style={{ fontSize: "2.5rem" }}
-              onClick={handleLikeComic}
-            ></i>
-            <FacebookShareButton
-              children={<FacebookIcon size={40} />}
-              url={`${originalURL}/truyen/${comic.slug}`}
-            />
-          </div>
-        </div>
-      )}
+      {!slugChapter && <ComicInteraction comic={comic} />}
     </div>
   );
 };

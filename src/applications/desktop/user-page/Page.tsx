@@ -1,27 +1,24 @@
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { MenuItem } from "primereact/menuitem";
 import { TabMenu } from "primereact/tabmenu";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import themeStore from "@/shared/stores/themeStore";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 import UserSettingPage from "./setting-page/Page";
-
-enum TabType {
-  PROFILE = 0,
-  NOTIFICATION = 1,
-  FOLLOWING_COMIC = 2,
-  SETTING = 3,
-}
+import { useRouter } from "next/router";
+import { useActiveTab } from "./useActiveTab";
+import { TabType } from "./enum";
 
 const Profile = dynamic(() => import("./Profile"));
-const Notification = dynamic(() => import("./Notification"));
+const Notification = dynamic(
+  () => import("./components/notification/Notification")
+);
 const ListFollowingComics = dynamic(() => import("./ListFollowingComics"));
 
 const UserPage = () => {
-  const {} = useContext(ThemeContext);
+  const { oppositeTheme } = useContext(ThemeContext);
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<number>(TabType.PROFILE);
+  const { activeTab, setActiveTab } = useActiveTab();
 
   const items: MenuItem[] = [
     {
@@ -54,12 +51,6 @@ const UserPage = () => {
     },
   ];
 
-  useEffect(() => {
-    const tabName = router.asPath.split("#")[1] ?? TabType.PROFILE;
-    const tabNameIndex = parseInt(tabName);
-    setActiveTab(tabNameIndex);
-  }, []);
-
   return (
     <div>
       <div className="card w-[100%]">
@@ -69,9 +60,7 @@ const UserPage = () => {
           onTabChange={(e) => setActiveTab(e.index)}
         />
       </div>
-      <div
-        className={`bg-${themeStore.getTheme()} text-${themeStore.getOppositeTheme()}`}
-      >
+      <div className={`bg-${themeStore.getTheme()} text-${oppositeTheme}`}>
         {activeTab === TabType.PROFILE && <Profile />}
         {activeTab === TabType.NOTIFICATION && <Notification />}
         {activeTab === TabType.FOLLOWING_COMIC && <ListFollowingComics />}

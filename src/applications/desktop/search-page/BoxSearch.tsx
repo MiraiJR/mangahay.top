@@ -1,94 +1,42 @@
 import { Divider } from "primereact/divider";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect } from "react";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import { toast } from "react-toastify";
 import comicService from "@/shared/services/comicService";
-import themeStore from "@/shared/stores/themeStore";
-import { globalStore } from "@/shared/stores/globalStore";
-import { useRouter } from "next/router";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { optionSort, optionStatus } from "./constant";
+import { useSearchState } from "./useSearchState";
+import { useGetGenres } from "@/shared/hooks/useGetGenres";
 
 interface itemProps {
   setComics: any;
   resultRef: any;
 }
 
-interface OptionStatus {
-  name: string;
-}
-
-interface OptionSort {
-  name: string;
-  code: string;
-}
-
 const BoxSearch = ({ setComics, resultRef }: itemProps) => {
-  const { genres } = globalStore();
-  const [comicName, setComicName] = useState<string>("");
-  const [filterAuthor, setFilterAuthor] = useState<string>("");
-  const [filterState, setFilterState] = useState<OptionStatus | null>(null);
-  const [filterSort, setFilterSort] = useState<OptionSort | null>(null);
-  const [filterGenres, setFilterGenres] = useState<string[]>([]);
-  const [showAdvancedSearch, setShowAdvancedSearch] = useState<boolean>(false);
-  const optionStatus: OptionStatus[] = [
-    { name: "Đang tiến hành" },
-    { name: "Tạm ngưng" },
-    { name: "Hoàn thành" },
-  ];
-  const optionSort: OptionSort[] = [
-    {
-      name: "A->Z",
-      code: "az",
-    },
-    {
-      name: "Z->A",
-      code: "za",
-    },
-    {
-      name: "Xem nhiều nhất",
-      code: "view",
-    },
-    {
-      name: "Thích nhiều nhất",
-      code: "like",
-    },
-    {
-      name: "Theo dõi nhiều nhất",
-      code: "follow",
-    },
-    {
-      name: "Mới cập nhật",
-      code: "updatedAt",
-    },
-  ];
-  const router = useRouter();
-
-  const searchComics = async (genresData: string[], authorData: string) => {
-    try {
-      const { data } = await comicService.searchComics({
-        filterGenres: genresData,
-        filterAuthor: authorData,
-      });
-
-      setComics(data.comics);
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-  };
+  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { genres } = useGetGenres();
+  const {
+    comicName,
+    setComicName,
+    filterAuthor,
+    setFilterAuthor,
+    filterState,
+    setFilterState,
+    filterSort,
+    setFilterSort,
+    filterGenres,
+    setFilterGenres,
+    showAdvancedSearch,
+    setShowAdvancedSearch,
+    initialSearchResult,
+  } = useSearchState();
 
   useEffect(() => {
-    const authorFromUrl = (router.query.filterAuthor as string) ?? "";
-    const genresFromUrl: string[] = router.query.filterGenres
-      ? (router.query.filterGenres as string).split(",")
-      : [];
-    setFilterAuthor(authorFromUrl);
-    setFilterGenres(genresFromUrl);
-
-    if (genresFromUrl.length !== 0 || authorFromUrl.length !== 0) {
-      searchComics(genresFromUrl, authorFromUrl);
-    }
-  }, [router]);
+    setComics(initialSearchResult);
+  }, [initialSearchResult]);
 
   const onIngredientsChange = (e: CheckboxChangeEvent) => {
     let _filterGenres = [...filterGenres];
@@ -146,7 +94,7 @@ const BoxSearch = ({ setComics, resultRef }: itemProps) => {
 
   return (
     <div
-      className={`bg-${themeStore.getTheme()} border border-${themeStore.getOppositeTheme()} text-${themeStore.getOppositeTheme()} p-4`}
+      className={`bg-${theme} border border-${oppositeTheme} text-${oppositeTheme} p-4`}
     >
       <div
         title="Tìm kiếm truyện"
@@ -158,13 +106,18 @@ const BoxSearch = ({ setComics, resultRef }: itemProps) => {
       <Divider type="solid" />
       <div className="flex items-center">
         <input
-          className={`w-[100%] p-2 text-black border border-${themeStore.getOppositeTheme()}`}
+          className={`w-[100%] p-2 text-black border border-${oppositeTheme}`}
           type="text"
           placeholder="Nhập tên truyện cần tìm"
           value={comicName}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             setComicName(event.target.value)
           }
+          onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+            if (event.key === "Enter") {
+              handleSearchComic();
+            }
+          }}
         />
         <i
           className="pi pi-search px-4 py-2 cursor-pointer"

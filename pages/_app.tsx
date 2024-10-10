@@ -16,6 +16,9 @@ import { ToastContainer } from "react-toastify";
 import React from "react";
 import { createStore } from "zustand";
 import Head from "next/head";
+import "@/shared/libs/i18n";
+import { queryClient } from "@/shared/libs/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 
 const store = createStore();
 const StoreContext = React.createContext<any>({});
@@ -35,14 +38,16 @@ export default function App({
           content="ca-pub-6188777334311255"
         ></meta>
       </Head>
-      <StoreContext.Provider value={store}>
-        <ThemProvider>
-          <MainLayout>
-            <Component {...pageProps} />
-            <ToastContainer position="bottom-right" autoClose={500} />
-          </MainLayout>
-        </ThemProvider>
-      </StoreContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <StoreContext.Provider value={store}>
+          <ThemProvider>
+            <MainLayout>
+              <Component {...pageProps} />
+              <ToastContainer position="bottom-right" autoClose={500} />
+            </MainLayout>
+          </ThemProvider>
+        </StoreContext.Provider>
+      </QueryClientProvider>
       <script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6188777334311255"
