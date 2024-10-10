@@ -2,11 +2,13 @@ import { NOTIFICATION_STATUS } from "@/applications/desktop/user-page/Notificati
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import MeService from "@/shared/services/meService";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 
 export const useNotification = () => {
-  const [isShowNotification, setIsShowNotification] = useState<boolean>(false);
-  const { elementRef: notifyRef } = useClickOutside(setIsShowNotification);
+  const {
+    elementRef: notifyRef,
+    isVisiable: isShowNotification,
+    setIsVisiable: setIsShowNotification,
+  } = useClickOutside();
   const { data: notifications = [], isLoading } = useQuery({
     queryKey: [
       "notification",

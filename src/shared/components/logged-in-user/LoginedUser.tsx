@@ -12,8 +12,11 @@ import { useTranslation } from "react-i18next";
 
 const LoginedUser = () => {
   const { theme, oppositeTheme } = useContext(ThemeContext);
-  const [showMenu, setShowMenu] = useState<boolean>(false);
-  const { elementRef: menuProfileRef } = useClickOutside(setShowMenu);
+  const {
+    elementRef: menuProfileRef,
+    isVisiable: showMenu,
+    setIsVisiable: setShowMenu,
+  } = useClickOutside();
   const { myProfile } = useGetMyProfile();
   const { t } = useTranslation();
 

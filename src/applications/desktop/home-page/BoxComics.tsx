@@ -1,12 +1,12 @@
 import CardComic from "@/shared/components/card/CardComic";
-import comicService from "@/shared/services/comicService";
 import { ChevronsRight } from "lucide-react";
-import { useEffect, useState } from "react";
-import themeStore from "@/shared/stores/themeStore";
 import Link from "next/link";
 import EmptyComic from "@/shared/components/EmptyComic";
 import { globalStore } from "@/shared/stores/globalStore";
 import MyLoading from "@/shared/components/MyLoading";
+import { useGetRankingComics } from "@/shared/hooks/useGetRankingComics";
+import { useContext } from "react";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
 
 interface itemProps {
   title: string;
@@ -16,35 +16,19 @@ interface itemProps {
 const MAX_THE_NUMBER_OF_COMICS: number = 6;
 
 const BoxComics = ({ title, field }: itemProps) => {
-  const [comics, setComics] = useState<Comic[]>([]);
+  const { comics, isLoading } = useGetRankingComics(
+    field,
+    MAX_THE_NUMBER_OF_COMICS
+  );
   const { isMobile } = globalStore();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const getComics = async () => {
-      try {
-        setIsLoading(true);
-        const { data } = await comicService.getRankingComics(
-          field,
-          MAX_THE_NUMBER_OF_COMICS
-        );
-
-        setComics(data.comics);
-      } catch (error: any) {
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getComics();
-  }, []);
+  const { oppositeTheme } = useContext(ThemeContext);
 
   return (
     <>
       <div className="mb-20">
         <div className="border-s-4 border-orange-500 my-4 flex justify-between items-center text-xl pl-4">
           <div
-            className={`text-${themeStore.getOppositeTheme()} font-bold text-3xl mobile:text-xl`}
+            className={`text-${oppositeTheme} font-bold text-3xl mobile:text-xl`}
           >
             {title}
           </div>

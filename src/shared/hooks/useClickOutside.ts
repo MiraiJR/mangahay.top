@@ -1,8 +1,8 @@
-import { useEffect, RefObject, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export const useClickOutside = (
-  targetFunction: (isOutside: boolean) => void
-) => {
+export const useClickOutside = () => {
+  const [isVisiable, setIsVisiable] = useState<boolean>(false);
+
   const elementRef = useRef<any>(null);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -10,7 +10,7 @@ export const useClickOutside = (
         elementRef.current &&
         !elementRef.current.contains(event.target as Node)
       ) {
-        targetFunction(false);
+        setIsVisiable(false);
       }
     };
 
@@ -19,9 +19,11 @@ export const useClickOutside = (
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [elementRef, targetFunction]);
+  }, [elementRef, setIsVisiable]);
 
   return {
+    isVisiable,
+    setIsVisiable,
     elementRef,
   };
 };

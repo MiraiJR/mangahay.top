@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { globalStore } from "../stores/globalStore";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ComicService from "../services/comicService";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
-export const useComment = (comicId: number, setComments: Function) => {
+export const useComment = (comicId: number) => {
   const [contentComment, setContentComment] = useState<string>("");
   const { isLogined } = globalStore();
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
 
   const validate = () => {
@@ -26,13 +27,13 @@ export const useComment = (comicId: number, setComments: Function) => {
     mutationFn: async () => {
       validate();
 
-      const { data } = await ComicService.commentOnComic(
-        comicId,
-        contentComment
-      );
+      await ComicService.commentOnComic(comicId, contentComment);
 
       setContentComment("");
-      setComments((pre: UserComment[]) => [data, ...pre]);
+
+      queryClient.invalidateQueries({
+        queryKey: ["comic.comments", { comicId }],
+      });
     },
     onError: (error) => {
       toast.error(error.message);

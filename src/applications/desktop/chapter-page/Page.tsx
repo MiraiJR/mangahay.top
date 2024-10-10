@@ -1,266 +1,100 @@
-import { extractIdFromSlugChapter } from "@/shared/helpers/helpers";
 import { originalURL } from "@/shared/libs/config";
-import comicService from "@/shared/services/comicService";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { MenuItem } from "primereact/menuitem";
-import { useContext, useEffect, useState } from "react";
-import { ArrowLeftCircle, ArrowRightCircle, MenuSquare } from "lucide-react";
-import { cn } from "@/shared/libs/utils";
-import { Editor, EditorTextChangeEvent } from "primereact/editor";
-import themeStore from "@/shared/stores/themeStore";
+import { useContext, useEffect } from "react";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import dynamic from "next/dynamic";
 import ListComicsOfAuthor from "../comic-page/ListComicsOfAuthor";
 import ListComicsRanking from "../home-page/ListComicsRanking";
-import { getNextPreAofChapterFromId } from "@/shared/helpers/ChapterHelper";
 import EmptyComic from "@/shared/components/EmptyComic";
 import ChapterViewTypeIndex from "./chapter-view-type/IndexComponent";
-import historyStore from "@/shared/stores/historyStore";
-import { useRouter } from "next/router";
-import { useClickOutside } from "@/shared/hooks/useClickOutside";
-import { useComment } from "@/shared/hooks/useComment";
+import { useGetComic } from "@/shared/hooks/useGetComic";
+import { useGetChapter } from "@/shared/hooks/useGetChapter";
+import { useIncreaseViewComic } from "@/shared/hooks/useIncreaseViewComic";
+import { NavigationChapter } from "./NavigationChapter";
+import { ListComment } from "@/shared/components/comments/ListComment";
+import { useUpdateHistory } from "@/shared/hooks/useUpdateHistory";
 
 interface itemProps {
   detailComic: Comic;
   detailChapterA: DetailChapter;
 }
 
-const ListComments = dynamic(() => import("../comic-page/ListComments"));
-const MenuChapter = dynamic(() => import("./MenuChapter"));
-
-const ChapterPage = ({ detailComic, detailChapterA }: itemProps) => {
-  const router = useRouter();
-  const { slugChapter, slugComic } = router.query;
-  const [comic, setComic] = useState<Comic>(detailComic);
-  const [detailChapter, setDetailChapter] = useState<DetailChapter | null>(
-    detailChapterA
-  );
-  const [comments, setComments] = useState<UserComment[]>(detailComic.comments);
-  const [showMenuChapterTop, setShowMenuChapterTop] = useState<boolean>(false);
-  const [showMenuChapterBottom, setShowMenuChapterBottm] =
-    useState<boolean>(false);
-  const { contentComment, setContentComment, handleComment } = useComment(
-    detailComic.id,
-    setComments
-  );
+const ChapterPage = ({ detailComic }: itemProps) => {
+  const { comic } = useGetComic(detailComic);
+  const { chapter } = useGetChapter();
+  const { increaseView } = useIncreaseViewComic(detailComic.id);
   const items: MenuItem[] = [
     { label: "Truyện" },
     { label: comic?.name, url: `${originalURL}/truyen/${comic?.slug}` },
     {
-      label: detailChapter?.currentChapter.name,
-      url: `${originalURL}/truyen/${comic?.slug}/${detailChapter?.currentChapter.slug}`,
+      label: chapter?.name,
+      url: `${originalURL}/truyen/${comic?.slug}/${chapter?.slug}`,
     },
   ];
   const home: MenuItem = { icon: "pi pi-home", url: originalURL };
-  const {} = useContext(ThemeContext);
-  const { elementRef: menuChapterRefTop } = useClickOutside(
-    setShowMenuChapterTop
-  );
-  const { elementRef: menuChapterRefBottom } = useClickOutside(
-    setShowMenuChapterBottm
-  );
+  const { theme, oppositeTheme } = useContext(ThemeContext);
+  useUpdateHistory(comic, true, chapter);
 
   useEffect(() => {
-    setShowMenuChapterTop(false);
-
-    const increaseView = async (comicId: number) => {
-      try {
-        await comicService.increaseField(comicId, "view", 1);
-      } catch (error: any) {}
-    };
-
-    const chapterId = extractIdFromSlugChapter(slugChapter as string);
-    setDetailChapter(getNextPreAofChapterFromId(chapterId, comic.chapters));
-    increaseView(comic.id);
-  }, [slugChapter, slugComic]);
-
-  useEffect(() => {
-    historyStore.setHistoryComics(
-      {
-        ...detailComic,
-        chapters: detailChapter
-          ? [detailChapter.currentChapter]
-          : [detailComic.chapters[0]],
-      },
-      true
-    );
-  }, []);
+    if (comic) {
+      increaseView();
+    }
+  }, [comic]);
 
   return (
-    <div>
-      <div className="mb-5">
-        <BreadCrumb model={items} home={home} />
-      </div>
-      {/* {comic && (
-        <DescriptionComic
-          firstChapter={comic.chapters[comic.chapters.length - 1] ?? null}
-          lastChapter={comic.chapters[0] ?? null}
-          comic={comic}
-          setComic={setComic}
-        />
-      )} */}
-      <div className="flex justify-between items-center mobile:flex-col mobile:items-start">
-        <h2
-          title={detailChapter?.currentChapter.name}
-          className={`border-s-4 border-orange-500 capitalize m-5 font-bold text-4xl pl-4 mobile:text-3xl text-${themeStore.getOppositeTheme()}`}
-        >
-          {detailChapter?.currentChapter.name}
-        </h2>
-        <div className="flex gap-4 mobile:w-[100%] mobile:justify-center">
-          <button
-            className={cn("btn-primary", {
-              "bg-slate-600": !detailChapter?.previousChapter,
-            })}
-            title="Chapter trước"
-            onClick={() =>
-              router.push(
-                `/truyen/${comic?.slug}/${detailChapter?.previousChapter?.slug}`
-              )
-            }
-            disabled={!detailChapter?.previousChapter}
-          >
-            <ArrowLeftCircle />
-          </button>
-          <div className="relative" ref={menuChapterRefTop}>
-            <button
-              className="btn-primary"
-              title="Danh sách chương"
-              onClick={() => setShowMenuChapterTop(!showMenuChapterTop)}
-            >
-              <MenuSquare />
-            </button>
-            {showMenuChapterTop && <MenuChapter chapters={comic.chapters} />}
+    <>
+      {comic && chapter && (
+        <div>
+          <div className="mb-5">
+            <BreadCrumb model={items} home={home} />
           </div>
-          <button
-            className={cn("btn-primary", {
-              "bg-slate-600": !detailChapter?.nextChapter,
-            })}
-            title="Chapter tiếp theo"
-            onClick={() => {
-              router.push(
-                `/truyen/${comic?.slug}/${detailChapter?.nextChapter?.slug}`
-              );
-            }}
-            disabled={!detailChapter?.nextChapter}
-          >
-            <ArrowRightCircle />
-          </button>
-        </div>
-      </div>
-      <div
-        className={`flex flex-col items-center justify-center m-5 bg-${themeStore.getTheme()}`}
-      >
-        {detailChapter && detailChapter.currentChapter.images ? (
-          <ChapterViewTypeIndex
-            images={detailChapter.currentChapter.images}
-            chapterName={detailChapter?.currentChapter.name}
-            comicName={comic.name}
-          />
-        ) : (
-          <EmptyComic content="Không có ảnh!" />
-        )}
-
-        <div
-          className={`text-${themeStore.getTheme()} w-[100%] bg-${themeStore.getOppositeTheme()} p-4 text-xl text-center`}
-        >
-          <div>Hết rồi</div>
-          <h2>
-            Nhớ theo dõi nhóm dịch:{" "}
-            <strong className="text-red-600">
-              {comic.translators.join(", ")}
-            </strong>{" "}
-            để ủng hộ nhóm dịch nha.
-          </h2>
-        </div>
-      </div>
-      <div className="relative z-10 flex justify-center items-center mobile:flex-col mobile:items-start">
-        <div className="flex gap-4 mobile:w-[100%] mobile:justify-center">
-          <button
-            className={cn("btn-primary", {
-              "bg-slate-600": !detailChapter?.previousChapter,
-            })}
-            title="Chapter trước"
-            onClick={() =>
-              router.push(
-                `/truyen/${comic.slug}/${detailChapter?.previousChapter?.slug}`
-              )
-            }
-            disabled={!detailChapter?.previousChapter}
-          >
-            <ArrowLeftCircle />
-          </button>
-          <div className="relative" ref={menuChapterRefBottom}>
-            <button
-              className="btn-primary"
-              title="Danh sách chương"
-              onClick={() => setShowMenuChapterBottm(!showMenuChapterBottom)}
-            >
-              <MenuSquare />
-            </button>
-            {showMenuChapterBottom && <MenuChapter chapters={comic.chapters} />}
-          </div>
-          <button
-            className={cn("btn-primary", {
-              "bg-slate-600": !detailChapter?.nextChapter,
-            })}
-            title="Chapter tiếp theo"
-            onClick={() => {
-              router.push(
-                `/truyen/${comic.slug}/${detailChapter?.nextChapter?.slug}`
-              );
-            }}
-            disabled={!detailChapter?.nextChapter}
-          >
-            <ArrowRightCircle />
-          </button>
-        </div>
-      </div>
-      <div className="retive grid grid-cols-12 gap-4">
-        <div className="col-span-8 mt-10 mobile:col-span-12">
-          <div className="border-s-4 border-orange-500 pl-4 font-bold">
-            <h2
-              className={`text-2xl mobile:text-xl text-${themeStore.getOppositeTheme()}`}
-            >
-              Danh sách bình luận ({comments.length})
-            </h2>
-          </div>
-          <Editor
-            value={contentComment}
-            onTextChange={(e: EditorTextChangeEvent) => {
-              if (e.htmlValue) {
-                setContentComment(e.htmlValue);
-              }
-            }}
-            style={{ height: "100px" }}
-            className="mt-10"
-          />
+          <NavigationChapter comicId={comic.id} slugComic={comic.slug} />
           <div
-            className="w-[100%]"
-            onClick={() => {
-              handleComment();
-            }}
+            className={`flex flex-col items-center justify-center m-5 bg-${theme}`}
           >
-            <button className="btn-primary w-fit mt-2 float-right">
-              Bình luận
-            </button>
+            {chapter && chapter.images ? (
+              <ChapterViewTypeIndex
+                images={chapter.images}
+                chapterName={chapter.name}
+                comicName={comic.name}
+              />
+            ) : (
+              <EmptyComic content="Không có ảnh!" />
+            )}
+
+            <div
+              className={`text-${theme} w-[100%] bg-${oppositeTheme} p-4 text-xl text-center`}
+            >
+              <div>Hết rồi</div>
+              <h2>
+                Nhớ theo dõi nhóm dịch:{" "}
+                <strong className="text-red-600">
+                  {comic.translators.join(", ")}
+                </strong>{" "}
+                để ủng hộ nhóm dịch nha.
+              </h2>
+            </div>
           </div>
-          <ListComments comments={comments} />
+          <NavigationChapter comicId={comic.id} slugComic={comic.slug} />
+          <div className="retive grid grid-cols-12 gap-4">
+            <ListComment comic={comic} />
+            <div className="col-span-4 mt-10 mobile:col-span-12">
+              {comic && (
+                <ListComicsOfAuthor
+                  title={"Truyện cùng tác giả"}
+                  author={comic.authors[0]}
+                />
+              )}
+              <ListComicsRanking
+                title={"Manga mới nhất"}
+                field={"createdAt"}
+                amountComic={5}
+              />
+            </div>
+          </div>
         </div>
-        <div className="col-span-4 mt-10 mobile:col-span-12">
-          {comic && (
-            <ListComicsOfAuthor
-              title={"Truyện cùng tác giả"}
-              author={comic?.authors[0]}
-            />
-          )}
-          <ListComicsRanking
-            title={"Manga mới nhất"}
-            field={"createdAt"}
-            amountComic={5}
-          />
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

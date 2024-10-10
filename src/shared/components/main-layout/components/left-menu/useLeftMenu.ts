@@ -15,8 +15,11 @@ export type ItemLeftMenu = {
 export const useLeftMenu = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const [showListGenres, setShowListGenres] = useState<boolean>(false);
-  const { elementRef: genreRef } = useClickOutside(setShowListGenres);
+  const {
+    elementRef: genreRef,
+    isVisiable: showListGenres,
+    setIsVisiable: setShowListGenres,
+  } = useClickOutside();
   const leftMenu: ItemLeftMenu[] = [
     {
       id: 1,

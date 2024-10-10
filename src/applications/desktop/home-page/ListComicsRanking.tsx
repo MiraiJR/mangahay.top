@@ -1,14 +1,10 @@
 import CardRanking from "@/shared/components/card/CardRanking";
-import comicService from "@/shared/services/comicService";
 import { ChevronsRight } from "lucide-react";
-import { useEffect, useState } from "react";
-import EmptyImage from "@/shared/assets/empty.webp";
 import themeStore from "@/shared/stores/themeStore";
-import { toast } from "react-toastify";
-import Image from "next/image";
 import Link from "next/link";
 import MyLoading from "@/shared/components/MyLoading";
 import EmptyComic from "@/shared/components/EmptyComic";
+import { useGetRankingComics } from "@/shared/hooks/useGetRankingComics";
 
 interface itemProps {
   title: string;
@@ -17,27 +13,8 @@ interface itemProps {
 }
 
 const ListComicsRanking = ({ title, field, amountComic }: itemProps) => {
-  const [comics, setComics] = useState<Comic[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { comics, isLoading } = useGetRankingComics(field, amountComic);
 
-  useEffect(() => {
-    const getComics = async () => {
-      try {
-        setIsLoading(true);
-        const { data } = await comicService.getRankingComics(
-          field,
-          amountComic
-        );
-
-        setComics(data.comics);
-      } catch (error: any) {
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getComics();
-  }, []);
   return (
     <div>
       <div className="my-4 flex justify-between items-center text-xl">

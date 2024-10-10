@@ -1,7 +1,16 @@
 import ComicService from "@/shared/services/comicService";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 
-export const useGetComic = (slugComic: string, initialData?: Comic) => {
+export const useGetComic = (initialData?: Comic) => {
+  const router = useRouter();
+  const { slugComic } = router.query;
+  if (!slugComic || typeof slugComic !== "string") {
+    return {
+      comic: initialData,
+    };
+  }
+
   const {
     data: comic,
     isLoading,
