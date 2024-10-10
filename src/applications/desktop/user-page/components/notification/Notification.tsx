@@ -1,99 +1,35 @@
-import MeService from "@/shared/services/meService";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CardNotify from "@/shared/components/card/CardNotify";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { SelectButton } from "primereact/selectbutton";
-import { Check, X } from "lucide-react";
-import NotifyService from "@/shared/services/notifyService";
-import { toast } from "react-toastify";
 import EmptyComic from "@/shared/components/EmptyComic";
-
-interface NotificationFilter {
-  label: string;
-  isRead: boolean;
-}
-
-export enum NOTIFICATION_STATUS {
-  READ = "1",
-  UNREAD = "0",
-}
+import { useNotification } from "@/shared/hooks/useNotification";
+import { useRemoveAllNotification } from "./useRemoveAllNotification";
+import { Check, X } from "lucide-react";
+import { useMarkAllReadNotification } from "./useMarkAllReadNotification";
+import { NOTIFICATION_STATUS } from "./enum";
 
 const notificationFilterButtonDatas: NotificationFilter[] = [
   {
     label: "Đã đọc",
-    isRead: true,
+    type: NOTIFICATION_STATUS.READ,
   },
   {
     label: "Chưa đọc",
-    isRead: false,
+    type: NOTIFICATION_STATUS.UNREAD,
   },
 ];
 
 const Notification = () => {
-  const [notifies, setNotifies] = useState<Notify[] | null>(null);
   const [notificationFilterData, setNotificationFilterData] =
-    useState<NotificationFilter | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const getNotifies = async () => {
-    try {
-      const { data } = await MeService.getNotifies(null);
-
-      setNotifies(data);
-    } catch (error: any) {}
-  };
-
-  useEffect(() => {
-    getNotifies();
-  }, []);
-
-  const filterNotification = async (isRead: boolean) => {
-    setIsLoading(true);
-    try {
-      const { data } = await MeService.getNotifies(
-        null,
-        isRead ? NOTIFICATION_STATUS.READ : NOTIFICATION_STATUS.UNREAD
-      );
-
-      setNotifies(data);
-      setIsLoading(false);
-    } catch (error: any) {}
-  };
-
-  const markAllReadNotification = async () => {
-    if (notifies?.length === 0) {
-      toast.warning("Do not have any notification to mark!");
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      setNotifies([]);
-      const { data: markAllReadResult } = await NotifyService.markAllRead();
-      toast.success(markAllReadResult);
-      await getNotifies();
-
-      setIsLoading(false);
-    } catch (error) {}
-  };
-
-  const removeAll = async () => {
-    if (notifies?.length === 0) {
-      toast.warning("Do not have any notification to remove!");
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      setNotifies([]);
-      const { data } = await NotifyService.removeAll();
-      toast.success(data);
-
-      setIsLoading(false);
-    } catch (error) {}
-  };
+    useState<NotificationFilter>(notificationFilterButtonDatas[0]);
+  const { notifications, isLoading } = useNotification({
+    page: 1,
+    limit: Number.MAX_VALUE,
+    type: notificationFilterData.type,
+  });
+  const { handleRemoveAllNotification } = useRemoveAllNotification();
+  const { handleMarkAllReadNotification } = useMarkAllReadNotification();
 
   return (
     <div className="flex flex-col w-[100%]">
@@ -105,7 +41,6 @@ const Notification = () => {
           value={notificationFilterData?.label}
           onChange={(e) => {
             setNotificationFilterData(e.value);
-            filterNotification(e.value.isRead);
           }}
           options={notificationFilterButtonDatas}
         />
@@ -113,14 +48,16 @@ const Notification = () => {
         <div className="flex gap-4">
           <div
             className="flex items-center text-green-600 cursor-pointer"
-            onClick={markAllReadNotification}
+            onClick={() => handleMarkAllReadNotification()}
           >
             <Check />
             <span>Đánh dấu đã đọc hết</span>
           </div>
           <div
             className="flex items-center text-red-600 cursor-pointer"
-            onClick={removeAll}
+            onClick={() => {
+              handleRemoveAllNotification();
+            }}
           >
             <X />
             <span>Xoá tất cả</span>
@@ -137,12 +74,12 @@ const Notification = () => {
           />
         </div>
       )}
-      {notifies ? (
-        notifies.length === 0 && !isLoading ? (
+      {notifications ? (
+        notifications.length === 0 && !isLoading ? (
           <EmptyComic content="Không có thông báo" />
         ) : (
           <div className="w-[100%]">
-            {notifies.map((notify) => (
+            {notifications.map((notify) => (
               <CardNotify notify={notify} imageHeight={150} key={notify.id} />
             ))}
           </div>

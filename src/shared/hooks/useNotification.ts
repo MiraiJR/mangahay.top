@@ -1,28 +1,34 @@
-import { NOTIFICATION_STATUS } from "@/applications/desktop/user-page/Notification";
+import { NOTIFICATION_STATUS } from "@/applications/desktop/user-page/components/notification/enum";
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import MeService from "@/shared/services/meService";
 import { useQuery } from "@tanstack/react-query";
 
-export const useNotification = () => {
+interface UseNotificationParams {
+  page: number;
+  limit: number;
+  type?: NOTIFICATION_STATUS;
+}
+
+export const useNotification = ({
+  page = 1,
+  limit = Number.MAX_VALUE,
+  type = NOTIFICATION_STATUS.UNREAD,
+}: UseNotificationParams) => {
   const {
     elementRef: notifyRef,
     isVisiable: isShowNotification,
     setIsVisiable: setIsShowNotification,
   } = useClickOutside();
   const { data: notifications = [], isLoading } = useQuery({
-    queryKey: [
-      "notification",
-      { page: 1, limit: 10 },
-      NOTIFICATION_STATUS.UNREAD,
-    ],
+    queryKey: ["notification", { page, limit }, type],
     queryFn: async () => {
       try {
         const { data } = await MeService.getNotifies(
           {
-            page: 1,
-            limit: 10,
+            page,
+            limit,
           },
-          NOTIFICATION_STATUS.UNREAD
+          type
         );
 
         return data;

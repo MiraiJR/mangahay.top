@@ -1,12 +1,12 @@
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { Bell } from "lucide-react";
 import { useContext } from "react";
-import { useNotification } from "./useNotification";
 import MyLoading from "../MyLoading";
 import ListNotifies from "./ListNotifies";
 import Link from "next/link";
 import { Badge } from "primereact/badge";
 import { useTranslation } from "react-i18next";
+import { useNotification } from "@/shared/hooks/useNotification";
 
 export const Notification = () => {
   const { oppositeTheme, theme } = useContext(ThemeContext);
@@ -16,7 +16,10 @@ export const Notification = () => {
     setIsShowNotification,
     notifications,
     isLoading,
-  } = useNotification();
+  } = useNotification({
+    page: 1,
+    limit: 10,
+  });
   const { t } = useTranslation();
 
   return (
