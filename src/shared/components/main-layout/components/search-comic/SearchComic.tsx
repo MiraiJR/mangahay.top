@@ -2,7 +2,7 @@ import { Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { InputText } from "primereact/inputtext";
-import ListSearchingComics from "./ListSearchingComics";
+import ListSearchingComics from "./ListResultSearchComics";
 import { useSearchComic } from "./useSearchComic";
 import { useTranslation } from "react-i18next";
 
@@ -15,6 +15,7 @@ export const SearchComic = () => {
     isShowSearchResult,
     setIsShowSearchResult,
     handleSearchComic,
+    reset,
   } = useSearchComic();
   const router = useRouter();
 
@@ -40,6 +41,13 @@ export const SearchComic = () => {
               setTimeout(() => {
                 setIsShowSearchResult(false);
               }, 100);
+            }}
+            onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+              if (event.key === "Enter") {
+                router.push(`/tim-kiem?comicName=${inputSearch}`);
+                setIsShowSearchResult(false);
+                reset();
+              }
             }}
           />
           {isShowSearchResult && <ListSearchingComics comics={searchResult} />}

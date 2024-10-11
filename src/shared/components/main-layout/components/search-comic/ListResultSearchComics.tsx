@@ -8,7 +8,7 @@ import Image from "next/image";
 interface itemProps {
   comics: Comic[];
 }
-const ListSearchingComics = ({ comics }: itemProps) => {
+const ListResultSearchComics = ({ comics }: itemProps) => {
   const { theme } = useContext(ThemeContext);
 
   return (
@@ -31,4 +31,4 @@ const ListSearchingComics = ({ comics }: itemProps) => {
   );
 };
 
-export default ListSearchingComics;
+export default ListResultSearchComics;

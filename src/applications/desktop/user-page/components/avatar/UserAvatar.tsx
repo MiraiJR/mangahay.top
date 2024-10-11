@@ -2,7 +2,7 @@ import { useUploadFile } from "@/shared/hooks/useUploadFile";
 import { Camera } from "lucide-react";
 import { Dialog } from "primereact/dialog";
 import { useUpdateAvatar } from "../../useUpdateAvatar";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { reduceQualityImage } from "@/shared/helpers/helpers";
 import { userStore } from "@/shared/stores/userStore";
@@ -19,10 +19,17 @@ export const UserAvatar = () => {
     setFile: setAvatar,
     handleUploadImage,
   } = useUploadFile();
-  const { handleUpdateAvatar, isLoading: isLoadingAvatar } =
-    useUpdateAvatar(avatar);
+  const {
+    handleUpdateAvatar,
+    isLoading: isLoadingAvatar,
+    isSuccess: isSuccessaAvatar,
+  } = useUpdateAvatar(avatar);
   const [showChangeAvatar, setShowChangeAvatar] = useState<boolean>(false);
   const [isVisibleDialog, setIsVisibleDialog] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsVisibleDialog(false);
+  }, [isSuccessaAvatar]);
 
   const dialogFooter = (
     <div>

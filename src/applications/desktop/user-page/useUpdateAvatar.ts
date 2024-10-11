@@ -37,5 +37,6 @@ export const useUpdateAvatar = (avatar: File | null) => {
     avatar,
     handleUpdateAvatar: mutation.mutate,
     isLoading: mutation.isPending,
+    isSuccess: mutation.isSuccess,
   };
 };

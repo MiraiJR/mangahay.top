@@ -7,7 +7,6 @@ export const useSearchComic = () => {
   const [searchResult, setSearchResult] = useState<Comic[]>([]);
 
   const handleSearchComic = async (comicName: string) => {
-    console.log(comicName);
     if (comicName.trim() === "") {
       setSearchResult([]);
       setIsShowSearchResult(false);
@@ -25,6 +24,10 @@ export const useSearchComic = () => {
     } catch (error: any) {}
   };
 
+  const reset = () => {
+    setInputSearch("");
+  };
+
   return {
     inputSearch,
     setInputSearch,
@@ -32,5 +35,6 @@ export const useSearchComic = () => {
     isShowSearchResult,
     setIsShowSearchResult,
     handleSearchComic,
+    reset,
   };
 };

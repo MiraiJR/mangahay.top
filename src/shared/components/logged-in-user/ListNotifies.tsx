@@ -17,7 +17,7 @@ const ListNotifies = ({ notifies }: ListNotifiesProps) => {
     >
       {notifies.length === 0 ? (
         <div className="text-center">
-          {t("noNotification", { ns: "common" })}
+          {t("notification.noNotification", { ns: "common" })}
         </div>
       ) : (
         notifies.map((notify) => <CardNotify notify={notify} key={notify.id} />)

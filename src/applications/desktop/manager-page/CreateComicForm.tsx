@@ -16,6 +16,7 @@ import { useDialogContext } from "@/shared/contexts/DialogContext";
 import { Button } from "primereact/button";
 import { StatusComic } from "@/shared/types/enums/StatusComic";
 import { RadioButton } from "primereact/radiobutton";
+import { useGetGenres } from "@/shared/hooks/useGetGenres";
 
 interface itemProps {
   comic?: Comic | null;
@@ -24,7 +25,6 @@ interface itemProps {
 const CreateComicForm = ({ comic = null }: itemProps) => {
   const { changeVisible, changeIsUpdateData } = useDialogContext();
   const fileUploadRef = useRef<any>(null);
-  const { genres } = globalStore();
   const [comicName, setComicName] = useState<string>("");
   const [comicAnotherName, setComicAnotherName] = useState<string>("");
   const [comicGenres, setComicGenres] = useState<string[]>([]);
@@ -37,6 +37,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
   const [statusComic, setStatusComic] = useState<string>(
     StatusComic.PROCESSING
   );
+  const { genres } = useGetGenres();
 
   useEffect(() => {
     if (comic) {
