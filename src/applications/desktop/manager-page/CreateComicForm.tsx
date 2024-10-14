@@ -113,7 +113,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
     formData.append("briefDescription", handleBriefDescription());
     formData.append("isUpdateImage", isUpdateImage);
     if (comicThumb) {
-      formData.append("file", comicThumb);
+      formData.append("thumb", comicThumb);
     }
     formData.append("state", statusComic);
 

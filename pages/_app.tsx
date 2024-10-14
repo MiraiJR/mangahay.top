@@ -19,6 +19,7 @@ import Head from "next/head";
 import "@/shared/libs/i18n";
 import { queryClient } from "@/shared/libs/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { PrimeReactProvider } from "primereact/api";
 
 const store = createStore();
 const StoreContext = React.createContext<any>({});
@@ -41,10 +42,12 @@ export default function App({
       <QueryClientProvider client={queryClient}>
         <StoreContext.Provider value={store}>
           <ThemProvider>
-            <MainLayout>
-              <Component {...pageProps} />
-              <ToastContainer position="bottom-right" autoClose={500} />
-            </MainLayout>
+            <PrimeReactProvider>
+              <MainLayout>
+                <Component {...pageProps} />
+                <ToastContainer position="bottom-right" autoClose={500} />
+              </MainLayout>
+            </PrimeReactProvider>
           </ThemProvider>
         </StoreContext.Provider>
       </QueryClientProvider>

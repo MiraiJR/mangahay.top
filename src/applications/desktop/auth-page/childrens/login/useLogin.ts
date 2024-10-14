@@ -12,7 +12,6 @@ export const useLogin = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const { setIsLogined } = globalStore();
-  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const validate = () => {
     if (email.trim() === "") {
@@ -38,9 +37,6 @@ export const useLogin = () => {
       router.push("/");
       return data;
     },
-    onError: (error) => {
-      setErrorMessage(error.message);
-    },
   });
 
   return {
@@ -48,7 +44,8 @@ export const useLogin = () => {
     setPassword,
     email,
     setEmail,
-    errorMessage,
     handleLogin: mutation.mutate,
+    isLoading: mutation.isPending,
+    error: mutation.error,
   };
 };

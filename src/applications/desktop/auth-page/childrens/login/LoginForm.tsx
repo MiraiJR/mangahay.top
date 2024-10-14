@@ -1,5 +1,4 @@
 import LoginImage from "@/shared/assets/login.webp";
-import { InputText } from "primereact/inputtext";
 import { Helmet } from "react-helmet";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,15 +6,23 @@ import { useLogin } from "./useLogin";
 import { useContext } from "react";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { useTranslation } from "react-i18next";
+import { InputTextCustom } from "@/shared/components/base-components/input-text/InputTextCustom";
+import { Button } from "primereact/button";
 
 const title = "Đăng nhập";
 
 const LoginForm = () => {
-  const { password, setPassword, email, setEmail, errorMessage, handleLogin } =
-    useLogin();
+  const {
+    password,
+    setPassword,
+    email,
+    setEmail,
+    handleLogin,
+    error,
+    isLoading,
+  } = useLogin();
   const { oppositeTheme } = useContext(ThemeContext);
   const { t } = useTranslation();
-
   return (
     <div>
       <Helmet>
@@ -37,9 +44,9 @@ const LoginForm = () => {
           >
             {title.toLocaleUpperCase()}
           </div>
-          {errorMessage && (
+          {error && (
             <small id="username-help" className="text-red-400">
-              {errorMessage}
+              {error.message}
             </small>
           )}
           <div className="card flex justify-content-center">
@@ -47,15 +54,15 @@ const LoginForm = () => {
               <label htmlFor="username" className={`text-${oppositeTheme}`}>
                 {t("email.label", { ns: "auth" })}
               </label>
-              <InputText
-                id="username"
+              <InputTextCustom
+                name={"username"}
                 placeholder={t("email.placeholder", { ns: "auth" })}
-                aria-describedby="username-help"
-                className="mobile:w-[235px] w-[455px]"
                 value={email}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setEmail(event.target.value)
-                }
+                onChange={function (
+                  event: React.ChangeEvent<HTMLInputElement>
+                ): void {
+                  setEmail(event.target.value);
+                }}
               />
             </div>
           </div>
@@ -64,16 +71,16 @@ const LoginForm = () => {
               <label htmlFor="password" className={`text-${oppositeTheme}`}>
                 {t("password.label", { ns: "auth" })}
               </label>
-              <InputText
-                type="password"
-                id="password"
+              <InputTextCustom
+                name={"password"}
+                type={"password"}
                 placeholder={t("password.placeholder", { ns: "auth" })}
-                aria-describedby="username-help"
-                className="mobile:w-[235px] w-[455px]"
                 value={password}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setPassword(e.target.value)
-                }
+                onChange={function (
+                  event: React.ChangeEvent<HTMLInputElement>
+                ): void {
+                  setPassword(event.target.value);
+                }}
               />
               <small id="username-help" className="text-red-400"></small>
             </div>
@@ -96,9 +103,11 @@ const LoginForm = () => {
               {t("forgetPassword.label", { ns: "auth" })}
             </Link>
           </div>
-          <button className="btn-primary p-4" onClick={() => handleLogin()}>
-            {t("login.label", { ns: "auth" })}
-          </button>
+          <Button
+            label={t("login.label", { ns: "auth" })}
+            loading={isLoading}
+            onClick={() => handleLogin()}
+          />
         </div>
       </div>
     </div>

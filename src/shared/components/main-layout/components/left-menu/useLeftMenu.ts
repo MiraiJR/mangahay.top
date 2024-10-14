@@ -1,7 +1,6 @@
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import { Library, History, LucideIcon } from "lucide-react";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export type ItemLeftMenu = {
@@ -10,6 +9,7 @@ export type ItemLeftMenu = {
   isChevronDown: boolean;
   handle: any;
   Icon?: LucideIcon;
+  ref?: React.Ref<any>;
 };
 
 export const useLeftMenu = () => {
@@ -29,6 +29,7 @@ export const useLeftMenu = () => {
         setShowListGenres(!showListGenres);
       },
       Icon: Library,
+      ref: genreRef,
     },
     {
       id: 2,
@@ -49,7 +50,6 @@ export const useLeftMenu = () => {
 
   return {
     leftMenuData: leftMenu,
-    genreRef,
     showListGenres,
   };
 };
