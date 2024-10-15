@@ -3,17 +3,16 @@ import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { originalURL } from "@/shared/libs/config";
 import { cn } from "@/shared/libs/utils";
 import ComicService from "@/shared/services/comicService";
-import themeStore from "@/shared/stores/themeStore";
+import themeStore from "@/shared/stores/theme-storage";
 import { useParams } from "next/navigation";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { MenuItem } from "primereact/menuitem";
 import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import EmptyComic from "@/shared/components/EmptyComic";
 import MyLoading from "@/shared/components/MyLoading";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 interface itemProps {
   genres: Genre[];

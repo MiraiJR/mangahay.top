@@ -1,4 +1,4 @@
-import { userStore } from "@/shared/stores/userStore";
+import { userStore } from "@/shared/stores/user-storage";
 import { UserSetting } from "@/shared/types/UserSetting";
 import { ChapterViewType } from "@/shared/types/enums/ChapterViewType";
 import { useEffect, useState } from "react";

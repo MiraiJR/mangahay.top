@@ -4,7 +4,7 @@ import { Rating } from "primereact/rating";
 import Image from "next/image";
 import { convertWebpResource, formatDate } from "@/shared/helpers/helpers";
 import ComicService from "@/shared/services/comicService";
-import themeStore from "@/shared/stores/themeStore";
+import themeStore from "@/shared/stores/theme-storage";
 import DialogUpdateComic from "@/shared/components/dialog/DialogUpdateComic";
 import { useDialogContext } from "@/shared/contexts/DialogContext";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import themeStore from "../stores/themeStore";
+import themeStore from "../stores/theme-storage";
 export type Theme = "light" | "dark";
 type ThemeContext = {
   theme: Theme;

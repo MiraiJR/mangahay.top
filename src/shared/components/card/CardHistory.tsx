@@ -1,5 +1,5 @@
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import themeStore from "@/shared/stores/themeStore";
+import themeStore from "@/shared/stores/theme-storage";
 import Image from "next/image";
 import Link from "next/link";
 import { Rating } from "primereact/rating";

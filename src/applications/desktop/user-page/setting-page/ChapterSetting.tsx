@@ -1,5 +1,5 @@
 import UserSettingService from "@/shared/services/settingService";
-import { userStore } from "@/shared/stores/userStore";
+import { userStore } from "@/shared/stores/user-storage";
 import { ChapterSetting } from "@/shared/types/UserSetting";
 import { ChapterViewType } from "@/shared/types/enums/ChapterViewType";
 import { Button } from "primereact/button";

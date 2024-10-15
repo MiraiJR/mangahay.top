@@ -1,4 +1,4 @@
-import themeStore from "@/shared/stores/themeStore";
+import themeStore from "@/shared/stores/theme-storage";
 import Image from "next/image";
 import { Rating } from "primereact/rating";
 import Link from "next/link";

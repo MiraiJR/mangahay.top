@@ -1,10 +1,7 @@
 import CardComic from "@/shared/components/card/CardComic";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { originalURL } from "@/shared/libs/config";
-import { cn } from "@/shared/libs/utils";
 import ComicService from "@/shared/services/comicService";
-import themeStore from "@/shared/stores/themeStore";
-import { useParams } from "next/navigation";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { MenuItem } from "primereact/menuitem";
 import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
@@ -13,22 +10,20 @@ import { toast } from "react-toastify";
 import EmptyImage from "@/shared/assets/empty.webp";
 import Image from "next/image";
 import MyLoading from "@/shared/components/MyLoading";
+import { ListGenre } from "./ListGenre";
 
 interface itemProps {
-  genres: Genre[];
   dataComics?: Comic[];
 }
 
 const THE_NUMBER_OF_COMICS_PER_PAGE: number = 30;
 
-const ListComicsPage = ({ genres, dataComics }: itemProps) => {
-  const { genre } = useParams();
-  const currentGenre = genre ?? null;
+const ListComicsPage = ({ dataComics }: itemProps) => {
+  const { oppositeTheme } = useContext(ThemeContext);
   const items: MenuItem[] = [
     { label: "Danh sách truyện", url: `${originalURL}/danh-sach-truyen` },
   ];
   const home: MenuItem = { icon: "pi pi-home", url: originalURL };
-  const {} = useContext(ThemeContext);
   const [comics, setComics] = useState<Comic[] | null>(dataComics ?? null);
   const [first, setFirst] = useState<number>(0);
   const [pageComics, setPageComics] = useState<Comic[]>([]);
@@ -82,11 +77,9 @@ const ListComicsPage = ({ genres, dataComics }: itemProps) => {
       <div className="grid grid-cols-12 gap-2">
         <div className="col-span-8 mobile:col-span-12">
           <div
-            className={`border border-${themeStore.getOppositeTheme()} text-${themeStore.getOppositeTheme()}`}
+            className={`border border-${oppositeTheme} text-${oppositeTheme}`}
           >
-            <h2
-              className={`font-bold p-2 border border-b-${themeStore.getOppositeTheme()}`}
-            >
+            <h2 className={`font-bold p-2 border border-b-${oppositeTheme}`}>
               Danh sách truyện
             </h2>
             <div className="grid grid-cols-5 mobile:grid-cols-2 relative gap-4 p-4">
@@ -121,42 +114,7 @@ const ListComicsPage = ({ genres, dataComics }: itemProps) => {
             )}
           </div>
         </div>
-        <div className={`col-span-4 mobile:col-span-12`}>
-          <div
-            className={`border border-${themeStore.getOppositeTheme()} text-${themeStore.getOppositeTheme()}`}
-          >
-            <h2
-              className={`font-bold p-2 border border-b-${themeStore.getOppositeTheme()}`}
-            >
-              Thể loại
-            </h2>
-            <ul className="grid grid-cols-3 gap-1 p-2">
-              {genres ? (
-                genres.map((genre) => (
-                  <a
-                    href={`/the-loai/${genre.slug}`}
-                    title={genre.name}
-                    key={genre.slug}
-                    className={cn(
-                      "p-1 cursor-pointer hover:bg-slate-500 hover:text-red-400 mobile:text-sm",
-                      {
-                        "bg-slate-500 text-red-400":
-                          currentGenre &&
-                          (currentGenre === genre.slug ||
-                            currentGenre === genre.name),
-                      }
-                    )}
-                    hrefLang="vi"
-                  >
-                    {genre.name}
-                  </a>
-                ))
-              ) : (
-                <MyLoading />
-              )}
-            </ul>
-          </div>
-        </div>
+        <ListGenre />
       </div>
     </div>
   );

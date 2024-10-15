@@ -2,7 +2,7 @@ import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { MenuItem } from "primereact/menuitem";
 import { TabMenu } from "primereact/tabmenu";
 import { useContext } from "react";
-import themeStore from "@/shared/stores/themeStore";
+import themeStore from "@/shared/stores/theme-storage";
 import dynamic from "next/dynamic";
 import UserSettingPage from "./setting-page/Page";
 import { useRouter } from "next/router";

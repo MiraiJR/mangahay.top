@@ -15,16 +15,14 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { reduceQualityImage } from "@/shared/helpers/helpers";
-import EmptyComic from "@/shared/components/EmptyComic";
-import MyLoading from "@/shared/components/MyLoading";
 import { useGetRankingComics } from "@/shared/hooks/useGetRankingComics";
-
-const THE_NUMBER_OF_COMICS_SLIDE: number = 5;
+import { THE_NUMBER_OF_COMICS_SLIDE } from "../../constant";
+import { SlideComicSkeleton } from "./SlideComicSkeleton";
 
 const SlideComics = () => {
   const router = useRouter();
-  const { comics, isLoading } = useGetRankingComics("view", 5);
-  const [currentComic, setCurrentComic] = useState<Comic>(comics[0]);
+  const { comics, isSuccess } = useGetRankingComics("view", 5);
+  const [currentComic, setCurrentComic] = useState<Comic | null>(null);
   const { theme, oppositeTheme } = useContext(ThemeContext);
 
   useEffect(() => {
@@ -35,10 +33,10 @@ const SlideComics = () => {
 
   return (
     <div
-      className={`bg-${oppositeTheme} text-${theme} rounded-xl flex items-center mobile:flex-col-reverse justify-between h-max p-10`}
+      className={`bg-${theme} text-${theme} rounded-xl flex items-center mobile:flex-col-reverse justify-between h-max p-10 shadow md:shadow-lg border-${oppositeTheme} border-[1px]`}
     >
-      {isLoading && <MyLoading />}
-      {!isLoading && currentComic && (
+      {!isSuccess && <SlideComicSkeleton />}
+      {isSuccess && currentComic && (
         <div className="flex flex-col px-10 w-max gap-5 mobile:w-fit mobile:mt-4">
           <h2
             className="font-bold desktop:text-4xl mobile:text-xl"
@@ -72,8 +70,7 @@ const SlideComics = () => {
           </div>
         </div>
       )}
-      {!isLoading && comics.length === 0 && <EmptyComic />}
-      {!isLoading && comics.length > 0 && (
+      {isSuccess && comics.length > 0 && (
         <div>
           <Swiper
             modules={[

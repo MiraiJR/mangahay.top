@@ -1,7 +1,7 @@
 import MyLoading from "@/shared/components/MyLoading";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { useGetGenres } from "@/shared/hooks/useGetGenres";
-import themeStore from "@/shared/stores/themeStore";
+import themeStore from "@/shared/stores/theme-storage";
 import { useContext } from "react";
 
 const ListGenres = () => {

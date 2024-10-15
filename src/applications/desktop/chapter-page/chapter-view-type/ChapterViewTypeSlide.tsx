@@ -2,7 +2,7 @@ import { convertWebpResource, shortImageName } from "@/shared/helpers/helpers";
 import { Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
-import themeStore from "@/shared/stores/themeStore";
+import themeStore from "@/shared/stores/theme-storage";
 import { useState } from "react";
 import MyLoading from "@/shared/components/MyLoading";
 

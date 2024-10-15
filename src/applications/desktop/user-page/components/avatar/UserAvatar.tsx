@@ -5,7 +5,7 @@ import { useUpdateAvatar } from "../../useUpdateAvatar";
 import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { reduceQualityImage } from "@/shared/helpers/helpers";
-import { userStore } from "@/shared/stores/userStore";
+import { userStore } from "@/shared/stores/user-storage";
 import { Button } from "primereact/button";
 import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
 import { ProgressSpinner } from "primereact/progressspinner";

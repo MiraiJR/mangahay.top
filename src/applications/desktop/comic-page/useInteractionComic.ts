@@ -1,5 +1,5 @@
 import MeService from "@/shared/services/meService";
-import { globalStore } from "@/shared/stores/globalStore";
+import { globalStore } from "@/shared/stores/global-storage";
 import { useQuery } from "@tanstack/react-query";
 
 const DEFAULT_INTERACTION = {

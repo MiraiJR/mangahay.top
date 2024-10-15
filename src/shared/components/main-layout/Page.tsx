@@ -2,7 +2,7 @@ import { useEffect, useContext } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 import { cn } from "@/shared/libs/utils";
-import { globalStore } from "@/shared/stores/globalStore";
+import { globalStore } from "@/shared/stores/global-storage";
 import { ScrollToTop } from "./components/scroll-to-top/ScrollToTop";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { MOBILE_MAX_SIZE_SCREEN } from "@/shared/settings/CommonConfig";

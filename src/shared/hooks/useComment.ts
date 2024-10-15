@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { globalStore } from "../stores/globalStore";
+import { globalStore } from "../stores/global-storage";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ComicService from "../services/comicService";
 import { toast } from "react-toastify";

@@ -1,7 +1,7 @@
 import MetaTags from "@/shared/components/MetaTags";
 import LoginImage from "@/shared/assets/login.webp";
 import Image from "next/image";
-import themeStore from "@/shared/stores/themeStore";
+import themeStore from "@/shared/stores/theme-storage";
 import { originalURL } from "@/shared/libs/config";
 import { useTranslation } from "react-i18next";
 import { InputText } from "primereact/inputtext";

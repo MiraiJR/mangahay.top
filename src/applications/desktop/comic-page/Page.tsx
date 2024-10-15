@@ -23,7 +23,7 @@ const ListComicsOfAuthor = dynamic(() => import("./ListComicsOfAuthor"), {
   loading: () => <MyLoading />,
 });
 const ListComicsRanking = dynamic(
-  () => import("../home-page/ListComicsRanking"),
+  () => import("../home-page/components/comic-ranking/ListComicsRanking"),
   {
     loading: () => <MyLoading />,
   }

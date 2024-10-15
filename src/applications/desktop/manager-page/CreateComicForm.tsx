@@ -6,8 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { Chips, ChipsChangeEvent } from "primereact/chips";
 import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
-import themeStore from "@/shared/stores/themeStore";
-import { globalStore } from "@/shared/stores/globalStore";
+import themeStore from "@/shared/stores/theme-storage";
+import { globalStore } from "@/shared/stores/global-storage";
 import {
   removeAccentsAndLowerCase,
   removeAccentsAndLowerCaseArray,

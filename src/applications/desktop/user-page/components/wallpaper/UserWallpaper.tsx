@@ -1,4 +1,4 @@
-import { userStore } from "@/shared/stores/userStore";
+import { userStore } from "@/shared/stores/user-storage";
 import Image from "next/image";
 
 export const UserWallPaper = () => {

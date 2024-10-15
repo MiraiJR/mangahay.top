@@ -1,6 +1,6 @@
 import { InputText } from "primereact/inputtext";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { userStore } from "@/shared/stores/userStore";
+import { userStore } from "@/shared/stores/user-storage";
 import { useUpdateProfile } from "./useUpdateProfile";
 import { UserAvatar } from "./components/avatar/UserAvatar";
 import { UserWallPaper } from "./components/wallpaper/UserWallpaper";

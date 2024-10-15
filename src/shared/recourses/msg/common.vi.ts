@@ -44,6 +44,14 @@ export const common = {
     unlike: "Huỷ thích thành công!",
   },
   viewMore: "Xem thêm",
+  homePage: {
+    newComicLabel: "Truyện mới",
+    newUpdatedComicLabel: "Truyện mới cập nhật",
+    newJapanComic: "Truyện Nhật",
+    newKoreaComic: "Truyện Hàn",
+    newChinaComic: "Truyện Trung Quốc",
+    trendComic: "Top thịnh hành",
+  },
 };
 
 export type CommonResouce = typeof common;

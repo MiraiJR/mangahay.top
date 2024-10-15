@@ -1,4 +1,4 @@
-import { globalStore } from "@/shared/stores/globalStore";
+import { globalStore } from "@/shared/stores/global-storage";
 import { useTranslation } from "react-i18next";
 import { useInteractionComic } from "./useInteractionComic";
 import { toast } from "react-toastify";

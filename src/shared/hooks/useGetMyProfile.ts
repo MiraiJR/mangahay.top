@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { userStore } from "../stores/userStore";
+import { userStore } from "../stores/user-storage";
 import { toast } from "react-toastify";
 import MeService from "../services/meService";
 

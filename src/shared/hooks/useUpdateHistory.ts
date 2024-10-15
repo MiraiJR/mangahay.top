@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import historyStore from "../stores/historyStore";
+import historyStore from "../stores/history-storage";
 
 export const useUpdateHistory = (
   comic?: Comic,

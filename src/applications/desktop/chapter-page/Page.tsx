@@ -4,7 +4,7 @@ import { MenuItem } from "primereact/menuitem";
 import { useContext, useEffect } from "react";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import ListComicsOfAuthor from "../comic-page/ListComicsOfAuthor";
-import ListComicsRanking from "../home-page/ListComicsRanking";
+import ListComicsRanking from "../home-page/components/comic-ranking/ListComicsRanking";
 import EmptyComic from "@/shared/components/EmptyComic";
 import ChapterViewTypeIndex from "./chapter-view-type/IndexComponent";
 import { useGetComic } from "@/shared/hooks/useGetComic";

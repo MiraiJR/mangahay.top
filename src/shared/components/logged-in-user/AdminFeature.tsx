@@ -1,4 +1,4 @@
-import { userStore } from "@/shared/stores/userStore";
+import { userStore } from "@/shared/stores/user-storage";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 

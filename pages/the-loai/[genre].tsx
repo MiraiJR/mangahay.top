@@ -15,7 +15,6 @@ const ListComicsPage = dynamic(
 
 export async function getServerSideProps(context: any) {
   try {
-    const genres = await ComicService.getGenres();
     const comics = await ComicService.searchComics({
       filterGenres: [context.query.genre],
       page: 1,
@@ -24,7 +23,6 @@ export async function getServerSideProps(context: any) {
 
     return {
       props: {
-        genres: genres.data,
         comics: comics.data.comics,
         currentGenre: context.query.genre,
       },
@@ -39,11 +37,7 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default function GenreRoute({
-  genres,
-  currentGenre,
-  comics,
-}: itemProps) {
+export default function GenreRoute({ currentGenre, comics }: itemProps) {
   return (
     <>
       <MetaTags
@@ -52,7 +46,7 @@ export default function GenreRoute({
         url={`${originalURL}/the-loại/${currentGenre}`}
         image=""
       />
-      <ListComicsPage genres={genres} dataComics={comics} />;
+      <ListComicsPage dataComics={comics} />;
     </>
   );
 }

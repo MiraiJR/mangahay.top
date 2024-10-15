@@ -1,6 +1,6 @@
 import { phoneValition } from "@/shared/helpers/Validation";
 import MeService from "@/shared/services/meService";
-import { userStore } from "@/shared/stores/userStore";
+import { userStore } from "@/shared/stores/user-storage";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "react-toastify";

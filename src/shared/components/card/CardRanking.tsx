@@ -1,5 +1,5 @@
 import { cn } from "@/shared/libs/utils";
-import themeStore from "@/shared/stores/themeStore";
+import themeStore from "@/shared/stores/theme-storage";
 
 interface itemProps {
   comic: Comic;

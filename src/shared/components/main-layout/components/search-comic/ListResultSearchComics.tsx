@@ -2,7 +2,7 @@ import { useContext } from "react";
 import CardSearchingComic from "../../../card/CardSearchingComic";
 import EmptyImage from "@/shared/assets/empty.webp";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import themeStore from "@/shared/stores/themeStore";
+import themeStore from "@/shared/stores/theme-storage";
 import Image from "next/image";
 
 interface itemProps {

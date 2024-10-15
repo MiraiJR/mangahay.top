@@ -1,7 +1,7 @@
 import { formatDate, reduceQualityImage } from "@/shared/helpers/helpers";
 import { Avatar } from "primereact/avatar";
 import CardAnswer from "./CardAnswer";
-import themeStore from "@/shared/stores/themeStore";
+import themeStore from "@/shared/stores/theme-storage";
 
 interface itemProps {
   comment: UserComment;

@@ -1,6 +1,6 @@
 import { extractComicId } from "@/shared/helpers/helpers";
 import comicService from "@/shared/services/comicService";
-import themeStore from "@/shared/stores/themeStore";
+import themeStore from "@/shared/stores/theme-storage";
 import {
   AutoComplete,
   AutoCompleteCompleteEvent,

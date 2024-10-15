@@ -1,5 +1,5 @@
 import MeService from "@/shared/services/meService";
-import { userStore } from "@/shared/stores/userStore";
+import { userStore } from "@/shared/stores/user-storage";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 

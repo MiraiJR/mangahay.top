@@ -6,6 +6,7 @@ export const useGetRankingComics = (field: string, amount: number) => {
     data: comics = [],
     isLoading,
     error,
+    isSuccess,
   } = useQuery({
     queryKey: ["comics.ranking", { field, amount }],
     queryFn: async () => {
@@ -19,5 +20,6 @@ export const useGetRankingComics = (field: string, amount: number) => {
     comics,
     isLoading,
     error,
+    isSuccess,
   };
 };

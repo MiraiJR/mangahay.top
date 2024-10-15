@@ -1,4 +1,4 @@
-import historyStore from "@/shared/stores/historyStore";
+import historyStore from "@/shared/stores/history-storage";
 import { useEffect, useState, useContext } from "react";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { Divider } from "primereact/divider";

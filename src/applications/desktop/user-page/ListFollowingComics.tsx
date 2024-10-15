@@ -1,6 +1,6 @@
 import { formatDate, reduceQualityImage } from "@/shared/helpers/helpers";
 import MeService, { TypeComicInteraction } from "@/shared/services/meService";
-import themeStore from "@/shared/stores/themeStore";
+import themeStore from "@/shared/stores/theme-storage";
 import { Rating } from "primereact/rating";
 import { useEffect, useState } from "react";
 import Image from "next/image";

@@ -1,5 +1,5 @@
 import React from "react";
-import { globalStore } from "../stores/globalStore";
+import { globalStore } from "../stores/global-storage";
 export const StoreContext = React.createContext<any>({});
 
 export const ZustandProvider = ({ children }: any) => {
