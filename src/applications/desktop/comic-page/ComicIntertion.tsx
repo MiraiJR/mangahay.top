@@ -6,6 +6,7 @@ import { useRatingComic } from "./useRatingComic";
 import { FacebookIcon, FacebookShareButton } from "react-share";
 import { originalURL } from "@/shared/libs/config";
 import { cn } from "@/shared/libs/utils";
+import { useTranslation } from "react-i18next";
 
 interface ComicInteractionProps {
   comic: Comic;
@@ -16,10 +17,13 @@ export const ComicInteraction = ({ comic }: ComicInteractionProps) => {
   const { setScoreStar, scoreStar, handleRatingComic } = useRatingComic(comic);
   const { handleFollow } = useFollowComic(comic.id);
   const { handleLike } = useLikeComic(comic.id);
+  const { t } = useTranslation();
 
   return (
     <div className="col-span-2 flex flex-col gap-4 mobile:col-span-12 mobile:mx-4">
-      <div className="font-bold text-xl">Đánh giá:</div>
+      <div className="font-bold text-xl">
+        {t("comicInteraction.label", { ns: "common" })}
+      </div>
       <div className="flex justify-between">
         <Rating
           disabled={statusInteractComic.isEvaluated}
@@ -35,15 +39,15 @@ export const ComicInteraction = ({ comic }: ComicInteractionProps) => {
         <span>{comic.star}</span>
       </div>
       <div className="flex justify-between">
-        <h2>Lượt xem:</h2>
+        <h2>{t("comicInteraction.viewTimes", { ns: "common" })}</h2>
         <span>{comic.view}</span>
       </div>
       <div className="flex justify-between">
-        <h2>Lượt thích:</h2>
+        <h2>{t("comicInteraction.likeTimes", { ns: "common" })}</h2>
         <span>{comic.like}</span>
       </div>
       <div className="flex justify-between">
-        <h2>Lượt theo dõi:</h2>
+        <h2>{t("comicInteraction.followTimes", { ns: "common" })}</h2>
         <span>{comic.follow}</span>
       </div>
       <div className="flex justify-around">

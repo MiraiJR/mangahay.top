@@ -1,7 +1,7 @@
-import ComicPage from "@/applications/desktop/comic-page/Page";
 import MetaTags from "@/shared/components/MetaTags";
 import { originalURL } from "@/shared/libs/config";
 import ComicService from "@/shared/services/comicService";
+import dynamic from "next/dynamic";
 
 interface itemProps {
   detailComic: Comic;
@@ -27,6 +27,13 @@ export async function getServerSideProps(context: any) {
   }
 }
 
+const ComicPage = dynamic(
+  () => import("@/applications/desktop/comic-page/Page"),
+  {
+    ssr: false,
+  }
+);
+
 export default function ComicRoute({ detailComic }: itemProps) {
   return (
     <>
@@ -36,7 +43,7 @@ export default function ComicRoute({ detailComic }: itemProps) {
         image={detailComic.thumb}
         url={`${originalURL}/truyen/${detailComic.slug}`}
       />
-      <ComicPage detailComic={detailComic} />
+      <ComicPage />
     </>
   );
 }

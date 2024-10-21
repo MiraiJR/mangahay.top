@@ -44,6 +44,10 @@ export const common: CommonResouce = {
     unfollow: "Successfully unfollowed!",
     like: "Successfully liked!",
     unlike: "Successfully unliked!",
+    label: "Rating:",
+    viewTimes: "Views:",
+    likeTimes: "Likes:",
+    followTimes: "Followers:",
   },
   viewMore: "View more",
   homePage: {
@@ -54,4 +58,15 @@ export const common: CommonResouce = {
     newChinaComic: "Chinese Comics",
     trendComic: "Trending Top Comics",
   },
+  readNow: "Read now",
+  readTheNewestChapter: "Read the newest chapter",
+  historyReadComic: "Reading history",
+  comicWithTheSameAuthor: "Comics by the same author",
+  newestMangaga: "Newest manga",
+  listComment: {
+    label: "Comment list ({{length}})",
+    comment: "Comment",
+    answer: "Answer",
+  },
+  comic: "Comic",
 };

@@ -4,9 +4,10 @@ import dynamic from "next/dynamic";
 import MetaTags from "@/shared/components/MetaTags";
 import { originalURL } from "@/shared/libs/config";
 
-const BoxSearch = dynamic(() => import("./BoxSearch"));
+const BoxSearch = dynamic(() => import("./BoxSearch"), { ssr: false });
 const ListComics = dynamic(
-  () => import("../../../shared/components/list-comics/ListComics")
+  () => import("@/shared/components/list-comics/ListComics"),
+  { ssr: false }
 );
 
 const SearchPage = () => {

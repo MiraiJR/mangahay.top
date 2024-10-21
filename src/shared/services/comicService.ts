@@ -19,13 +19,10 @@ const ComicService = {
       },
     }),
   getComicBySlug: (slug: string) => axiosClient.get<Comic>(`/comics/${slug}`),
-  increaseField: (comicId: number, field: string, jump: number) =>
-    axiosClient.patch<string>(
-      `/comics/${comicId}/increment?field=${field}&jump=${jump}`
-    ),
-
+  increaseView: (comicId: number) =>
+    axiosClient.patch<string>(`/comics/${comicId}/viewed`),
   commentOnComic: (comicId: number, content: string) =>
-    axiosClient.post<UserComment>(`/comics/${comicId}/comments`, {
+    axiosClient.post<UserCommentResponse>(`/comics/${comicId}/comments`, {
       content,
     }),
   getChapterOfComic: (comicId: number, chapterId: number) =>
@@ -73,6 +70,6 @@ const ComicService = {
   getListChapters: (comicId: number) =>
     axiosClient.get<Chapter[]>(`/comics/${comicId}/chapters`),
   getListComment: (comicId: number) =>
-    axiosClient.get<UserComment[]>(`/comics/${comicId}/comments`),
+    axiosClient.get<UserCommentResponse[]>(`/comics/${comicId}/comments`),
 };
 export default ComicService;

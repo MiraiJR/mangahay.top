@@ -15,7 +15,7 @@ export const SlideComicSkeleton = () => {
         <Skeleton width="6rem" height="2rem" className="mb-2"></Skeleton>
       </div>
       <div className="">
-        <Skeleton width="15rem" height="20rem"></Skeleton>
+        <Skeleton width="25rem" height="25rem"></Skeleton>
       </div>
     </>
   );

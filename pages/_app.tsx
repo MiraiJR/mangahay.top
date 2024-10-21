@@ -13,28 +13,19 @@ import "swiper/css/autoplay";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemProvider } from "@/shared/contexts/ThemeContext";
 import { ToastContainer } from "react-toastify";
-import React, { useEffect } from "react";
+import React, { Suspense } from "react";
 import { createStore } from "zustand";
 import Head from "next/head";
 import "@/shared/libs/i18n";
 import { queryClient } from "@/shared/libs/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { PrimeReactProvider } from "primereact/api";
-import { useSetLanguage } from "@/shared/hooks/useSetLanguage";
+import MyLoading from "@/shared/components/MyLoading";
 
 const store = createStore();
 const StoreContext = React.createContext<any>({});
 
-export default function App({
-  Component,
-  pageProps: { session, ...pageProps },
-}: AppProps) {
-  const { initLanguage } = useSetLanguage();
-
-  useEffect(() => {
-    initLanguage();
-  }, []);
-
+const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   return (
     <>
       <Head>
@@ -65,4 +56,6 @@ export default function App({
       ></script>
     </>
   );
-}
+};
+
+export default App;

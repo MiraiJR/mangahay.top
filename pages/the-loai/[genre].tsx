@@ -10,7 +10,8 @@ interface itemProps {
 }
 
 const ListComicsPage = dynamic(
-  () => import("@/applications/desktop/list-comics-page/Page")
+  () => import("@/applications/desktop/list-comics-page/Page"),
+  { ssr: false }
 );
 
 export async function getServerSideProps(context: any) {

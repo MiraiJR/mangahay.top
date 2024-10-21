@@ -8,7 +8,7 @@ export const useGetRankingComics = (field: string, amount: number) => {
     error,
     isSuccess,
   } = useQuery({
-    queryKey: ["comics.ranking", { field, amount }],
+    queryKey: ["comic.ranking", { field, amount }],
     queryFn: async () => {
       const { data } = await ComicService.getRankingComics(field, amount);
 

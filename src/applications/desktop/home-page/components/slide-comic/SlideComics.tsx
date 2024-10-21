@@ -18,10 +18,12 @@ import { reduceQualityImage } from "@/shared/helpers/helpers";
 import { useGetRankingComics } from "@/shared/hooks/useGetRankingComics";
 import { THE_NUMBER_OF_COMICS_SLIDE } from "../../constant";
 import { SlideComicSkeleton } from "./SlideComicSkeleton";
+import { useTranslation } from "react-i18next";
 
 const SlideComics = () => {
+  const { t } = useTranslation();
   const router = useRouter();
-  const { comics, isSuccess } = useGetRankingComics("view", 5);
+  const { comics, isSuccess, isLoading } = useGetRankingComics("view", 5);
   const [currentComic, setCurrentComic] = useState<Comic | null>(null);
   const { theme, oppositeTheme } = useContext(ThemeContext);
 
@@ -33,9 +35,9 @@ const SlideComics = () => {
 
   return (
     <div
-      className={`bg-${theme} text-${theme} rounded-xl flex items-center mobile:flex-col-reverse justify-between h-max p-10 shadow md:shadow-lg border-${oppositeTheme} border-[1px]`}
+      className={`bg-${theme} text-${oppositeTheme} rounded-xl flex items-center mobile:flex-col-reverse justify-between h-max p-10 shadow md:shadow-lg border-${oppositeTheme} border-[1px]`}
     >
-      {!isSuccess && <SlideComicSkeleton />}
+      {isLoading && <SlideComicSkeleton />}
       {isSuccess && currentComic && (
         <div className="flex flex-col px-10 w-max gap-5 mobile:w-fit mobile:mt-4">
           <h2
@@ -66,7 +68,7 @@ const SlideComics = () => {
             className="btn-primary w-fit"
             onClick={() => router.push(`/truyen/${currentComic.slug}`)}
           >
-            Đọc ngay
+            {t("readNow", { ns: "common" })}
           </div>
         </div>
       )}

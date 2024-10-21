@@ -6,10 +6,16 @@ import dynamic from "next/dynamic";
 import { DialogProvider } from "@/shared/contexts/DialogContext";
 import { useRouter } from "next/router";
 
-const CreateComicForm = dynamic(() => import("./CreateComicForm"));
-const CrawlChapter = dynamic(() => import("./CrawlChapter"));
-const ListCreatedComics = dynamic(() => import("./ListCreatedComics"));
-const CreateChapterForm = dynamic(() => import("./CreateChapterForm"));
+const CreateComicForm = dynamic(() => import("./CreateComicForm"), {
+  ssr: false,
+});
+const CrawlChapter = dynamic(() => import("./CrawlChapter"), { ssr: false });
+const ListCreatedComics = dynamic(() => import("./ListCreatedComics"), {
+  ssr: false,
+});
+const CreateChapterForm = dynamic(() => import("./CreateChapterForm"), {
+  ssr: false,
+});
 
 enum TabType {
   CREATED_COMICS = 0,

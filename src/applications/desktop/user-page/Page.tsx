@@ -9,11 +9,14 @@ import { useRouter } from "next/router";
 import { useActiveTab } from "./useActiveTab";
 import { TabType } from "./enum";
 
-const Profile = dynamic(() => import("./Profile"));
+const Profile = dynamic(() => import("./Profile"), { ssr: false });
 const Notification = dynamic(
-  () => import("./components/notification/Notification")
+  () => import("./components/notification/Notification"),
+  { ssr: false }
 );
-const ListFollowingComics = dynamic(() => import("./ListFollowingComics"));
+const ListFollowingComics = dynamic(() => import("./ListFollowingComics"), {
+  ssr: false,
+});
 
 const UserPage = () => {
   const { oppositeTheme } = useContext(ThemeContext);

@@ -38,7 +38,7 @@ const Notification = () => {
       </div>
       <div className="my-10 card flex justify-content-center items-center justify-between">
         <SelectButton
-          value={notificationFilterData?.label}
+          value={notificationFilterData}
           onChange={(e) => {
             setNotificationFilterData(e.value);
           }}

@@ -1,40 +1,26 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { MenuItem } from "primereact/menuitem";
 import { originalURL } from "@/shared/libs/config";
-import dynamic from "next/dynamic";
-import MyLoading from "@/shared/components/MyLoading";
 import { useIncreaseViewComic } from "@/shared/hooks/useIncreaseViewComic";
 import { useGetComic } from "@/shared/hooks/useGetComic";
 import { ListComment } from "@/shared/components/comments/ListComment";
 import { useUpdateHistory } from "@/shared/hooks/useUpdateHistory";
+import DescriptionComic from "./DescriptionComic";
+import ListChapters from "./ListChapters";
+import ListComicsOfAuthor from "./ListComicsOfAuthor";
+import ListComicsRanking from "../home-page/components/comic-ranking/ListComicsRanking";
+import { useTranslation } from "react-i18next";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
 
-interface itemProps {
-  detailComic: Comic;
-}
-
-const DescriptionComic = dynamic(() => import("./DescriptionComic"), {
-  loading: () => <MyLoading />,
-});
-const ListChapters = dynamic(() => import("./ListChapters"), {
-  loading: () => <MyLoading />,
-});
-const ListComicsOfAuthor = dynamic(() => import("./ListComicsOfAuthor"), {
-  loading: () => <MyLoading />,
-});
-const ListComicsRanking = dynamic(
-  () => import("../home-page/components/comic-ranking/ListComicsRanking"),
-  {
-    loading: () => <MyLoading />,
-  }
-);
-
-const ComicPage = ({ detailComic }: itemProps) => {
-  const { comic } = useGetComic(detailComic);
-  const { increaseView } = useIncreaseViewComic(detailComic.id);
+const ComicPage = () => {
+  const { t } = useTranslation();
+  const { comic } = useGetComic();
+  const { increaseView } = useIncreaseViewComic(comic?.id);
+  const { theme, oppositeTheme } = useContext(ThemeContext);
 
   const items: MenuItem[] = [
-    { label: "Truyện" },
+    { label: t("comic", { ns: "common" }) },
     { label: comic?.name, url: `${originalURL}/truyen/${comic?.slug}` },
   ];
   const home: MenuItem = { icon: "pi pi-home", url: originalURL };
@@ -49,25 +35,32 @@ const ComicPage = ({ detailComic }: itemProps) => {
       {comic && (
         <div>
           <div className="mb-5">
-            <BreadCrumb model={items} home={home} />
+            <BreadCrumb
+              style={{
+                backgroundColor: theme === "light" ? "white" : "black",
+                border: `1px solid ${
+                  oppositeTheme === "light" ? "white" : "black"
+                }`,
+              }}
+              model={items}
+              home={home}
+            />
           </div>
           {comic && (
             <DescriptionComic
-              firstChapter={
-                detailComic.chapters[detailComic.chapters.length - 1] ?? null
-              }
-              lastChapter={detailComic.chapters[0] ?? null}
+              firstChapter={comic.chapters[comic.chapters.length - 1] ?? null}
+              lastChapter={comic.chapters[0] ?? null}
               comic={comic}
             />
           )}
           <div className="grid grid-cols-12 gap-4">
             <div className="col-span-8 mt-10 mobile:col-span-12">
-              <ListChapters chapters={detailComic.chapters} />
+              <ListChapters chapters={comic.chapters} />
             </div>
             <div className="col-span-4 mt-10 mobile:col-span-12">
               {comic && (
                 <ListComicsOfAuthor
-                  title={"Truyện cùng tác giả"}
+                  title={t("comicWithTheSameAuthor", { ns: "common" })}
                   author={comic?.authors[0]}
                 />
               )}
@@ -75,7 +68,7 @@ const ComicPage = ({ detailComic }: itemProps) => {
             <ListComment comic={comic} />
             <div className="col-span-4 mt-10 mobile:col-span-12">
               <ListComicsRanking
-                title={"Manga mới nhất"}
+                title={t("newestMangaga", { ns: "common" })}
                 field={"createdAt"}
                 amountComic={5}
               />

@@ -1,17 +1,20 @@
-import themeStore from "@/shared/stores/theme-storage";
 import Image from "next/image";
 import { Rating } from "primereact/rating";
 import Link from "next/link";
 import { reduceQualityImage } from "@/shared/helpers/helpers";
+import { useContext } from "react";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
 
 interface itemProps {
   comic: Comic;
 }
 
 const CardHighlightComic = ({ comic }: itemProps) => {
+  const { theme, oppositeTheme } = useContext(ThemeContext);
+
   return (
     <div
-      className={`bg-${themeStore.getOppositeTheme()} p-6 text-${themeStore.getTheme()} text-sm flex flex-col gap-2`}
+      className={`bg-${theme} p-6 text-${oppositeTheme} text-sm flex flex-col gap-2 border-${oppositeTheme} border-2 rounded-sm`}
     >
       <Link
         rel="preload"
@@ -65,9 +68,7 @@ const CardHighlightComic = ({ comic }: itemProps) => {
             <Link
               key={_index}
               href={`/tim-kiem?filterAuthor=${author}`}
-              className={`bg-${themeStore.getTheme()} rounded-md border border-${
-                themeStore.getOppositeTheme
-              } px-1 capitalize text-${themeStore.getOppositeTheme()}`}
+              className={`bg-${theme} rounded-md border border-${oppositeTheme} px-1 capitalize text-${oppositeTheme}`}
               rel="preload"
             >
               <h2 title={author}>{author}</h2>

@@ -22,6 +22,7 @@ axiosClient.interceptors.response.use(
     return response;
   },
   async (error) => {
+    console.log(error);
     const originalRequest = error.config;
     if (
       originalRequest.url === "/auth/refresh-token" &&

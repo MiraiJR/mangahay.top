@@ -42,6 +42,10 @@ export const common = {
     unfollow: "Huỷ theo dõi thành công!",
     like: "Thích thành công!",
     unlike: "Huỷ thích thành công!",
+    label: "Đánh giá:",
+    viewTimes: "Lượt xem:",
+    likeTimes: "Lượt thích:",
+    followTimes: "Lượt theo dõi:",
   },
   viewMore: "Xem thêm",
   homePage: {
@@ -52,6 +56,18 @@ export const common = {
     newChinaComic: "Truyện Trung Quốc",
     trendComic: "Top thịnh hành",
   },
+  readNow: "Đọc ngay",
+  readTheNewestChapter: "Đọc chương mới nhất",
+  historyReadComic: "Lịch sử đọc truyện",
+  comicWithTheSameAuthor: "Truyện cùng tác giả",
+  newestMangaga: "Manga mới nhất",
+  listComment: {
+    label: "Danh sách bình luận ({{length}})",
+    comment: "Bình luận",
+    answer: "Trả lời",
+  },
+  comic: "Truyện",
+  notEmptyContent: "Nội dùng không thể rỗng!",
 };
 
 export type CommonResouce = typeof common;

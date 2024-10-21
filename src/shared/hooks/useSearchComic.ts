@@ -70,7 +70,7 @@ export const useSearchComic = ({
     error,
   } = useQuery({
     queryKey: [
-      "comics.search",
+      "comic.search",
       {
         comicName,
         filterAuthor,

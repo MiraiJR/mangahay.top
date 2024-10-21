@@ -15,7 +15,7 @@ const MainLayout = ({
   className?: string;
 }) => {
   const { setIsMobile } = globalStore();
-  const { theme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     const handleResize = () => {
@@ -42,7 +42,7 @@ const MainLayout = ({
       <div className={cn("container relative mx-auto my-10 mobile:p-2")}>
         {children}
       </div>
-      <div className="bg-slate-200">
+      <div className={`bg-${theme} border-t-${oppositeTheme} border-2`}>
         <Footer />
       </div>
       <ScrollToTop />

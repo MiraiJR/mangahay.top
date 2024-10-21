@@ -1,12 +1,18 @@
 import { formatDate, reduceQualityImage } from "@/shared/helpers/helpers";
 import { Avatar } from "primereact/avatar";
-import CardAnswer from "./CardAnswer";
 import themeStore from "@/shared/stores/theme-storage";
+import { useTranslation } from "react-i18next";
+import { useAnswerComment } from "@/shared/hooks/useAnswerComment";
+import { AnswerEditor } from "../comments/AnswerEditor";
+import { useState } from "react";
 
 interface itemProps {
-  comment: UserComment;
+  comment: UserCommentResponse;
 }
 const CardComment = ({ comment }: itemProps) => {
+  const { t } = useTranslation();
+  const [showAnswerEditor, setShowAnswerEditor] = useState<boolean>(false);
+
   return (
     <div className="flex gap-4">
       <Avatar
@@ -28,15 +34,38 @@ const CardComment = ({ comment }: itemProps) => {
             {formatDate(comment.updatedAt)}
           </h2>
         </div>
-        <h2
-          className={`text-${themeStore.getOppositeTheme()}`}
-          title={comment.content}
-          dangerouslySetInnerHTML={{ __html: comment.content }}
-        ></h2>
-        <div className="text-blue-600 text-right cursor-pointer">Trả lời</div>
+        <div>
+          {comment.mentionedUser && (
+            <span className="text-red-600 mr-2">
+              @{comment.mentionedUser.fullname}
+            </span>
+          )}
+          <span
+            className={`text-${themeStore.getOppositeTheme()}`}
+            title={comment.content}
+            dangerouslySetInnerHTML={{ __html: comment.content }}
+          ></span>
+        </div>
+        <div className="flex justify-end">
+          <button
+            className="text-blue-600 text-right cursor-pointer w-fit"
+            onClick={() => {
+              setShowAnswerEditor(!showAnswerEditor);
+            }}
+          >
+            {t("listComment.answer", { ns: "common" })}
+          </button>
+        </div>
+        {showAnswerEditor && (
+          <AnswerEditor
+            commentId={comment.parentCommentId ?? comment.id}
+            comicId={comment.comicId}
+            mentionedUserId={comment.user.id}
+          />
+        )}
         <div>
           {comment.answers.map((answer) => (
-            <CardAnswer answer={answer} key={answer.id} />
+            <CardComment comment={answer} key={answer.id} />
           ))}
         </div>
       </div>

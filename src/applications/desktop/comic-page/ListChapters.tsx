@@ -19,7 +19,7 @@ const ListChapters = ({ chapters }: itemProps) => {
         </div>
       </div>
       {chapters.length === 0 ? (
-        <EmptyComic content="Không có chương!" />
+        <EmptyComic content={t("noAnyChapter", { ns: "chapter" })} />
       ) : (
         <div className="grid grid-cols-3 mobile:grid-cols-2 gap-3 mt-5 max-h-[800px] overflow-y-scroll">
           {chapters.map((chapter) => (

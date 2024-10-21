@@ -1,8 +1,8 @@
 import LoginPage from "@/applications/desktop/auth-page/childrens/login/Page";
-import useAuthHook from "@/shared/hooks/AuthHook";
+import useAuthHook from "@/shared/hooks/useAuthHook";
 
 export default function LoginRoute() {
-  const component = useAuthHook({ component: <LoginPage /> });
+  const { component } = useAuthHook(<LoginPage />);
 
   return <>{component}</>;
 }

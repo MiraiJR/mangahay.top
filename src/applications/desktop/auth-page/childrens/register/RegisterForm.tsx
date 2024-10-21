@@ -8,8 +8,6 @@ import { useContext } from "react";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { useTranslation } from "react-i18next";
 
-const title = "Đăng ký";
-
 const RegisterForm = () => {
   const {
     errorMessage,
@@ -30,7 +28,7 @@ const RegisterForm = () => {
     <div>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>{title}</title>
+        <title>{t("register.label", { ns: "auth" })}</title>
         <meta property="og:type" content="website"></meta>
       </Helmet>
       <div className="flex justify-center items-center">
@@ -45,7 +43,7 @@ const RegisterForm = () => {
           <div
             className={`text-center text-4xl font-bold mb-5 text-${oppositeTheme}`}
           >
-            {title.toLocaleUpperCase()}
+            {t("register.label", { ns: "auth" }).toLocaleUpperCase()}
           </div>
           {errorMessage && (
             <small id="username-help" className="text-red-400">

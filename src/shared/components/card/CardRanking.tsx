@@ -1,5 +1,7 @@
 import { cn } from "@/shared/libs/utils";
 import themeStore from "@/shared/stores/theme-storage";
+import EmptyComic from "../EmptyComic";
+import { useTranslation } from "react-i18next";
 
 interface itemProps {
   comic: Comic;
@@ -7,6 +9,8 @@ interface itemProps {
   isRanking: boolean;
 }
 const CardRanking = ({ comic, position, isRanking }: itemProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="grid grid-cols-12 p-2 border-b-2">
       {isRanking && (
@@ -30,7 +34,7 @@ const CardRanking = ({ comic, position, isRanking }: itemProps) => {
           </h2>
         </a>
         {comic.chapters.length === 0 ? (
-          <span>Không có chương!</span>
+          <span>{t("noAnyChapter", { ns: "chapter" })}</span>
         ) : (
           <a
             rel="preload"

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { globalStore } from "../stores/global-storage";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import ComicService from "../services/comicService";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import CommentService from "../services/commentService";
 
 export const useComment = (comicId: number) => {
   const [contentComment, setContentComment] = useState<string>("");
@@ -13,12 +13,11 @@ export const useComment = (comicId: number) => {
 
   const validate = () => {
     if (!isLogined) {
-      toast.warn(t("requiredLogin", { ns: "common" }));
-      return;
+      throw new Error(t("requiredLogin", { ns: "common" }));
     }
 
     if (contentComment.trim() === "") {
-      return;
+      throw new Error(t("notEmptyContent", { ns: "common" }));
     }
   };
 
@@ -27,7 +26,7 @@ export const useComment = (comicId: number) => {
     mutationFn: async () => {
       validate();
 
-      await ComicService.commentOnComic(comicId, contentComment);
+      await CommentService.commentOnComic(comicId, contentComment);
 
       setContentComment("");
 

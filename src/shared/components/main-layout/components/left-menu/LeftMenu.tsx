@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 
 export const LeftMenu = () => {
-  const { leftMenuData, showListGenres } = useLeftMenu();
+  const { leftMenuData, showListGenres, genreRef } = useLeftMenu();
   const { oppositeTheme } = useContext(ThemeContext);
   return (
     <div>
@@ -17,7 +17,6 @@ export const LeftMenu = () => {
             } transition-all duration-300`}
             key={item.id}
             onClick={item.handle}
-            ref={item.ref}
           >
             <span className="mobile:hidden">{item.label}</span>
             {item.Icon && <item.Icon size={30} className="desktop:hidden" />}
@@ -28,7 +27,10 @@ export const LeftMenu = () => {
         ))}
       </div>
       {showListGenres && (
-        <div className="absolute z-50 top-full w-max desktop:top-3/4 mobile:left-0">
+        <div
+          className="absolute z-50 top-full w-max desktop:top-3/4 mobile:left-0"
+          ref={genreRef}
+        >
           <ListGenres />
         </div>
       )}

@@ -6,8 +6,10 @@ import EmptyComic from "@/shared/components/EmptyComic";
 import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import CardComicHistory from "@/shared/components/card/CardHistory";
 import { THE_NUMBER_OF_COMICS_PER_PAGE } from "@/shared/settings/CommonConfig";
+import { useTranslation } from "react-i18next";
 
 const HistoryPage = () => {
+  const { t } = useTranslation();
   const [comics, setComics] = useState<Comic[]>([]);
   const { oppositeTheme, theme } = useContext(ThemeContext);
   const [first, setFirst] = useState<number>(0);
@@ -36,7 +38,7 @@ const HistoryPage = () => {
             className={`text-${oppositeTheme} font-bold text-xl mobile:lg`}
             title={"Lịch sử đọc truyện"}
           >
-            Lịch sử đọc truyện
+            {t("historyReadComic", { ns: "common" })}
           </div>
           <Divider />
           {comics.length === 0 ? (

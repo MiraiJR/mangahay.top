@@ -1,5 +1,10 @@
-import HomePage from "@/applications/desktop/home-page/Page";
+import dynamic from "next/dynamic";
 import Head from "next/head";
+
+const HomePage = dynamic(
+  () => import("@/applications/desktop/home-page/Page"),
+  { ssr: false }
+);
 
 export default function HomeRoute() {
   return (

@@ -17,7 +17,7 @@ type Comic = {
   updatedAt: Date;
   translators: string[];
   chapters: Chapter[];
-  comments: UserComment[];
+  comments: UserCommentResponse[];
 };
 
 type PagingComic = {

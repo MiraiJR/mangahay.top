@@ -13,6 +13,7 @@ import { useIncreaseViewComic } from "@/shared/hooks/useIncreaseViewComic";
 import { NavigationChapter } from "./NavigationChapter";
 import { ListComment } from "@/shared/components/comments/ListComment";
 import { useUpdateHistory } from "@/shared/hooks/useUpdateHistory";
+import { useTranslation } from "react-i18next";
 
 interface itemProps {
   detailComic: Comic;
@@ -20,11 +21,12 @@ interface itemProps {
 }
 
 const ChapterPage = ({ detailComic }: itemProps) => {
+  const { t } = useTranslation();
   const { comic } = useGetComic(detailComic);
   const { chapter } = useGetChapter();
   const { increaseView } = useIncreaseViewComic(detailComic.id);
   const items: MenuItem[] = [
-    { label: "Truyện" },
+    { label: t("comic", { ns: "common" }) },
     { label: comic?.name, url: `${originalURL}/truyen/${comic?.slug}` },
     {
       label: chapter?.name,
@@ -46,7 +48,16 @@ const ChapterPage = ({ detailComic }: itemProps) => {
       {comic && chapter && (
         <div>
           <div className="mb-5">
-            <BreadCrumb model={items} home={home} />
+            <BreadCrumb
+              model={items}
+              home={home}
+              style={{
+                backgroundColor: theme === "light" ? "white" : "black",
+                border: `1px solid ${
+                  oppositeTheme === "light" ? "white" : "black"
+                }`,
+              }}
+            />
           </div>
           <NavigationChapter comicId={comic.id} slugComic={comic.slug} />
           <div
@@ -63,15 +74,14 @@ const ChapterPage = ({ detailComic }: itemProps) => {
             )}
 
             <div
-              className={`text-${theme} w-[100%] bg-${oppositeTheme} p-4 text-xl text-center`}
+              className={`text-${oppositeTheme} w-[100%] bg-${theme} p-4 text-xl text-center border-${oppositeTheme} border-[1px]`}
             >
-              <div>Hết rồi</div>
+              <div>{t("endChapter", { ns: "chapter" })}</div>
               <h2>
-                Nhớ theo dõi nhóm dịch:{" "}
-                <strong className="text-red-600">
-                  {comic.translators.join(", ")}
-                </strong>{" "}
-                để ủng hộ nhóm dịch nha.
+                {t("recommendedFollowTranslator", {
+                  ns: "chapter",
+                  translator: comic.translators.join(", "),
+                })}
               </h2>
             </div>
           </div>
@@ -81,12 +91,12 @@ const ChapterPage = ({ detailComic }: itemProps) => {
             <div className="col-span-4 mt-10 mobile:col-span-12">
               {comic && (
                 <ListComicsOfAuthor
-                  title={"Truyện cùng tác giả"}
+                  title={t("comicWithTheSameAuthor", { ns: "common" })}
                   author={comic.authors[0]}
                 />
               )}
               <ListComicsRanking
-                title={"Manga mới nhất"}
+                title={t("newestMangaga", { ns: "common" })}
                 field={"createdAt"}
                 amountComic={5}
               />

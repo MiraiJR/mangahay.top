@@ -9,8 +9,6 @@ import { useTranslation } from "react-i18next";
 import { InputTextCustom } from "@/shared/components/base-components/input-text/InputTextCustom";
 import { Button } from "primereact/button";
 
-const title = "Đăng nhập";
-
 const LoginForm = () => {
   const {
     password,
@@ -27,7 +25,7 @@ const LoginForm = () => {
     <div>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>{title}</title>
+        <title>{t("login.label", { ns: "auth" })}</title>
         <meta property="og:type" content="website"></meta>
       </Helmet>
       <div className="flex justify-center items-center">
@@ -42,7 +40,7 @@ const LoginForm = () => {
           <div
             className={`text-center text-4xl font-bold mb-5 text-${oppositeTheme}`}
           >
-            {title.toLocaleUpperCase()}
+            {t("login.label", { ns: "auth" }).toLocaleUpperCase()}
           </div>
           {error && (
             <small id="username-help" className="text-red-400">

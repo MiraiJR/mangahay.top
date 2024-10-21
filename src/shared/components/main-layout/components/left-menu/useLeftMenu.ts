@@ -51,5 +51,6 @@ export const useLeftMenu = () => {
   return {
     leftMenuData: leftMenu,
     showListGenres,
+    genreRef,
   };
 };

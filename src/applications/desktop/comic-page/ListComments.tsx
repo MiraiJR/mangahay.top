@@ -4,7 +4,7 @@ import { Paginator } from "primereact/paginator";
 import { useListComment } from "./useListComments";
 
 interface itemProps {
-  comments: UserComment[];
+  comments: UserCommentResponse[];
 }
 
 const ListComments = ({ comments }: itemProps) => {

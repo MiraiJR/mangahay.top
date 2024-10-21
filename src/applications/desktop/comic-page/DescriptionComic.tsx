@@ -5,6 +5,7 @@ import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { convertWebpResource } from "@/shared/helpers/helpers";
 import { useRouter } from "next/router";
 import { ComicInteraction } from "./ComicIntertion";
+import { useTranslation } from "react-i18next";
 
 interface itemProps {
   comic: Comic;
@@ -13,6 +14,7 @@ interface itemProps {
 }
 
 const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
+  const { t } = useTranslation();
   const { theme, oppositeTheme } = useContext(ThemeContext);
   const router = useRouter();
   const { slugChapter } = router.query;
@@ -108,7 +110,7 @@ const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
                 router.push(`/truyen/${comic.slug}/${firstChapter?.slug}`)
               }
             >
-              Đọc ngay
+              {t("readNow", { ns: "common" })}
             </button>
             <button
               className="btn-primary bg-green-600"
@@ -116,7 +118,7 @@ const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
                 router.push(`/truyen/${comic.slug}/${lastChapter?.slug}`)
               }
             >
-              Đọc chương mới nhất
+              {t("readTheNewestChapter", { ns: "common" })}
             </button>
           </div>
         )}
