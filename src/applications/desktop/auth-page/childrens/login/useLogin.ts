@@ -34,7 +34,7 @@ export const useLogin = () => {
 
       JWTManager.setToken(data);
       setIsLogined(true);
-      router.push("/");
+      router.back();
       return data;
     },
   });

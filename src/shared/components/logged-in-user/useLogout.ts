@@ -1,12 +1,10 @@
 import jwt from "@/shared/libs/jwt";
 import AuthService from "@/shared/services/authService";
 import { globalStore } from "@/shared/stores/global-storage";
-import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
 export const useLogout = () => {
   const { setIsLogined } = globalStore();
-  const router = useRouter();
 
   const handleLogout = async () => {
     try {
@@ -15,7 +13,6 @@ export const useLogout = () => {
       jwt.deleteToken();
       setIsLogined(false);
       toast.success(data);
-      router.push("/");
     } catch (error: any) {
       toast.error(error.message);
     }
