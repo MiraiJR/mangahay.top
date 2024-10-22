@@ -26,7 +26,7 @@ const Notification = () => {
   const { notifications, isLoading } = useNotification({
     page: 1,
     limit: Number.MAX_VALUE,
-    type: notificationFilterData.type,
+    type: notificationFilterData?.type,
   });
   const { handleRemoveAllNotification } = useRemoveAllNotification();
   const { handleMarkAllReadNotification } = useMarkAllReadNotification();

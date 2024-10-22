@@ -1,5 +1,4 @@
-import { useContext, useEffect } from "react";
-import { BreadCrumb } from "primereact/breadcrumb";
+import { useEffect } from "react";
 import { MenuItem } from "primereact/menuitem";
 import { originalURL } from "@/shared/libs/config";
 import { useIncreaseViewComic } from "@/shared/hooks/useIncreaseViewComic";
@@ -11,13 +10,12 @@ import ListChapters from "./ListChapters";
 import ListComicsOfAuthor from "./ListComicsOfAuthor";
 import ListComicsRanking from "../home-page/components/comic-ranking/ListComicsRanking";
 import { useTranslation } from "react-i18next";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { BreadCrumbTheme } from "@/shared/components/restyle-prime-component/BreadCrumbTheme";
 
 const ComicPage = () => {
   const { t } = useTranslation();
   const { comic } = useGetComic();
   const { increaseView } = useIncreaseViewComic(comic?.id);
-  const { theme, oppositeTheme } = useContext(ThemeContext);
 
   const items: MenuItem[] = [
     { label: t("comic", { ns: "common" }) },
@@ -35,16 +33,7 @@ const ComicPage = () => {
       {comic && (
         <div>
           <div className="mb-5">
-            <BreadCrumb
-              style={{
-                backgroundColor: theme === "light" ? "white" : "black",
-                border: `1px solid ${
-                  oppositeTheme === "light" ? "white" : "black"
-                }`,
-              }}
-              model={items}
-              home={home}
-            />
+            <BreadCrumbTheme items={items} home={home} />
           </div>
           {comic && (
             <DescriptionComic

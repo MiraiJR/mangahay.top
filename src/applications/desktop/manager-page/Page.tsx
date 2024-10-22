@@ -26,7 +26,7 @@ enum TabType {
 
 const ManagerPage = () => {
   const router = useRouter();
-  const {} = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useContext(ThemeContext);
   const [activeTab, setActiveTab] = useState<number>(TabType.CREATED_COMICS);
 
   const items: MenuItem[] = [
@@ -71,6 +71,17 @@ const ManagerPage = () => {
       <div>
         <div className="card w-[100%]">
           <TabMenu
+            pt={{
+              menu: {
+                className: `bg-${theme}`,
+              },
+              label: {
+                className: `text-${oppositeTheme}`,
+              },
+              action: {
+                className: `bg-${theme}`,
+              },
+            }}
             model={items}
             activeIndex={activeTab}
             onTabChange={(e) => setActiveTab(e.index)}

@@ -10,10 +10,12 @@ import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { useGetMyCreatedComic } from "./useGetMyCreatedComic";
 import { useDeleteComic } from "./useDeleteComic";
 import { Button } from "primereact/button";
+import { useTranslation } from "react-i18next";
 
 const THE_DEFAULT_AMOUNT_COMICS: number = 10;
 
 const ListCreatedComics = () => {
+  const { t } = useTranslation();
   const { theme, oppositeTheme } = useContext(ThemeContext);
   const { changeVisible: changeVisibleDialogUpdateComic } = useDialogContext();
   const [_showDetail, setShowDetail] = useState<boolean>(false);
@@ -25,7 +27,7 @@ const ListCreatedComics = () => {
   const confirmDeleteComic = (event: any, comicId: number) => {
     confirmPopup({
       target: event.currentTarget,
-      message: "Do you want to delete this record?",
+      message: t("confirmDelete", { ns: "common" }),
       icon: "pi pi-info-circle",
       acceptClassName: "p-button-danger",
       accept: () => {
@@ -83,7 +85,7 @@ const ListCreatedComics = () => {
                 className="btn-primary bg-green-400"
                 onClick={() => setShowDetail(true)}
               >
-                Xem
+                {t("comicAction.view", { ns: "common" })}
               </button>
               <button
                 className="btn-primary"
@@ -92,14 +94,14 @@ const ListCreatedComics = () => {
                   setSelectedComic(comic);
                 }}
               >
-                Sửa
+                {t("comicAction.modify", { ns: "common" })}
               </button>
               <Button
                 className="btn-primary bg-red-400"
                 onClick={(e) => confirmDeleteComic(e, comic.id)}
                 loading={isLoadingDeleteComic}
               >
-                Xoá
+                {t("comicAction.delete", { ns: "common" })}
               </Button>
               <ConfirmPopup />
             </div>
@@ -117,11 +119,20 @@ const ListCreatedComics = () => {
           item: {
             className: `bg-${theme} text-${oppositeTheme}`,
           },
+          header: {
+            className: `bg-${theme} text-${oppositeTheme}`,
+          },
+          list: {
+            className: `bg-${theme}`,
+          },
+          content: {
+            className: `bg-${theme}`,
+          },
         }}
         value={comics}
         itemTemplate={itemTemplate}
         rows={THE_DEFAULT_AMOUNT_COMICS}
-        header="Danh sách truyện bạn đã đăng"
+        header={t("listCreatedComic", { ns: "common" })}
         inline
         scrollHeight="1000px"
       />

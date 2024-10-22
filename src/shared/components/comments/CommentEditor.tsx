@@ -17,6 +17,11 @@ export const CommentEditor = ({ comicId }: CommentEditorProps) => {
   return (
     <>
       <Editor
+        pt={{
+          toolbar: {
+            className: `bg-white`,
+          },
+        }}
         value={contentComment}
         onTextChange={(e: EditorTextChangeEvent) => {
           if (e.htmlValue) {

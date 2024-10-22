@@ -1,5 +1,4 @@
 import { originalURL } from "@/shared/libs/config";
-import { BreadCrumb } from "primereact/breadcrumb";
 import { MenuItem } from "primereact/menuitem";
 import { useContext, useEffect } from "react";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
@@ -14,6 +13,7 @@ import { NavigationChapter } from "./NavigationChapter";
 import { ListComment } from "@/shared/components/comments/ListComment";
 import { useUpdateHistory } from "@/shared/hooks/useUpdateHistory";
 import { useTranslation } from "react-i18next";
+import { BreadCrumbTheme } from "@/shared/components/restyle-prime-component/BreadCrumbTheme";
 
 interface itemProps {
   detailComic: Comic;
@@ -48,16 +48,7 @@ const ChapterPage = ({ detailComic }: itemProps) => {
       {comic && chapter && (
         <div>
           <div className="mb-5">
-            <BreadCrumb
-              model={items}
-              home={home}
-              style={{
-                backgroundColor: theme === "light" ? "white" : "black",
-                border: `1px solid ${
-                  oppositeTheme === "light" ? "white" : "black"
-                }`,
-              }}
-            />
+            <BreadCrumbTheme items={items} home={home} />
           </div>
           <NavigationChapter comicId={comic.id} slugComic={comic.slug} />
           <div

@@ -67,8 +67,15 @@ export const common = {
     answer: "Trả lời",
   },
   comic: "Truyện",
-  notEmptyContent: "Content cannot be empty!",
+  notEmptyContent: "Nội dung không thể để trống!",
   deletedUser: "Người dùng đã bị xoá",
+  confirmDelete: "Bạn thực sự muốn xoá truyện này?",
+  comicAction: {
+    view: "Xem",
+    modify: "Sửa",
+    delete: "Xoá",
+  },
+  listCreatedComic: "Danh sách truyện bạn đã đăng",
 };
 
 export type CommonResouce = typeof common;

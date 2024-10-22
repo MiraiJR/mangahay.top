@@ -1,9 +1,10 @@
-import { formatDate, reduceQualityImage } from "@/shared/helpers/helpers";
+import { formatDate } from "@/shared/helpers/helpers";
 import { Avatar } from "primereact/avatar";
 import { useTranslation } from "react-i18next";
 import { AnswerEditor } from "../comments/AnswerEditor";
 import { useContext, useState } from "react";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import Image from "next/image";
 
 interface itemProps {
   comment: UserCommentResponse;
@@ -16,6 +17,11 @@ const CardComment = ({ comment }: itemProps) => {
   return (
     <div className="flex gap-4">
       <Avatar
+        pt={{
+          image: {
+            className: "object-cover rounded",
+          },
+        }}
         icon="pi pi-user"
         image={comment.user?.avatar}
         label="P"

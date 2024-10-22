@@ -69,5 +69,13 @@ export const common: CommonResouce = {
     answer: "Answer",
   },
   comic: "Comic",
+  notEmptyContent: "Content cannot be empty!",
   deletedUser: "Deleted user",
+  confirmDelete: "Do you want to delete this comic?",
+  comicAction: {
+    view: "View",
+    modify: "Modify",
+    delete: "Delete",
+  },
+  listCreatedComic: "List of comics you have posted",
 };

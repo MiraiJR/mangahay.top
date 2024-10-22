@@ -115,7 +115,7 @@ const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
           <div className="flex gap-2">
             <Button
               className="btn-primary"
-              onClick={() => handleReadNow}
+              onClick={() => handleReadNow()}
               disabled={!firstChapter}
             >
               {t("readNow", { ns: "common" })}

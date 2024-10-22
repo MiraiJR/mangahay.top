@@ -1,8 +1,7 @@
 import { formatDate, reduceQualityImage } from "@/shared/helpers/helpers";
 import MeService, { TypeComicInteraction } from "@/shared/services/meService";
-import themeStore from "@/shared/stores/theme-storage";
 import { Rating } from "primereact/rating";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { DataScroller } from "primereact/datascroller";
 import Link from "next/link";
@@ -10,8 +9,10 @@ import MyLoading from "@/shared/components/MyLoading";
 import EmptyComic from "@/shared/components/EmptyComic";
 import { Button } from "primereact/button";
 import { toast } from "react-toastify";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
 
 const ListFollowingComics = () => {
+  const { theme, oppositeTheme } = useContext(ThemeContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [comics, setComics] = useState<Comic[]>([]);
   const [isUpdateData, setIsUpdateData] = useState<boolean>(false);
@@ -61,7 +62,7 @@ const ListFollowingComics = () => {
             {comic.genres.map((genre, _index) => (
               <Link
                 key={_index}
-                className={`p-1 bg-${themeStore.getOppositeTheme()} text-${themeStore.getTheme()} rounded-md capitalize`}
+                className={`p-1 bg-${oppositeTheme} text-${theme} rounded-md capitalize`}
                 title={genre}
                 href={`/the-loai/${genre}`}
               >
@@ -73,7 +74,7 @@ const ListFollowingComics = () => {
             {comic.authors.map((author, _index) => (
               <Link
                 key={_index}
-                className={`p-1 bg-${themeStore.getOppositeTheme()} text-${themeStore.getTheme()} rounded-md capitalize`}
+                className={`p-1 bg-${oppositeTheme} text-${theme} rounded-md capitalize`}
                 title={author}
                 href={`/tim-kiem?filterAuthor=${author}`}
               >
@@ -110,7 +111,16 @@ const ListFollowingComics = () => {
         <DataScroller
           pt={{
             item: {
-              className: `bg-${themeStore.getTheme()} text-${themeStore.getOppositeTheme()}`,
+              className: `bg-${theme} text-${oppositeTheme}`,
+            },
+            header: {
+              className: `bg-${theme} text-${oppositeTheme}`,
+            },
+            list: {
+              className: `bg-${theme}`,
+            },
+            content: {
+              className: `bg-${theme}`,
             },
           }}
           value={comics}

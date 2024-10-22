@@ -19,7 +19,7 @@ const ListFollowingComics = dynamic(() => import("./ListFollowingComics"), {
 });
 
 const UserPage = () => {
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme, theme } = useContext(ThemeContext);
   const router = useRouter();
   const { activeTab, setActiveTab } = useActiveTab();
 
@@ -58,6 +58,17 @@ const UserPage = () => {
     <div>
       <div className="card w-[100%]">
         <TabMenu
+          pt={{
+            menu: {
+              className: `bg-${theme}`,
+            },
+            label: {
+              className: `text-${oppositeTheme}`,
+            },
+            action: {
+              className: `bg-${theme}`,
+            },
+          }}
           model={items}
           activeIndex={activeTab}
           onTabChange={(e) => setActiveTab(e.index)}
