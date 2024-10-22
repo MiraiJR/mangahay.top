@@ -13,14 +13,13 @@ import "swiper/css/autoplay";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemProvider } from "@/shared/contexts/ThemeContext";
 import { ToastContainer } from "react-toastify";
-import React, { Suspense } from "react";
+import React from "react";
 import { createStore } from "zustand";
 import Head from "next/head";
 import "@/shared/libs/i18n";
 import { queryClient } from "@/shared/libs/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { PrimeReactProvider } from "primereact/api";
-import MyLoading from "@/shared/components/MyLoading";
 
 const store = createStore();
 const StoreContext = React.createContext<any>({});

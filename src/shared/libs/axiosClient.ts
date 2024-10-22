@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseURL } from "./config";
+import { baseURL, originalURL } from "./config";
 import jwt from "./jwt";
 import authService from "../services/authService";
 
@@ -17,26 +17,20 @@ axiosClient.interceptors.request.use(
   }
 );
 
+const removeTokenInErrorCodes = ["AUTH_ERROR_0004", "AUTH_ERROR_0007"];
+
 axiosClient.interceptors.response.use(
   (response) => {
     return response;
   },
   async (error) => {
-    console.log(error);
     const originalRequest = error.config;
-    if (
-      originalRequest.url === "/auth/refresh-token" &&
-      error.response.data.statusCode === 500
-    ) {
+    if (removeTokenInErrorCodes.includes(error.response.data.errorCode)) {
       jwt.deleteToken();
-      return axios(originalRequest);
+      window.location.href = originalURL as string;
     }
 
-    if (
-      (error.response.data.statusCode === 401 ||
-        error.response.data.statusCode === 403) &&
-      jwt.getToken()
-    ) {
+    if (error.response.data.errorCode === "AUTH_ERROR_0005" && jwt.getToken()) {
       const token = jwt.getToken();
 
       if (token) {
@@ -51,6 +45,7 @@ axiosClient.interceptors.response.use(
           return axios(originalRequest);
         } catch (error: any) {
           jwt.deleteToken();
+          console.log(error);
           if (error.message === "Token không hợp lệ") {
             window.location.reload();
           }

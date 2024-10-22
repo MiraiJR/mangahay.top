@@ -1,6 +1,7 @@
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { cn } from "@/shared/libs/utils";
 import themeStore from "@/shared/stores/theme-storage";
-import EmptyComic from "../EmptyComic";
+import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 
 interface itemProps {
@@ -10,6 +11,7 @@ interface itemProps {
 }
 const CardRanking = ({ comic, position, isRanking }: itemProps) => {
   const { t } = useTranslation();
+  const { oppositeTheme } = useContext(ThemeContext);
 
   return (
     <div className="grid grid-cols-12 p-2 border-b-2">
@@ -27,14 +29,16 @@ const CardRanking = ({ comic, position, isRanking }: itemProps) => {
       <div className="col-span-11 capitalize">
         <a rel="preload" href={`/truyen/${comic.slug}`} hrefLang="vi">
           <h2
-            className={`font-bold line-clamp-1 text-${themeStore.getOppositeTheme()}`}
+            className={`font-bold line-clamp-1 text-${oppositeTheme}`}
             title={comic.name}
           >
             {comic.name}
           </h2>
         </a>
         {comic.chapters.length === 0 ? (
-          <span>{t("noAnyChapter", { ns: "chapter" })}</span>
+          <span className={`font-light line-clamp-1 text-${oppositeTheme}`}>
+            {t("noAnyChapter", { ns: "chapter" })}
+          </span>
         ) : (
           <a
             rel="preload"
@@ -42,7 +46,7 @@ const CardRanking = ({ comic, position, isRanking }: itemProps) => {
             hrefLang="vi"
           >
             <h2
-              className={`font-light line-clamp-1 text-${themeStore.getOppositeTheme()}`}
+              className={`font-light line-clamp-1 text-${oppositeTheme}`}
               title={comic.chapters[0].name}
             >
               {comic.chapters[0].name}

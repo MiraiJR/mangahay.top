@@ -6,6 +6,7 @@ import { convertWebpResource } from "@/shared/helpers/helpers";
 import { useRouter } from "next/router";
 import { ComicInteraction } from "./ComicIntertion";
 import { useTranslation } from "react-i18next";
+import { Button } from "primereact/button";
 
 interface itemProps {
   comic: Comic;
@@ -18,6 +19,14 @@ const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
   const { theme, oppositeTheme } = useContext(ThemeContext);
   const router = useRouter();
   const { slugChapter } = router.query;
+
+  const handleReadNow = () => {
+    if (firstChapter) {
+      router.push(`/truyen/${comic.slug}/${firstChapter?.slug}`);
+    } else {
+      router.push(`/truyen/${comic.slug}`);
+    }
+  };
 
   return (
     <div className={`grid grid-cols-12 gap-2 text-${oppositeTheme}`}>
@@ -104,22 +113,22 @@ const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
         ></h2>
         {!slugChapter && (
           <div className="flex gap-2">
-            <button
+            <Button
               className="btn-primary"
-              onClick={() =>
-                router.push(`/truyen/${comic.slug}/${firstChapter?.slug}`)
-              }
+              onClick={() => handleReadNow}
+              disabled={!firstChapter}
             >
               {t("readNow", { ns: "common" })}
-            </button>
-            <button
+            </Button>
+            <Button
               className="btn-primary bg-green-600"
               onClick={() =>
                 router.push(`/truyen/${comic.slug}/${lastChapter?.slug}`)
               }
+              disabled={!lastChapter}
             >
               {t("readTheNewestChapter", { ns: "common" })}
-            </button>
+            </Button>
           </div>
         )}
       </div>

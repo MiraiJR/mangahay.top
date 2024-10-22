@@ -5,7 +5,7 @@ interface UserCommentResponse {
   content: string;
   createdAt: Date;
   updatedAt: Date;
-  user: CreatorCommentResponse;
+  user: CreatorCommentResponse | null;
   mentionedUser: MentionedUserCommentResponseResponse;
   answers: UserCommentResponseResponse[];
 }

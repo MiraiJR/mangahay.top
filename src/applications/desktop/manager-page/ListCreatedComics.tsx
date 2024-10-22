@@ -1,42 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { DataScroller } from "primereact/datascroller";
 import { Rating } from "primereact/rating";
 import Image from "next/image";
 import { convertWebpResource, formatDate } from "@/shared/helpers/helpers";
-import ComicService from "@/shared/services/comicService";
-import themeStore from "@/shared/stores/theme-storage";
 import DialogUpdateComic from "@/shared/components/dialog/DialogUpdateComic";
 import { useDialogContext } from "@/shared/contexts/DialogContext";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
-import { toast } from "react-toastify";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useGetMyCreatedComic } from "./useGetMyCreatedComic";
+import { useDeleteComic } from "./useDeleteComic";
+import { Button } from "primereact/button";
 
 const THE_DEFAULT_AMOUNT_COMICS: number = 10;
 
 const ListCreatedComics = () => {
-  const { changeVisible, isUpdateData, changeIsUpdateData } =
-    useDialogContext();
-  const [comics, setComics] = useState<Comic[]>([]);
+  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { changeVisible: changeVisibleDialogUpdateComic } = useDialogContext();
   const [_showDetail, setShowDetail] = useState<boolean>(false);
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
-
-  const getComics = async () => {
-    try {
-      const { data } = await ComicService.getComicsCreatedByMe();
-
-      setComics(data);
-    } catch (error: any) {}
-  };
-
-  useEffect(() => {
-    if (isUpdateData) {
-      getComics();
-      changeIsUpdateData(false);
-    }
-  }, [isUpdateData]);
-
-  useEffect(() => {
-    getComics();
-  }, []);
+  const { comics } = useGetMyCreatedComic();
+  const { handleDeleteComic, isLoading: isLoadingDeleteComic } =
+    useDeleteComic();
 
   const confirmDeleteComic = (event: any, comicId: number) => {
     confirmPopup({
@@ -48,17 +32,6 @@ const ListCreatedComics = () => {
         handleDeleteComic(comicId);
       },
     });
-  };
-
-  const handleDeleteComic = async (comicId: number) => {
-    try {
-      const { data } = await ComicService.deleteComic(comicId);
-
-      toast.success(data);
-      getComics();
-    } catch (error: any) {
-      toast.error(error.message);
-    }
   };
 
   const itemTemplate = (comic: Comic) => {
@@ -80,7 +53,7 @@ const ListCreatedComics = () => {
               {comic.genres.map((genre, _index) => (
                 <span
                   key={_index}
-                  className={`p-1 bg-${themeStore.getOppositeTheme()} text-${themeStore.getTheme()} rounded-md capitalize`}
+                  className={`p-1 bg-${oppositeTheme} text-${theme} rounded-md capitalize`}
                   title={genre}
                 >
                   {genre}
@@ -91,7 +64,7 @@ const ListCreatedComics = () => {
               {comic.authors.map((author, _index) => (
                 <span
                   key={_index}
-                  className={`p-1 bg-${themeStore.getOppositeTheme()} text-${themeStore.getTheme()} rounded-md capitalize`}
+                  className={`p-1 bg-${oppositeTheme} text-${theme} rounded-md capitalize`}
                   title={author}
                 >
                   {author}
@@ -115,18 +88,19 @@ const ListCreatedComics = () => {
               <button
                 className="btn-primary"
                 onClick={() => {
-                  changeVisible(true);
+                  changeVisibleDialogUpdateComic(true);
                   setSelectedComic(comic);
                 }}
               >
                 Sửa
               </button>
-              <button
+              <Button
                 className="btn-primary bg-red-400"
                 onClick={(e) => confirmDeleteComic(e, comic.id)}
+                loading={isLoadingDeleteComic}
               >
                 Xoá
-              </button>
+              </Button>
               <ConfirmPopup />
             </div>
             <span className="text-orange-400">{comic.state}</span>
@@ -141,7 +115,7 @@ const ListCreatedComics = () => {
       <DataScroller
         pt={{
           item: {
-            className: `bg-${themeStore.getTheme()} text-${themeStore.getOppositeTheme()}`,
+            className: `bg-${theme} text-${oppositeTheme}`,
           },
         }}
         value={comics}

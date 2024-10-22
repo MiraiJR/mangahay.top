@@ -19,6 +19,7 @@ import { useGetRankingComics } from "@/shared/hooks/useGetRankingComics";
 import { THE_NUMBER_OF_COMICS_SLIDE } from "../../constant";
 import { SlideComicSkeleton } from "./SlideComicSkeleton";
 import { useTranslation } from "react-i18next";
+import { Button } from "primereact/button";
 
 const SlideComics = () => {
   const { t } = useTranslation();
@@ -37,7 +38,7 @@ const SlideComics = () => {
     <div
       className={`bg-${theme} text-${oppositeTheme} rounded-xl flex items-center mobile:flex-col-reverse justify-between h-max p-10 shadow md:shadow-lg border-${oppositeTheme} border-[1px]`}
     >
-      {isLoading && <SlideComicSkeleton />}
+      {(isLoading || comics.length === 0) && <SlideComicSkeleton />}
       {isSuccess && currentComic && (
         <div className="flex flex-col px-10 w-max gap-5 mobile:w-fit mobile:mt-4">
           <h2
@@ -64,12 +65,12 @@ const SlideComics = () => {
               </Link>
             ))}
           </div>
-          <div
+          <Button
             className="btn-primary w-fit"
             onClick={() => router.push(`/truyen/${currentComic.slug}`)}
           >
             {t("readNow", { ns: "common" })}
-          </div>
+          </Button>
         </div>
       )}
       {isSuccess && comics.length > 0 && (

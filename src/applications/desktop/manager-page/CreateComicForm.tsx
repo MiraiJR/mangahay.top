@@ -1,68 +1,52 @@
-import comicService from "@/shared/services/comicService";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import { Editor, EditorTextChangeEvent } from "primereact/editor";
 import { InputText } from "primereact/inputtext";
-import { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { useContext } from "react";
 import { Chips, ChipsChangeEvent } from "primereact/chips";
 import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
-import themeStore from "@/shared/stores/theme-storage";
-import { globalStore } from "@/shared/stores/global-storage";
 import {
   removeAccentsAndLowerCase,
   removeAccentsAndLowerCaseArray,
 } from "@/shared/helpers/StringHelper";
-import { useDialogContext } from "@/shared/contexts/DialogContext";
 import { Button } from "primereact/button";
 import { StatusComic } from "@/shared/types/enums/StatusComic";
 import { RadioButton } from "primereact/radiobutton";
 import { useGetGenres } from "@/shared/hooks/useGetGenres";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useCreateComic } from "./useCreateComic";
 
 interface itemProps {
   comic?: Comic | null;
 }
 
 const CreateComicForm = ({ comic = null }: itemProps) => {
-  const { changeVisible, changeIsUpdateData } = useDialogContext();
-  const fileUploadRef = useRef<any>(null);
-  const [comicName, setComicName] = useState<string>("");
-  const [comicAnotherName, setComicAnotherName] = useState<string>("");
-  const [comicGenres, setComicGenres] = useState<string[]>([]);
-  const [comicAuthors, setComicAuthors] = useState<string[]>([]);
-  const [comicTranslators, setComicTranslators] = useState<string[]>([]);
-  const [comicBriefDescription, setBriefDescription] = useState<string>("");
-  const [comicThumb, setComicThumb] = useState<File | null>(null);
-  const [isUpdateImage, setIsUpdateImage] = useState<string>("0");
-  const [isCreating, setIsCreating] = useState<boolean>(false);
-  const [statusComic, setStatusComic] = useState<string>(
-    StatusComic.PROCESSING
-  );
+  const { oppositeTheme, theme } = useContext(ThemeContext);
   const { genres } = useGetGenres();
+  const {
+    setComicName,
+    setComicAnotherName,
+    setComicGenres,
+    setComicAuthors,
+    setComicTranslators,
+    setBriefDescription,
+    setIsUpdateImage,
+    setStatusComic,
+    comicName,
+    comicAnotherName,
+    comicGenres,
+    comicAuthors,
+    comicTranslators,
+    comicBriefDescription,
+    statusComic,
+    fileUploadRef,
+    handleUploadImage,
+    handleCreateComic,
+    isLoadingCreateComic,
+    handleUpdateComic,
+    isLoadingUpdateComic,
+  } = useCreateComic(comic);
 
-  useEffect(() => {
-    if (comic) {
-      setComicName(comic.name);
-      setComicAnotherName(comic.anotherName);
-      setBriefDescription(comic.briefDescription);
-      setComicAuthors(comic.authors);
-      setComicTranslators(comic.translators);
-      setComicGenres(comic.genres);
-      addExistedImageUrlToUpload(comic.thumb);
-      setStatusComic(comic.state);
-    }
-  }, [comic]);
-
-  const handleUploadImage = (e: FileUploadSelectEvent) => {
-    if (e.files.length > 1) {
-      toast.warn("Ảnh mô tả chỉ cần 1 ảnh thôi!");
-      setComicThumb(null);
-      return;
-    }
-
-    setComicThumb(e.files[0]);
-  };
-
-  const onIngredientsChange = (e: CheckboxChangeEvent) => {
+  const setSelectedGenres = (e: CheckboxChangeEvent) => {
     let _filterGenres = [...comicGenres];
 
     if (e.checked) _filterGenres.push(e.value);
@@ -71,107 +55,9 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
     setComicGenres(_filterGenres);
   };
 
-  const handleBriefDescription = (): string => {
-    let temp = comicBriefDescription;
-    temp = temp.replace(/background-color: rgb\(255, 255, 255\)/g, "");
-    temp = temp.replace(/background-color: rgb\(0, 0, 0\)/g, "");
-    temp = temp.replace(/color: rgb\(0, 0, 0\)/g, "");
-    temp = temp.replace(/color: rgb\(5, 5, 5\)/g, "");
-    temp = temp.replace(/color/g, "");
-    temp = temp.replace(/background-color/g, "");
-    temp += `\n Đọc truyện ${comicName};${comicAnotherName} tiếng việt chất lượng tại mangahay.top`;
-    return temp;
-  };
-
-  const handleCreateComic = async () => {
-    if (
-      comicName.trim() === "" ||
-      comicAnotherName.trim() === "" ||
-      comicGenres.length === 0 ||
-      comicBriefDescription.trim() === "" ||
-      (!comic && !comicThumb) ||
-      comicTranslators.length === 0
-    ) {
-      toast.warn("Vui lòng điền đầy đủ thông tin!");
-      return;
-    }
-
-    setIsCreating(true);
-
-    let formData = new FormData();
-    formData.append("name", comicName.replaceAll("/", ""));
-    formData.append("anotherName", comicAnotherName);
-    comicGenres.forEach((genre) => {
-      formData.append("genres[]", genre.toLocaleLowerCase());
-    });
-    comicAuthors.forEach((author) => {
-      formData.append("authors[]", author);
-    });
-    comicTranslators.forEach((translator) => {
-      formData.append("translators[]", translator);
-    });
-    formData.append("briefDescription", handleBriefDescription());
-    formData.append("isUpdateImage", isUpdateImage);
-    if (comicThumb) {
-      formData.append("thumb", comicThumb);
-    }
-    formData.append("state", statusComic);
-
-    try {
-      if (comic) {
-        await comicService.updateComic(comic.id, formData);
-        changeVisible(false);
-        changeIsUpdateData(true);
-      } else {
-        await comicService.createComic(formData);
-        toast.success("Tạo truyện mới thành công!");
-        resetInput();
-      }
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setIsCreating(false);
-    }
-  };
-
-  const resetInput = () => {
-    setComicName("");
-    setComicAnotherName("");
-    setComicGenres([]);
-    setComicAuthors([]);
-    setBriefDescription("");
-    setComicThumb(null);
-    setComicTranslators([]);
-    setStatusComic(StatusComic.PROCESSING);
-    fileUploadRef.current.clear();
-  };
-
-  const addExistedImageUrlToUpload = async (urlImage: string) => {
-    try {
-      const response = await fetch(urlImage);
-      const blob = await response.blob();
-
-      const file = new File([blob], `${comic!.id}.jpg`, {
-        type: "image/jpeg",
-        lastModified: Date.now(),
-      });
-
-      if (fileUploadRef.current) {
-        fileUploadRef.current.setFiles([file]);
-
-        handleUploadImage({
-          originalEvent: {} as DragEvent,
-          files: [file],
-        });
-      }
-    } catch (error) {}
-  };
-
   return (
-    <div className="flex flex-col gap-4">
-      <div
-        className={`flex gap-4 flex-col text-${themeStore.getOppositeTheme()}`}
-      >
+    <div className={`flex flex-col gap-4 bg-${theme} p-2`}>
+      <div className={`flex gap-4 flex-col text-${oppositeTheme}`}>
         <div className="flex gap-4  mobile:flex-col">
           <div className="flex flex-col gap-2 w-[100%] ">
             <label htmlFor="comicName">Tên truyện</label>
@@ -233,7 +119,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className={`flex flex-col gap-4 text-${oppositeTheme}`}>
         <label htmlFor="translators">Trạng thái truyện</label>
         <div className="flex flex-wrap gap-3">
           {Object.values(StatusComic).map((status, _index) => (
@@ -252,9 +138,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
           ))}
         </div>
       </div>
-      <div
-        className={`flex gap-4 flex-col text-${themeStore.getOppositeTheme()}`}
-      >
+      <div className={`flex gap-4 flex-col text-${oppositeTheme}`}>
         <div>
           <h2 className="font-bold mb-4">Thể loại</h2>
           <div className="grid grid-cols-6 mobile:grid-cols-3 gap-2">
@@ -267,7 +151,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
                 <Checkbox
                   inputId={genre.slug}
                   value={genre.name}
-                  onChange={onIngredientsChange}
+                  onChange={setSelectedGenres}
                   checked={removeAccentsAndLowerCaseArray(comicGenres).includes(
                     removeAccentsAndLowerCase(genre.name)
                   )}
@@ -280,9 +164,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
           </div>
         </div>
       </div>
-      <div
-        className={`flex flex-col gap-2 text-${themeStore.getOppositeTheme()}`}
-      >
+      <div className={`flex flex-col gap-2 text-${oppositeTheme}`}>
         <label htmlFor="briefDescription">Mô tả</label>
         <Editor
           value={comicBriefDescription}
@@ -295,9 +177,7 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
           id="briefDescription"
         />
       </div>
-      <div
-        className={`flex flex-col gap-2 text-${themeStore.getOppositeTheme()}`}
-      >
+      <div className={`flex flex-col gap-2 text-${oppositeTheme}`}>
         <label htmlFor="iamge">Ảnh mô tả</label>
         <FileUpload
           ref={fileUploadRef}
@@ -311,12 +191,21 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
         />
       </div>
       <div className="flex items-center justify-center">
-        <Button
-          label={comic ? "Cập nhật truyện" : "Tạo truyện"}
-          icon="pi pi-check"
-          loading={isCreating}
-          onClick={handleCreateComic}
-        />
+        {comic ? (
+          <Button
+            label={"Cập nhật truyện"}
+            icon="pi pi-check"
+            loading={isLoadingUpdateComic}
+            onClick={() => handleUpdateComic()}
+          />
+        ) : (
+          <Button
+            label={"Tạo truyện"}
+            icon="pi pi-check"
+            loading={isLoadingCreateComic}
+            onClick={() => handleCreateComic()}
+          />
+        )}
       </div>
     </div>
   );

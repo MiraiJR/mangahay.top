@@ -69,4 +69,5 @@ export const common: CommonResouce = {
     answer: "Answer",
   },
   comic: "Comic",
+  deletedUser: "Deleted user",
 };

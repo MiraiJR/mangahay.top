@@ -1,10 +1,9 @@
 import { formatDate, reduceQualityImage } from "@/shared/helpers/helpers";
 import { Avatar } from "primereact/avatar";
-import themeStore from "@/shared/stores/theme-storage";
 import { useTranslation } from "react-i18next";
-import { useAnswerComment } from "@/shared/hooks/useAnswerComment";
 import { AnswerEditor } from "../comments/AnswerEditor";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ThemeContext } from "@/shared/contexts/ThemeContext";
 
 interface itemProps {
   comment: UserCommentResponse;
@@ -12,25 +11,25 @@ interface itemProps {
 const CardComment = ({ comment }: itemProps) => {
   const { t } = useTranslation();
   const [showAnswerEditor, setShowAnswerEditor] = useState<boolean>(false);
+  const { oppositeTheme } = useContext(ThemeContext);
 
   return (
     <div className="flex gap-4">
       <Avatar
-        image={reduceQualityImage(comment.user.avatar)}
+        icon="pi pi-user"
+        image={comment.user?.avatar}
         label="P"
         size="xlarge"
       />
       <div className="flex flex-col w-[100%]">
         <div className="flex justify-between">
           <h2
-            className={`font-bold text-lg mobile:text-sm text-${themeStore.getOppositeTheme()}`}
-            title={comment.user.fullname}
+            className={`font-bold text-lg mobile:text-sm text-${oppositeTheme}`}
+            title={comment.user?.fullname}
           >
-            {comment.user.fullname}
+            {comment.user?.fullname ?? t("deletedUser", { ns: "common" })}
           </h2>
-          <h2
-            className={`text-right mobile:text-sm text-${themeStore.getOppositeTheme()}`}
-          >
+          <h2 className={`text-right mobile:text-sm text-${oppositeTheme}`}>
             {formatDate(comment.updatedAt)}
           </h2>
         </div>
@@ -41,7 +40,7 @@ const CardComment = ({ comment }: itemProps) => {
             </span>
           )}
           <span
-            className={`text-${themeStore.getOppositeTheme()}`}
+            className={`text-${oppositeTheme}`}
             title={comment.content}
             dangerouslySetInnerHTML={{ __html: comment.content }}
           ></span>
@@ -60,7 +59,7 @@ const CardComment = ({ comment }: itemProps) => {
           <AnswerEditor
             commentId={comment.parentCommentId ?? comment.id}
             comicId={comment.comicId}
-            mentionedUserId={comment.user.id}
+            mentionedUserId={comment.user?.id ?? null}
           />
         )}
         <div>

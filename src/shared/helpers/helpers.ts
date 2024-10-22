@@ -75,3 +75,13 @@ export const shortImageName = (images: string[]): string[] => {
 
   return sortedFileNames;
 };
+
+export const removeRelatedToColorStyleCss = (value: string) => {
+  return value
+    .replace(/background-color: rgb\(255, 255, 255\)/g, "")
+    .replace(/background-color: rgb\(0, 0, 0\)/g, "")
+    .replace(/color: rgb\(0, 0, 0\)/g, "")
+    .replace(/color: rgb\(5, 5, 5\)/g, "")
+    .replace(/color/g, "")
+    .replace(/background-color/g, "");
+};
