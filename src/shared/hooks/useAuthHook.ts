@@ -13,7 +13,7 @@ const useAuthHook = (targetComponent: ReactElement) => {
     } else {
       setComponent(targetComponent);
     }
-  }, [isLogined]);
+  }, [isLogined, setComponent]);
 
   return { component };
 };

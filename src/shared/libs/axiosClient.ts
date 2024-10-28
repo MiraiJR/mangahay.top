@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseURL, originalURL } from "./config";
+import { baseURL } from "./config";
 import jwt from "./jwt";
 import authService from "../services/authService";
 
@@ -27,7 +27,6 @@ axiosClient.interceptors.response.use(
     const originalRequest = error.config;
     if (removeTokenInErrorCodes.includes(error.response.data.errorCode)) {
       jwt.deleteToken();
-      window.location.href = originalURL as string;
     }
 
     if (error.response.data.errorCode === "AUTH_ERROR_0005" && jwt.getToken()) {

@@ -69,7 +69,16 @@ const ComicService = {
   getComicsWithChapters: () => axiosClient.get<Comic[]>(`/comics/chapters`),
   getListChapters: (comicId: number) =>
     axiosClient.get<Chapter[]>(`/comics/${comicId}/chapters`),
-  getListComment: (comicId: number) =>
-    axiosClient.get<UserCommentResponse[]>(`/comics/${comicId}/comments`),
+  getListComment: (comicId: number, page: number, size: number) =>
+    axiosClient.get<{
+      comments: UserCommentResponse[];
+      hasPrevious: boolean;
+      total: number;
+    }>(`/comics/${comicId}/comments`, {
+      params: {
+        page,
+        size,
+      },
+    }),
 };
 export default ComicService;

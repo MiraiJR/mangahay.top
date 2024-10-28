@@ -7,4 +7,8 @@ export const chapter: ChapterResource = {
   endChapter: "It's over",
   recommendedFollowTranslator: `Remember to follow the translation group: {{translator}} to support them.`,
   noAnyChapter: "No chapter!",
+  createNewChapter: "Post a New Chapter for the Comic",
+  chapterName: "Chapter Name",
+  chapterImages: "Chapter Content Images",
+  createChapterButton: "Create chapter",
 };

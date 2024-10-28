@@ -13,7 +13,7 @@ const MenuChapter = ({ chapters }: itemProps) => {
 
   return (
     <div
-      className={`z-[100] absolute w-max flex flex-col max-h-[400px]
+      className={`z-[999] absolute w-max flex flex-col max-h-[400px]
        overflow-y-scroll top-13 right-0 translate-x-12 mobile:translate-x-6 
        scrollbar-hide bg-${oppositeTheme} text-${theme} shadow-outer-lg-${oppositeTheme}`}
     >

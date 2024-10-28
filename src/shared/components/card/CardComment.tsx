@@ -2,32 +2,43 @@ import { formatDate } from "@/shared/helpers/helpers";
 import { Avatar } from "primereact/avatar";
 import { useTranslation } from "react-i18next";
 import { AnswerEditor } from "../comments/AnswerEditor";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import Image from "next/image";
+import { useAnswerCommentContext } from "@/shared/contexts/AnswerCommentEditorContext";
+import { useGetListAnswerOfComment } from "@/shared/hooks/useGetListAnswerOfComment";
 
 interface itemProps {
   comment: UserCommentResponse;
 }
 const CardComment = ({ comment }: itemProps) => {
   const { t } = useTranslation();
-  const [showAnswerEditor, setShowAnswerEditor] = useState<boolean>(false);
+  const { activeEditorId, setActiveEditorId } = useAnswerCommentContext();
   const { oppositeTheme } = useContext(ThemeContext);
+  const isAnswerEditorVisible = activeEditorId
+    ? activeEditorId === comment.id
+    : false;
+
+  const toggleAnswerEditor = () => {
+    setActiveEditorId(isAnswerEditorVisible ? null : comment.id);
+  };
+  const { answers, fetchNextPage } = useGetListAnswerOfComment(comment.id);
 
   return (
-    <div className="flex gap-4">
-      <Avatar
-        pt={{
-          image: {
-            className: "object-cover rounded",
-          },
-        }}
-        icon="pi pi-user"
-        image={comment.user?.avatar}
-        label="P"
-        size="xlarge"
-      />
-      <div className="flex flex-col w-[100%]">
+    <div className="flex gap-4 mb-5">
+      <div>
+        <Avatar
+          pt={{
+            image: {
+              className: "object-cover rounded",
+            },
+          }}
+          icon="pi pi-user"
+          image={comment.user?.avatar}
+          label="P"
+          size="xlarge"
+        />
+      </div>
+      <div className="flex flex-col w-[100%] h-fit">
         <div className="flex justify-between">
           <h2
             className={`font-bold text-lg mobile:text-sm text-${oppositeTheme}`}
@@ -55,24 +66,41 @@ const CardComment = ({ comment }: itemProps) => {
           <button
             className="text-blue-600 text-right cursor-pointer w-fit"
             onClick={() => {
-              setShowAnswerEditor(!showAnswerEditor);
+              toggleAnswerEditor();
             }}
           >
             {t("listComment.answer", { ns: "common" })}
           </button>
         </div>
-        {showAnswerEditor && (
+
+        {isAnswerEditorVisible && (
           <AnswerEditor
             commentId={comment.parentCommentId ?? comment.id}
             comicId={comment.comicId}
             mentionedUserId={comment.user?.id ?? null}
+            fetchNextPage={fetchNextPage}
           />
         )}
         <div>
-          {comment.answers.map((answer) => (
+          {answers.map((answer) => (
             <CardComment comment={answer} key={answer.id} />
           ))}
         </div>
+        {!comment.parentCommentId &&
+          answers.length !== comment.theNumberOfAnswer && (
+            <div
+              className={`text-${oppositeTheme} cursor-pointer
+             hover:text-blue-600 w-fit border-b-[1px] border-${oppositeTheme} hover:border-blue-600 mb-2`}
+              onClick={() => {
+                fetchNextPage();
+              }}
+            >
+              {t("listComment.viewListAnswer", {
+                ns: "common",
+                length: comment.theNumberOfAnswer - answers.length,
+              })}
+            </div>
+          )}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { useAnswerComment } from "@/shared/hooks/useAnswerComment";
+import { Button } from "primereact/button";
 import { Editor, EditorTextChangeEvent } from "primereact/editor";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
@@ -8,17 +9,24 @@ interface AnswerEditorProps {
   commentId: number;
   comicId: number;
   mentionedUserId: number | null;
+  fetchNextPage: any;
 }
 
 export const AnswerEditor = ({
   commentId,
   comicId,
   mentionedUserId,
+  fetchNextPage,
 }: AnswerEditorProps) => {
   const { t } = useTranslation();
   const { oppositeTheme } = useContext(ThemeContext);
-  const { contentAnswer, setContentAnswer, handleAnswerCommand } =
-    useAnswerComment(comicId, commentId, mentionedUserId);
+  const {
+    contentAnswer,
+    setContentAnswer,
+    handleAnswerCommand,
+    isSuccess,
+    isLoading,
+  } = useAnswerComment(comicId, commentId, mentionedUserId);
 
   return (
     <>
@@ -33,12 +41,18 @@ export const AnswerEditor = ({
         className={`mt-10 text-${oppositeTheme}`}
       />
       <div className="w-[100%]">
-        <button
+        <Button
           className="btn-primary w-fit mt-2 float-right"
-          onClick={() => handleAnswerCommand()}
+          onClick={() => {
+            handleAnswerCommand();
+            if (isSuccess) {
+              fetchNextPage();
+            }
+          }}
+          disabled={isLoading}
         >
           {t("listComment.answer", { ns: "common" })}
-        </button>
+        </Button>
       </div>
     </>
   );

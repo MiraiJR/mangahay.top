@@ -2,7 +2,7 @@ import ForgetPasswordPage from "@/applications/desktop/auth-page/childrens/forge
 import useAuthHook from "@/shared/hooks/useAuthHook";
 
 export default function ForgetPasswordRoute() {
-  const component = useAuthHook({ component: <ForgetPasswordPage /> });
+  const { component } = useAuthHook(<ForgetPasswordPage />);
 
   return <>{component}</>;
 }

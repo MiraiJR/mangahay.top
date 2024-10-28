@@ -1,7 +1,5 @@
 import { useContext } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { reduceQualityImage } from "../../helpers/helpers";
 import { AdminFeature } from "./AdminFeature";
 import { ThemeContext } from "@/shared/contexts/ThemeContext";
 import { Notification } from "./Notification";
@@ -9,6 +7,7 @@ import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import { LoggoutButton } from "./LogoutButton";
 import { useGetMyProfile } from "@/shared/hooks/useGetMyProfile";
 import { useTranslation } from "react-i18next";
+import { Avatar } from "primereact/avatar";
 
 const LoginedUser = () => {
   const { theme, oppositeTheme } = useContext(ThemeContext);
@@ -25,12 +24,18 @@ const LoginedUser = () => {
       <Notification />
       <div ref={menuProfileRef}>
         {myProfile && (
-          <Image
-            width={50}
-            height={0}
-            className="mobile:w-[36px] w-[50px] mobile:h-[36px] h-[50px] object-cover rounded"
-            src={reduceQualityImage(myProfile.avatar)}
-            alt={myProfile.fullname}
+          <Avatar
+            shape="circle"
+            pt={{
+              image: {
+                className:
+                  "mobile:w-[36px] w-[50px] mobile:h-[36px] h-[50px] object-cover rounded",
+              },
+            }}
+            icon="pi pi-user"
+            image={myProfile.avatar}
+            label="P"
+            size="large"
             onClick={() => {
               setShowMenu(!showMenu);
             }}

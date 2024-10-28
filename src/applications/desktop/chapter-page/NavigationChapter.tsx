@@ -6,6 +6,7 @@ import MenuChapter from "./MenuChapter";
 import router from "next/router";
 import { ArrowLeftCircle, ArrowRightCircle, MenuSquare } from "lucide-react";
 import { cn } from "@/shared/libs/utils";
+import { Button } from "primereact/button";
 
 interface NavigationChapterProps {
   comicId: number;
@@ -44,10 +45,12 @@ export const NavigationChapter = ({
   return (
     <div className="relative z-10 flex justify-center items-center mobile:flex-col mobile:items-start">
       <div className="flex gap-4 mobile:w-[100%] mobile:justify-center">
-        <button
-          className={cn("btn-primary", {
-            "bg-slate-600": !previousChapter,
-          })}
+        <Button
+          pt={{
+            badge: {
+              className: "bg-red",
+            },
+          }}
           title="Chapter trước"
           onClick={() =>
             router.push(`/truyen/${slugComic}/${previousChapter?.slug}`)
@@ -55,21 +58,17 @@ export const NavigationChapter = ({
           disabled={!previousChapter}
         >
           <ArrowLeftCircle />
-        </button>
+        </Button>
         <div className="relative" ref={menuChapterRef}>
-          <button
-            className="btn-primary"
+          <Button
             title="Danh sách chương"
             onClick={() => setShowMenuChapter(!showMenuChapter)}
           >
             <MenuSquare />
-          </button>
+          </Button>
           {showMenuChapter && <MenuChapter chapters={chapters} />}
         </div>
-        <button
-          className={cn("btn-primary", {
-            "bg-slate-600": !nextChapter,
-          })}
+        <Button
           title="Chapter tiếp theo"
           onClick={() => {
             router.push(`/truyen/${slugComic}/${nextChapter?.slug}`);
@@ -77,7 +76,7 @@ export const NavigationChapter = ({
           disabled={!nextChapter}
         >
           <ArrowRightCircle />
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -67,6 +67,7 @@ export const common: CommonResouce = {
     label: "Comment list ({{length}})",
     comment: "Comment",
     answer: "Answer",
+    viewListAnswer: "View all {{length}} responses",
   },
   comic: "Comic",
   notEmptyContent: "Content cannot be empty!",
@@ -78,4 +79,11 @@ export const common: CommonResouce = {
     delete: "Delete",
   },
   listCreatedComic: "List of comics you have posted",
+  comicProperty: {
+    anotherName: "Other Name:",
+    author: "Author:",
+    translors: "Translation Group:",
+    genres: "Genres:",
+  },
+  canDragAndDropImage: "You can drag and drop images here.",
 };

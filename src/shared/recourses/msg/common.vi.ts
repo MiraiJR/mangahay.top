@@ -65,6 +65,7 @@ export const common = {
     label: "Danh sách bình luận ({{length}})",
     comment: "Bình luận",
     answer: "Trả lời",
+    viewListAnswer: "Xem tất cả {{length}} phản hồi",
   },
   comic: "Truyện",
   notEmptyContent: "Nội dung không thể để trống!",
@@ -76,6 +77,13 @@ export const common = {
     delete: "Xoá",
   },
   listCreatedComic: "Danh sách truyện bạn đã đăng",
+  comicProperty: {
+    anotherName: "Tên khác:",
+    author: "Tác giả:",
+    translors: "Nhóm dịch:",
+    genres: "Thể loại:",
+  },
+  canDragAndDropImage: "Có thể kéo thả ảnh vào đây",
 };
 
 export type CommonResouce = typeof common;

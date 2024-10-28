@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { ComicInteraction } from "./ComicIntertion";
 import { useTranslation } from "react-i18next";
 import { Button } from "primereact/button";
+import { ChipWithTheme } from "@/shared/components/restyle-prime-component/ChipWithTheme";
 
 interface itemProps {
   comic: Comic;
@@ -51,11 +52,15 @@ const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
           </span>
         </div>
         <div className="flex flex-wrap gap-2 items-center mobile:flex-col mobile:items-start">
-          <h2 className="font-bold">Tên khác:</h2>
+          <h2 className="font-bold">
+            {t("comicProperty.anotherName", { ns: "common" })}
+          </h2>
           <span>{comic.anotherName}</span>
         </div>
         <div className="flex gap-2 items-center mobile:flex-col mobile:items-start">
-          <h2 className="font-bold">Tác giả:</h2>
+          <h2 className="font-bold">
+            {t("comicProperty.author", { ns: "common" })}
+          </h2>
           <ul className="flex ">
             {comic.authors.map((author, _index) => (
               <Link
@@ -70,26 +75,26 @@ const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
           </ul>
         </div>
         <div className="flex gap-2 items-center mobile:flex-col mobile:items-start">
-          <h2 className="font-bold">Nhóm dịch:</h2>
+          <h2 className="font-bold">
+            {t("comicProperty.translors", { ns: "common" })}
+          </h2>
           <ul className="flex flex-wrap gap-2">
-            {comic.translators.length === 0 ? (
-              <div>Đang cập nhật</div>
-            ) : (
-              comic.translators.map((translator, _index) => (
-                <Link
-                  key={_index}
-                  href={`/nhom-dich/${translator}`}
-                  className={`font-bold bg-${theme} text-red-600 rounded-md border border-${oppositeTheme} px-1 capitalize`}
-                  rel="preload"
-                >
-                  <h2 title={translator}>{translator}</h2>
-                </Link>
-              ))
-            )}
+            {comic.translators.map((translator, _index) => (
+              <Link
+                key={_index}
+                href={`/nhom-dich/${translator}`}
+                className={`font-bold bg-${theme} text-red-600 rounded-md border border-${oppositeTheme} px-1 capitalize`}
+                rel="preload"
+              >
+                <h2 title={translator}>{translator}</h2>
+              </Link>
+            ))}
           </ul>
         </div>
         <div className="flex gap-2 items-center mobile:flex-col mobile:items-start">
-          <h2 className="font-bold">Thể loại:</h2>
+          <h2 className="font-bold">
+            {t("comicProperty.genres", { ns: "common" })}
+          </h2>
           <ul className="flex gap-1 flex-wrap">
             {comic.genres.map((genre, _index) => (
               <Link
@@ -97,12 +102,7 @@ const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
                 href={`/tim-kiem?filterGenres=${genre.toLocaleLowerCase()}`}
                 rel="preload"
               >
-                <h2
-                  title={genre}
-                  className={`bg-${theme} rounded-md border border-${oppositeTheme} px-1 capitalize`}
-                >
-                  {genre}
-                </h2>
+                <ChipWithTheme label={genre} />
               </Link>
             ))}
           </ul>

@@ -6,8 +6,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ComicService from "@/shared/services/comicService";
 import { toast } from "react-toastify";
 import { useDialogContext } from "@/shared/contexts/DialogContext";
+import { useTranslation } from "react-i18next";
 
 export const useCreateComic = (comic: Comic | null) => {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [comicName, setComicName] = useState<string>("");
   const [comicAnotherName, setComicAnotherName] = useState<string>("");
@@ -26,7 +28,7 @@ export const useCreateComic = (comic: Comic | null) => {
     handleUploadImage,
     uploadedFile: comicThumb,
     setUploadedFile: setComicThumb,
-  } = useUploadFile(comic?.thumb ?? null);
+  } = useUploadFile(comic?.thumb);
 
   const reset = () => {
     setComicName("");
@@ -46,10 +48,9 @@ export const useCreateComic = (comic: Comic | null) => {
       comicAnotherName.trim() === "" ||
       comicGenres.length === 0 ||
       comicBriefDescription.trim() === "" ||
-      (!comic && !comicThumb) ||
-      comicTranslators.length === 0
+      (!comic && !comicThumb)
     ) {
-      throw new Error("Vui lòng điền đầy đủ thông tin!");
+      throw new Error(t("notEmptyContent", { ns: "common" }));
     }
   };
 

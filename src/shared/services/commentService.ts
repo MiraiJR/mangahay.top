@@ -18,5 +18,19 @@ const CommentService = {
       content,
       mentionedUserId,
     }),
+  listAnswerOfComment: (
+    commentId: number,
+    limit: number,
+    lastAnswerId: number | null
+  ) =>
+    axiosClient.get<{
+      answers: UserCommentResponse[];
+      hasPrevious: boolean;
+    }>(`/comments/${commentId}/answers`, {
+      params: {
+        limit,
+        lastAnswerId,
+      },
+    }),
 };
 export default CommentService;

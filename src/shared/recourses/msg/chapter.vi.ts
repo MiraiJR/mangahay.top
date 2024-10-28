@@ -5,6 +5,10 @@ export const chapter = {
   endChapter: "Hết rồi",
   recommendedFollowTranslator: `Nhớ theo dõi nhóm dịch: {{translator}} để ủng hộ nhóm dịch nha.`,
   noAnyChapter: "Không có chương!",
+  createNewChapter: "Đăng chương mới cho truyện",
+  chapterName: "Tên chương",
+  chapterImages: "Ảnh nội dung chương",
+  createChapterButton: "Tạo chương",
 };
 
 export type ChapterResource = typeof chapter;
