@@ -1,14 +1,13 @@
 import CardChapter from "@/shared/components/card/CardChapter";
 import EmptyComic from "@/shared/components/EmptyComic";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import { useContext } from "react";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useTranslation } from "react-i18next";
 
 interface itemProps {
   chapters: Chapter[];
 }
 const ListChapters = ({ chapters }: itemProps) => {
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const { t } = useTranslation();
 
   return (

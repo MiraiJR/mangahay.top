@@ -5,15 +5,15 @@ import {
 import { Button } from "primereact/button";
 import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
 import { InputText } from "primereact/inputtext";
-import { useContext } from "react";
 import { useRecommendedComicByName } from "@/shared/hooks/useRecommendedComicByName";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useCreateChapter } from "./useCreateChapter";
 import { useTranslation } from "react-i18next";
+import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 
 const CreateChapterForm = () => {
   const { t } = useTranslation();
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const { recommendedComics, handleGetRecommendedComics } =
     useRecommendedComicByName();
   const {
@@ -21,9 +21,10 @@ const CreateChapterForm = () => {
     setComicName,
     chapterName,
     setChapterName,
+    isEnd,
+    setIsEnd,
     fileUploadRef,
     handleUploadMultipleFile,
-    chapterImages,
     handleCreateChapter,
     isLoading,
   } = useCreateChapter();
@@ -63,6 +64,18 @@ const CreateChapterForm = () => {
             setChapterName(event.target.value)
           }
         />
+      </div>
+      <div className="flex flex-row gap-2 w-[100%] items-center">
+        <label htmlFor="isChapterEnd">
+          {t("theLastChapter", { ns: "chapter" })}
+        </label>
+        <Checkbox
+          id="isChapterEnd"
+          onChange={(event: CheckboxChangeEvent) => {
+            setIsEnd(event.checked ?? false);
+          }}
+          checked={isEnd}
+        ></Checkbox>
       </div>
       <div className="flex flex-col gap-2 w-[100%]">
         <div className={`flex flex-col gap-2 text-${oppositeTheme}`}>

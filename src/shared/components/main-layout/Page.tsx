@@ -4,7 +4,7 @@ import Header from "./Header";
 import { cn } from "@/shared/libs/utils";
 import { globalStore } from "@/shared/stores/global-storage";
 import { ScrollToTop } from "./components/scroll-to-top/ScrollToTop";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { MOBILE_MAX_SIZE_SCREEN } from "@/shared/settings/CommonConfig";
 
 const MainLayout = ({
@@ -15,7 +15,7 @@ const MainLayout = ({
   className?: string;
 }) => {
   const { setIsMobile } = globalStore();
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
 
   useEffect(() => {
     const handleResize = () => {

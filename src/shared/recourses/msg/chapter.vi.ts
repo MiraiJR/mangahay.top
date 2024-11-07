@@ -9,6 +9,7 @@ export const chapter = {
   chapterName: "Tên chương",
   chapterImages: "Ảnh nội dung chương",
   createChapterButton: "Tạo chương",
+  theLastChapter: "Chương cuối",
 };
 
 export type ChapterResource = typeof chapter;

@@ -13,6 +13,10 @@ const AuthService = {
     axiosClient.post<string>(`/auth/forget-password`, {
       email,
     }),
+  loginWithGoogle: (authCode: string) =>
+    axiosClient.post<Token>(`/auth/login/google`, {
+      authCode,
+    }),
 };
 
 export default AuthService;

@@ -1,11 +1,11 @@
 import { ArrowUpCircle } from "lucide-react";
 import { useScrollToTop } from "./useScrollToTop";
 import { useContext } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 
 export const ScrollToTop = () => {
   const { isScroll } = useScrollToTop();
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useThemeContext();
 
   return (
     <>

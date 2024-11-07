@@ -1,16 +1,14 @@
 import Image from "next/image";
 import { Rating } from "primereact/rating";
 import Link from "next/link";
-import { reduceQualityImage } from "@/shared/helpers/helpers";
-import { useContext } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 
 interface itemProps {
   comic: Comic;
 }
 
 const CardHighlightComic = ({ comic }: itemProps) => {
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
 
   return (
     <div
@@ -27,7 +25,7 @@ const CardHighlightComic = ({ comic }: itemProps) => {
           width={0}
           height={0}
           className="mobile:w-[150px] w-[100%]"
-          src={reduceQualityImage(comic.thumb)}
+          src={comic.thumb}
           alt={comic.name}
         />
       </Link>

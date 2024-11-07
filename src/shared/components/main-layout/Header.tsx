@@ -3,28 +3,27 @@ import LogoWebLight from "@/shared/assets/logo-light.webp";
 import { UserCircle2 } from "lucide-react";
 import { useState, useContext } from "react";
 import LoginedUser from "../logged-in-user/LoginedUser";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { InputSwitch, InputSwitchChangeEvent } from "primereact/inputswitch";
-import themeStore from "@/shared/stores/theme-storage";
 import Image from "next/image";
 import Link from "next/link";
 import { SearchComic } from "./components/search-comic/SearchComic";
 import { LeftMenu } from "./components/left-menu/LeftMenu";
 import { useTranslation } from "react-i18next";
-import { useLogin } from "@/shared/hooks/useLogin";
 import { FlagCountries } from "../flag-country/FlagCountries";
+import { useAuthContext } from "@/shared/contexts/AuthContext";
 
 const Header = () => {
   const { t } = useTranslation();
-  const { isLogined } = useLogin();
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { isLoggedIn } = useAuthContext();
+  const { theme, toggleTheme, oppositeTheme } = useThemeContext();
   const [checkedChangeTheme, setCheckedChangeTheme] = useState<boolean>(
-    themeStore.getTheme() === "light" ? false : true
+    theme === "light" ? false : true
   );
 
   return (
     <div
-      className={`container mx-auto bg-${theme} text-${themeStore.getOppositeTheme()} p-5 flex justify-between items-center relative`}
+      className={`container mx-auto bg-${theme} text-${oppositeTheme} p-5 flex justify-between items-center relative`}
     >
       <div className="flex items-center gap-5 font-medium text-lg">
         <Link href="/" hrefLang="vi">
@@ -53,12 +52,12 @@ const Header = () => {
           />
         </div>
         <SearchComic />
-        {isLogined ? (
+        {isLoggedIn ? (
           <LoginedUser />
         ) : (
           <Link href="/dang-nhap" hrefLang="vi">
             <button
-              className={`desktop:rounded-full mobile:rounded mobile:p-2 py-2 px-4 font-bold bg-${themeStore.getOppositeTheme()} text-${theme}`}
+              className={`desktop:rounded-full mobile:rounded mobile:p-2 py-2 px-4 font-bold bg-${oppositeTheme} text-${theme}`}
             >
               <UserCircle2 size={20} className="desktop:hidden" />
               <span className="mobile:hidden">

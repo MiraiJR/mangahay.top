@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import CommentService from "../services/commentService";
 
 interface ListAnswerResponse {
@@ -12,6 +12,8 @@ const Default: ListAnswerResponse = {
 };
 
 export const useGetListAnswerOfComment = (commentId: number) => {
+  const queryClient = useQueryClient();
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useInfiniteQuery<ListAnswerResponse>({
       queryKey: ["comment.answers", { commentId }],
@@ -41,6 +43,13 @@ export const useGetListAnswerOfComment = (commentId: number) => {
       },
     });
 
+  const reset = () => {
+    queryClient.setQueryData(["comment.answers", { commentId }], () => ({
+      pages: [Default],
+      pageParams: [null],
+    }));
+  };
+
   return {
     answers: data?.pages.flatMap((page) => page.answers) ?? [],
     hasPrevious: data?.pages[0]?.hasPrevious ?? false,
@@ -48,5 +57,6 @@ export const useGetListAnswerOfComment = (commentId: number) => {
     hasNextPage,
     isFetchingNextPage,
     status,
+    reset,
   };
 };

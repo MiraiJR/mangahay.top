@@ -3,10 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import ReactCountryFlag from "react-country-flag";
 import { countryMapping } from "./constant";
 import { useSetLanguage } from "@/shared/hooks/useSetLanguage";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 
 export const FlagCountries = () => {
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useThemeContext();
   const { changedLanguage, currentLanguage, initLanguage } = useSetLanguage();
   const [selectedCountry, setSelectedCountry] = useState<Country>(
     countryMapping[currentLanguage]

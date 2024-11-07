@@ -13,7 +13,7 @@ const ComicService = {
       },
     }),
   searchComics: (query: QuerySearch) =>
-    axiosClient.get<PagingComic>(`/comics/search`, {
+    axiosClient.get<SearchComicResult>(`/search/comics`, {
       params: {
         ...query,
       },
@@ -60,12 +60,6 @@ const ComicService = {
       attribute,
     }),
   getComicsCreatedByMe: () => axiosClient.get<Comic[]>(`/comics/created-by-me`),
-  createChapter: (comicId: number, formdata: FormData) =>
-    axiosClient.post<string>(`/comics/${comicId}/chapters`, formdata, {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    }),
   getComicsWithChapters: () => axiosClient.get<Comic[]>(`/comics/chapters`),
   getListChapters: (comicId: number) =>
     axiosClient.get<Chapter[]>(`/comics/${comicId}/chapters`),

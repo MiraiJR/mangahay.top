@@ -3,11 +3,11 @@ import { Helmet } from "react-helmet";
 import Image from "next/image";
 import Link from "next/link";
 import { useLogin } from "./useLogin";
-import { useContext } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useTranslation } from "react-i18next";
 import { InputTextCustom } from "@/shared/components/base-components/input-text/InputTextCustom";
 import { Button } from "primereact/button";
+import { GoogleLoginButton } from "@/shared/components/socials/google/GoogleLoginButton";
 
 const LoginForm = () => {
   const {
@@ -19,7 +19,7 @@ const LoginForm = () => {
     error,
     isLoading,
   } = useLogin();
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const { t } = useTranslation();
   return (
     <div>
@@ -106,6 +106,12 @@ const LoginForm = () => {
             loading={isLoading}
             onClick={() => handleLogin()}
           />
+          <div className="flex flex-col items-center gap-2">
+            <h1>Đăng nhập bằng:</h1>
+            <div>
+              <GoogleLoginButton />
+            </div>
+          </div>
         </div>
       </div>
     </div>

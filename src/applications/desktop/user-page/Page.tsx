@@ -1,4 +1,4 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { MenuItem } from "primereact/menuitem";
 import { TabMenu } from "primereact/tabmenu";
 import { useContext } from "react";
@@ -19,7 +19,7 @@ const ListFollowingComics = dynamic(() => import("./ListFollowingComics"), {
 });
 
 const UserPage = () => {
-  const { oppositeTheme, theme } = useContext(ThemeContext);
+  const { oppositeTheme, theme } = useThemeContext();
   const router = useRouter();
   const { activeTab, setActiveTab } = useActiveTab();
 

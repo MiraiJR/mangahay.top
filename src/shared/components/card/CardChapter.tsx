@@ -1,4 +1,4 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { formatDate } from "@/shared/helpers/helpers";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -8,7 +8,7 @@ interface itemProps {
   chapter: Chapter;
 }
 const CardChapter = ({ chapter }: itemProps) => {
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
   const router = useRouter();
   const { slugComic } = router.query;
 

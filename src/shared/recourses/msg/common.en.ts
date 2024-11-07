@@ -86,4 +86,5 @@ export const common: CommonResouce = {
     genres: "Genres:",
   },
   canDragAndDropImage: "You can drag and drop images here.",
+  collapse: "Collapse",
 };

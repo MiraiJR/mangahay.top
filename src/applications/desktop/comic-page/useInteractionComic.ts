@@ -1,5 +1,5 @@
+import { useAuthContext } from "@/shared/contexts/AuthContext";
 import MeService from "@/shared/services/meService";
-import { globalStore } from "@/shared/stores/global-storage";
 import { useQuery } from "@tanstack/react-query";
 
 const DEFAULT_INTERACTION = {
@@ -9,14 +9,14 @@ const DEFAULT_INTERACTION = {
 };
 
 export const useInteractionComic = (comicId: number) => {
-  const { isLogined } = globalStore();
+  const { isLoggedIn } = useAuthContext();
   const { data: statusInteractComic = DEFAULT_INTERACTION } = useQuery({
     queryKey: ["comic.interaction", { comicId }],
     queryFn: async () => {
       const { data } = await MeService.getInteractionWithComic(comicId);
       return data;
     },
-    enabled: isLogined,
+    enabled: isLoggedIn,
   });
 
   return {

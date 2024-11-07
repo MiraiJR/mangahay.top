@@ -4,5 +4,5 @@ interface OptionStatus {
 
 interface OptionSort {
   name: string;
-  code: string;
+  code: "asc" | "desc" | "updatedAt" | "view" | "follow" | "like";
 }

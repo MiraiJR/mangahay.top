@@ -26,3 +26,10 @@ type PagingComic = {
   total: number;
   comics: Comic[];
 };
+
+type SearchComicResult = {
+  query: QuerySearch;
+  total: number;
+  comics: Comic[];
+  hasNext: boolean;
+};

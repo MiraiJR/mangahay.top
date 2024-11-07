@@ -1,4 +1,4 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { cn } from "@/shared/libs/utils";
 import themeStore from "@/shared/stores/theme-storage";
 import { useContext } from "react";
@@ -11,7 +11,7 @@ interface itemProps {
 }
 const CardRanking = ({ comic, position, isRanking }: itemProps) => {
   const { t } = useTranslation();
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
 
   return (
     <div className="grid grid-cols-12 p-2 border-b-2">

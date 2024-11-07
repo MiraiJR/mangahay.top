@@ -1,5 +1,5 @@
 import CardComic from "@/shared/components/card/CardComic";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { Divider } from "primereact/divider";
 import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import { useEffect, useContext, useState } from "react";
@@ -14,7 +14,7 @@ interface itemProps {
 const ListComics = ({ comics, title }: itemProps) => {
   const [first, setFirst] = useState<number>(0);
   const [pageComics, setPageComics] = useState<Comic[]>([]);
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
 
   const onPageChange = (event: PaginatorPageChangeEvent) => {
     setFirst(event.first);

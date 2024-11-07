@@ -1,9 +1,9 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { Skeleton } from "primereact/skeleton";
 import { useContext } from "react";
 
 export const CardComicSkeleton = () => {
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   return (
     <div className={`flex flex-col capitalize text-${oppositeTheme}`}>
       <Skeleton height="15rem" className="mb-2 w-[100%]"></Skeleton>

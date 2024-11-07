@@ -3,8 +3,7 @@ import { ChevronsRight } from "lucide-react";
 import Link from "next/link";
 import { globalStore } from "@/shared/stores/global-storage";
 import { useGetRankingComics } from "@/shared/hooks/useGetRankingComics";
-import { useContext } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { MAX_THE_NUMBER_OF_COMICS_RANK } from "../../constant";
 import { BoxComicsSkeleton } from "./BoxComicsSkeleton";
 import { useTranslation } from "react-i18next";
@@ -20,7 +19,7 @@ const BoxComics = ({ title, field }: ItemProps) => {
     MAX_THE_NUMBER_OF_COMICS_RANK
   );
   const { isMobile } = globalStore();
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const shouldShowSkeleton = isLoading || comics.length === 0;
   const displayedComics = comics.slice(
     0,

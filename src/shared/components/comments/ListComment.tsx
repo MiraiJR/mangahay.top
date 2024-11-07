@@ -1,4 +1,4 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useListComment } from "@/shared/hooks/useListComment";
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,7 +14,7 @@ interface ListCommentProps {
 
 export const ListComment = ({ comic }: ListCommentProps) => {
   const { comments, totalComment, setPage } = useListComment(comic.id);
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme, theme } = useThemeContext();
   const { t } = useTranslation();
   const [pagination, setPagination] = useState<number>(0);
 
@@ -46,6 +46,11 @@ export const ListComment = ({ comic }: ListCommentProps) => {
               onPageChange={(event: PaginatorPageChangeEvent) => {
                 setPagination(event.first);
                 setPage(event.page + 1);
+              }}
+              pt={{
+                root: {
+                  className: `bg-${theme}`,
+                },
               }}
             />
           </div>

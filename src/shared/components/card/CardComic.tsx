@@ -1,10 +1,8 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import themeStore from "@/shared/stores/theme-storage";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import Image from "next/image";
 import Link from "next/link";
 import { Rating } from "primereact/rating";
-import { useState, useContext, useEffect } from "react";
-import { reduceQualityImage } from "@/shared/helpers/helpers";
+import { useState, useEffect } from "react";
 
 interface itemProps {
   comic: Comic;
@@ -16,7 +14,7 @@ interface itemPropsPreviewComic {
 }
 
 const PreviewComic = ({ comic, position }: itemPropsPreviewComic) => {
-  const { theme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
 
   useEffect(() => {
     const previewComicElement = document.getElementById(
@@ -33,7 +31,7 @@ const PreviewComic = ({ comic, position }: itemPropsPreviewComic) => {
   return (
     <div
       id={`preview-comic-${comic.id}`}
-      className={`fixed bg-${themeStore.getOppositeTheme()} text-${theme} w-[500px] p-5 z-1`}
+      className={`fixed bg-${oppositeTheme} text-${theme} w-[500px] p-5 z-1 flex flex-col gap-4`}
     >
       <div className="flex flex-wrap gap-2">
         <h2>Tên:</h2>
@@ -44,20 +42,12 @@ const PreviewComic = ({ comic, position }: itemPropsPreviewComic) => {
         <h2>{comic.anotherName}</h2>
       </div>
       <div className="flex flex-wrap gap-2">
-        <h2>Lượt xem:</h2>
-        <h2>{comic.view}</h2>
+        <h2>Tác giả:</h2>
+        <h2>{comic.authors.join(", ")}</h2>
       </div>
       <div className="flex flex-wrap gap-2">
-        <h2>Lượt thích:</h2>
-        <h2>{comic.like}</h2>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        <h2>Lượt theo dõi:</h2>
-        <h2>{comic.follow}</h2>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        <h2>Đánh giá:</h2>
-        <Rating value={comic.star} cancel={false} readOnly />
+        <h2>Thể loại: </h2>
+        <h2>{comic.genres.join(", ")}</h2>
       </div>
       <div className="flex flex-wrap gap-2">
         <h2>Nội dung:</h2>
@@ -68,7 +58,7 @@ const PreviewComic = ({ comic, position }: itemPropsPreviewComic) => {
 };
 
 const CardComic = ({ comic }: itemProps) => {
-  const {} = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const [isOpenPreview, setIsOpenPreview] = useState<boolean>(false);
   const [previewPosition, setPreviewPostion] = useState<ElementPostion>({
     top: 0,
@@ -86,9 +76,7 @@ const CardComic = ({ comic }: itemProps) => {
   useEffect(() => {}, [comic]);
 
   return (
-    <div
-      className={`flex flex-col capitalize text-${themeStore.getOppositeTheme()}`}
-    >
+    <div className={`flex flex-col capitalize text-${oppositeTheme}`}>
       <Link
         rel="preload"
         hrefLang="vi"
@@ -102,7 +90,7 @@ const CardComic = ({ comic }: itemProps) => {
           height={100}
           width={100}
           className="w-[100%] object-cover h-[280px] mobile:max-h-[200px]"
-          src={reduceQualityImage(comic.thumb)}
+          src={comic.thumb}
           alt={comic.name}
         />
       </Link>
@@ -113,7 +101,7 @@ const CardComic = ({ comic }: itemProps) => {
         lang="vi"
       >
         <h2
-          className={`text-center font-bold line-clamp-2 mobile:text-sm text-${themeStore.getOppositeTheme()}`}
+          className={`text-center font-bold line-clamp-2 mobile:text-sm text-${oppositeTheme}`}
           title={comic.name}
         >
           {comic.name}
@@ -127,7 +115,7 @@ const CardComic = ({ comic }: itemProps) => {
           lang="vi"
         >
           <h3
-            className={`text-${themeStore.getOppositeTheme()} line-clamp-2 mobile:text-sm`}
+            className={`text-${oppositeTheme} line-clamp-2 mobile:text-sm`}
             title={comic.chapters[0].name}
           >
             {comic.chapters[0].name}

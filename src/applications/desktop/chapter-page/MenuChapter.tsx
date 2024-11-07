@@ -1,15 +1,14 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { cn } from "@/shared/libs/utils";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useContext } from "react";
 
 interface itemProps {
   chapters: Chapter[];
 }
 const MenuChapter = ({ chapters }: itemProps) => {
-  const { slugChapter, slugComic } = useParams();
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { slugChapter = "", slugComic = "" } = useParams();
+  const { theme, oppositeTheme } = useThemeContext();
 
   return (
     <div

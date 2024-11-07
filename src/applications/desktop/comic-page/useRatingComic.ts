@@ -1,38 +1,32 @@
-import { globalStore } from "@/shared/stores/global-storage";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useInteractionComic } from "./useInteractionComic";
 import ComicService from "@/shared/services/comicService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuthContext } from "@/shared/contexts/AuthContext";
 
 export const useRatingComic = (comic: Comic) => {
   const [scoreStar, setScoreStar] = useState<number>(comic.star);
-  const { isLogined } = globalStore();
+  const { isLoggedIn } = useAuthContext();
   const { t } = useTranslation();
   const { statusInteractComic } = useInteractionComic(comic.id);
   const queryClient = useQueryClient();
 
   const validate = () => {
-    if (!isLogined) {
-      toast.warn(t("requiredLogin", { ns: "common" }));
-      return false;
+    if (!isLoggedIn) {
+      throw new Error(t("requiredLogin", { ns: "common" }));
     }
 
     if (statusInteractComic.isEvaluated) {
-      toast.warn(t("comicInteraction.evaluated", { ns: "common" }));
-      return false;
+      throw new Error(t("comicInteraction.evaluated", { ns: "common" }));
     }
-
-    return true;
   };
 
   const mutation = useMutation({
     mutationKey: ["comic.rating", { comicId: comic.id }],
     mutationFn: async () => {
-      if (!validate()) {
-        return;
-      }
+      validate();
 
       await ComicService.evaluateComic(comic.id, scoreStar);
 

@@ -25,6 +25,7 @@ axiosClient.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
+    console.log(error.response);
     if (removeTokenInErrorCodes.includes(error.response.data.errorCode)) {
       jwt.deleteToken();
     }

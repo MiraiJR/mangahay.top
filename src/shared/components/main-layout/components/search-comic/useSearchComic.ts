@@ -15,9 +15,9 @@ export const useSearchComic = () => {
 
     try {
       const { data } = await ComicService.searchComics({
-        comicName,
+        name: comicName,
         page: 1,
-        limit: 10,
+        size: 10,
       });
 
       setSearchResult(data.comics);

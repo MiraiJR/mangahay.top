@@ -28,9 +28,7 @@ export const AnswerCommentEditorProvider = ({
 export const useAnswerCommentContext = () => {
   const context = useContext(AnswerCommentEditorContext);
   if (!context) {
-    throw new Error(
-      "useAnswerCommentContext must be used within an AnswerCommentEditorProvider"
-    );
+    throw new Error("Context not found");
   }
   return context;
 };

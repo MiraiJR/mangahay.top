@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import themeStore from "../stores/theme-storage";
 export type Theme = "light" | "dark";
 type ThemeContext = {
@@ -24,4 +24,12 @@ export const ThemProvider = ({ children }: any) => {
       {children}
     </ThemeContext.Provider>
   );
+};
+
+export const useThemeContext = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error("Context not found");
+  }
+  return context;
 };

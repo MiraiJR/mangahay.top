@@ -2,17 +2,16 @@ import { useUploadFile } from "@/shared/hooks/useUploadFile";
 import { Camera } from "lucide-react";
 import { Dialog } from "primereact/dialog";
 import { useUpdateAvatar } from "../../useUpdateAvatar";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { reduceQualityImage } from "@/shared/helpers/helpers";
 import { userStore } from "@/shared/stores/user-storage";
 import { Button } from "primereact/button";
 import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 
 export const UserAvatar = () => {
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const { userProfile } = userStore();
   const {
     file: avatar,
@@ -66,7 +65,7 @@ export const UserAvatar = () => {
                 className="w-[150px] h-[150px] object-cover rounded-full"
                 width={100}
                 height={100}
-                src={reduceQualityImage(userProfile.avatar)}
+                src={userProfile.avatar}
                 alt={userProfile.fullname}
                 onMouseOver={() => setShowChangeAvatar(true)}
                 onMouseOut={() => setShowChangeAvatar(false)}

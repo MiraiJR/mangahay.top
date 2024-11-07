@@ -1,4 +1,4 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useAnswerComment } from "@/shared/hooks/useAnswerComment";
 import { Button } from "primereact/button";
 import { Editor, EditorTextChangeEvent } from "primereact/editor";
@@ -19,7 +19,7 @@ export const AnswerEditor = ({
   fetchNextPage,
 }: AnswerEditorProps) => {
   const { t } = useTranslation();
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const {
     contentAnswer,
     setContentAnswer,

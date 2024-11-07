@@ -1,17 +1,17 @@
 import AuthService from "@/shared/services/authService";
-import { globalStore } from "@/shared/stores/global-storage";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import JWTManager from "@/shared/libs/jwt";
+import { useAuthContext } from "@/shared/contexts/AuthContext";
 
 export const useLogin = () => {
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const { t } = useTranslation();
   const router = useRouter();
-  const { setIsLogined } = globalStore();
+  const { setIsLoggedIn } = useAuthContext();
 
   const validate = () => {
     if (email.trim() === "") {
@@ -27,15 +27,15 @@ export const useLogin = () => {
     mutationKey: ["login"],
     mutationFn: async () => {
       validate();
-      const { data } = await AuthService.login({
+      const { data: tokens } = await AuthService.login({
         password,
         email,
       });
 
-      JWTManager.setToken(data);
-      setIsLogined(true);
+      JWTManager.setToken(tokens);
+      setIsLoggedIn(true);
       router.back();
-      return data;
+      return tokens;
     },
   });
 

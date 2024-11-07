@@ -1,18 +1,18 @@
 import { useState } from "react";
-import { globalStore } from "../stores/global-storage";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import CommentService from "../services/commentService";
+import { useAuthContext } from "../contexts/AuthContext";
 
 export const useComment = (comicId: number) => {
   const [contentComment, setContentComment] = useState<string>("");
-  const { isLogined } = globalStore();
+  const { isLoggedIn } = useAuthContext();
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
   const validate = () => {
-    if (!isLogined) {
+    if (!isLoggedIn) {
       throw new Error(t("requiredLogin", { ns: "common" }));
     }
 

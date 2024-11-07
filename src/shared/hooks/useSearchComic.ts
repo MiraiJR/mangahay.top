@@ -8,7 +8,7 @@ interface SearchComicParams {
   filterState?: OptionStatus;
   filterGenres?: string[];
   page?: number;
-  limit?: number;
+  size?: number;
 }
 
 export const useSearchComic = ({
@@ -18,7 +18,7 @@ export const useSearchComic = ({
   filterState,
   filterGenres,
   page,
-  limit,
+  size,
 }: SearchComicParams) => {
   const buildParams = () => {
     let params = "?";
@@ -52,13 +52,13 @@ export const useSearchComic = ({
     window.history.pushState({}, "", buildParams());
 
     const { data } = await ComicService.searchComics({
-      comicName,
-      filterAuthor,
-      filterSort: filterSort?.code,
-      filterState: filterState?.name,
-      filterGenres,
+      name: comicName,
+      author: filterAuthor,
+      orderBy: filterSort?.code ?? "updatedAt",
+      status: filterState?.name,
+      genres: filterGenres,
       page,
-      limit,
+      size,
     });
 
     return data.comics;
@@ -78,18 +78,18 @@ export const useSearchComic = ({
         filterState,
         filterGenres,
         page,
-        limit,
+        size,
       },
     ],
     queryFn: async () => {
       const { data } = await ComicService.searchComics({
-        comicName,
-        filterAuthor,
-        filterSort: filterSort?.code,
-        filterState: filterState?.name,
-        filterGenres,
+        name: comicName,
+        author: filterAuthor,
+        orderBy: filterSort?.code,
+        status: filterState?.name,
+        genres: filterGenres,
         page,
-        limit,
+        size,
       });
 
       return data.comics;

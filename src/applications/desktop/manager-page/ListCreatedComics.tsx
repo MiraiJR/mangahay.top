@@ -1,12 +1,12 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { DataScroller } from "primereact/datascroller";
 import { Rating } from "primereact/rating";
 import Image from "next/image";
-import { convertWebpResource, formatDate } from "@/shared/helpers/helpers";
+import { formatDate } from "@/shared/helpers/helpers";
 import DialogUpdateComic from "@/shared/components/dialog/DialogUpdateComic";
 import { useDialogContext } from "@/shared/contexts/DialogContext";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useGetMyCreatedComic } from "./useGetMyCreatedComic";
 import { useDeleteComic } from "./useDeleteComic";
 import { Button } from "primereact/button";
@@ -16,7 +16,7 @@ const THE_DEFAULT_AMOUNT_COMICS: number = 10;
 
 const ListCreatedComics = () => {
   const { t } = useTranslation();
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
   const { changeVisible: changeVisibleDialogUpdateComic } = useDialogContext();
   const [_showDetail, setShowDetail] = useState<boolean>(false);
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
@@ -45,7 +45,7 @@ const ListCreatedComics = () => {
               width={0}
               height={0}
               className="w-[100%]"
-              src={convertWebpResource(comic.thumb)}
+              src={comic.thumb}
               alt={comic.name}
             />
           </div>

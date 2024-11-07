@@ -1,23 +1,33 @@
+import { useAuthContext } from "@/shared/contexts/AuthContext";
 import jwt from "@/shared/libs/jwt";
 import AuthService from "@/shared/services/authService";
-import { globalStore } from "@/shared/stores/global-storage";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
 export const useLogout = () => {
-  const { setIsLogined } = globalStore();
+  const { setIsLoggedIn } = useAuthContext();
+  const router = useRouter();
 
-  const handleLogout = async () => {
-    try {
+  const mutation = useMutation({
+    mutationKey: ["user.logout"],
+    mutationFn: async () => {
       const { data } = await AuthService.logout();
 
       jwt.deleteToken();
-      setIsLogined(false);
+      setIsLoggedIn(false);
+      router.reload();
+      return data;
+    },
+    onSuccess: (data) => {
       toast.success(data);
-    } catch (error: any) {
+    },
+    onError: (error) => {
       toast.error(error.message);
-    }
-  };
+    },
+  });
+
   return {
-    handleLogout,
+    handleLogout: mutation.mutate,
   };
 };

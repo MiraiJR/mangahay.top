@@ -2,8 +2,7 @@ import Image, { StaticImageData } from "next/image";
 import EmptyImage from "@/shared/assets/empty.webp";
 import { useTranslation } from "react-i18next";
 import i18n from "../libs/i18n";
-import { useContext } from "react";
-import { ThemeContext } from "../contexts/ThemeContext";
+import { useThemeContext } from "../contexts/ThemeContext";
 
 interface itemProps {
   content?: string;
@@ -15,7 +14,7 @@ const EmptyComic = ({
   image = EmptyImage,
 }: itemProps) => {
   const { t } = useTranslation();
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
 
   return (
     <div className="text-center flex flex-col items-center justify-center w-full">

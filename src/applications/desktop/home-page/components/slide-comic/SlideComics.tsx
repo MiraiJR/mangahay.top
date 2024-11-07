@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Chip } from "primereact/chip";
 import {
@@ -9,12 +9,11 @@ import {
   EffectCards,
   Autoplay,
 } from "swiper/modules";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import TextAnimation from "@/shared/components/animations/TextAnimation";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { reduceQualityImage } from "@/shared/helpers/helpers";
 import { useGetRankingComics } from "@/shared/hooks/useGetRankingComics";
 import { THE_NUMBER_OF_COMICS_SLIDE } from "../../constant";
 import { SlideComicSkeleton } from "./SlideComicSkeleton";
@@ -26,7 +25,7 @@ const SlideComics = () => {
   const router = useRouter();
   const { comics, isSuccess, isLoading } = useGetRankingComics("view", 5);
   const [currentComic, setCurrentComic] = useState<Comic | null>(null);
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
 
   useEffect(() => {
     if (comics.length >= 0) {
@@ -108,7 +107,7 @@ const SlideComics = () => {
                     priority
                     width={300}
                     height={400}
-                    src={reduceQualityImage(comic.thumb)}
+                    src={comic.thumb}
                     alt={comic.name}
                     className="w-[300px] max-h-[400px] object-cover mobile:w-[200px]"
                   />

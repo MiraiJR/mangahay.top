@@ -5,8 +5,7 @@ import Link from "next/link";
 import { globalStore } from "@/shared/stores/global-storage";
 import { useSearchComic } from "@/shared/hooks/useSearchComic";
 import { MAX_THE_NUMBER_OF_RECOMMENDED_COMICS } from "../../constant";
-import { useContext } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { RecommendedComicsSkeleton } from "./RecommendedComicsSkeleton";
 import { useTranslation } from "react-i18next";
 
@@ -23,7 +22,7 @@ const RecommendedComics = ({
   isShowHighlight = true,
   comicPerRow = 5,
 }: itemProps) => {
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const { isMobile } = globalStore();
   const { comics, isLoading } = useSearchComic({
     filterGenres: [genre],

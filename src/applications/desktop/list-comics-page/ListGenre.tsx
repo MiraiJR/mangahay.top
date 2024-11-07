@@ -1,14 +1,13 @@
 import MyLoading from "@/shared/components/MyLoading";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useGetGenres } from "@/shared/hooks/useGetGenres";
 import { cn } from "@/shared/libs/utils";
 import { useParams } from "next/navigation";
-import { useContext } from "react";
 
 export const ListGenre = () => {
-  const { genre } = useParams();
+  const { genre = null } = useParams();
   const currentGenre = genre ?? null;
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const { genres, isLoading } = useGetGenres();
 
   return (

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { globalStore } from "../stores/global-storage";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import CommentService from "../services/commentService";
 import { useAnswerCommentContext } from "../contexts/AnswerCommentEditorContext";
+import { useAuthContext } from "../contexts/AuthContext";
 
 export const useAnswerComment = (
   comicId: number,
@@ -12,13 +12,13 @@ export const useAnswerComment = (
   mentionedUserId: number | null
 ) => {
   const [contentAnswer, setContentAnswer] = useState<string>("");
-  const { isLogined } = globalStore();
+  const { isLoggedIn } = useAuthContext();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { setActiveEditorId } = useAnswerCommentContext();
 
   const validate = () => {
-    if (!isLogined) {
+    if (!isLoggedIn) {
       toast.warn(t("requiredLogin", { ns: "common" }));
       return;
     }

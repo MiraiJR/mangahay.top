@@ -1,6 +1,6 @@
 import historyStore from "@/shared/stores/history-storage";
-import { useEffect, useState, useContext } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useEffect, useState } from "react";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { Divider } from "primereact/divider";
 import EmptyComic from "@/shared/components/EmptyComic";
 import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 const HistoryPage = () => {
   const { t } = useTranslation();
   const [comics, setComics] = useState<Comic[]>([]);
-  const { oppositeTheme, theme } = useContext(ThemeContext);
+  const { oppositeTheme, theme } = useThemeContext();
   const [first, setFirst] = useState<number>(0);
   const [pageComics, setPageComics] = useState<Comic[]>([]);
 

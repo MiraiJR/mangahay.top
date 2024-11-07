@@ -25,7 +25,7 @@ export const SearchComic = () => {
         <div className="p-input-icon-left relative">
           <i
             className="pi pi-search cursor-pointer right-0 px-3"
-            onClick={() => router.push("/tim-kiem")}
+            onClick={() => router.push(`/tim-kiem?comicName=${inputSearch}`)}
           />
           <InputText
             className="w-[300px] border-black border-[1px] p-2"

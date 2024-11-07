@@ -20,9 +20,13 @@ import "@/shared/libs/i18n";
 import { queryClient } from "@/shared/libs/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { PrimeReactProvider } from "primereact/api";
+import { AuthContextProvider } from "@/shared/contexts/AuthContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const store = createStore();
 const StoreContext = React.createContext<any>({});
+
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string;
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   return (
@@ -40,10 +44,14 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
         <StoreContext.Provider value={store}>
           <ThemProvider>
             <PrimeReactProvider>
-              <MainLayout>
-                <Component {...pageProps} />
-                <ToastContainer position="bottom-right" autoClose={500} />
-              </MainLayout>
+              <AuthContextProvider>
+                <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+                  <MainLayout>
+                    <Component {...pageProps} />
+                    <ToastContainer position="bottom-right" autoClose={500} />
+                  </MainLayout>
+                </GoogleOAuthProvider>
+              </AuthContextProvider>
             </PrimeReactProvider>
           </ThemProvider>
         </StoreContext.Provider>

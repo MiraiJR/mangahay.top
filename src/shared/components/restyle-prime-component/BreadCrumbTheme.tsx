@@ -1,4 +1,4 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { MenuItem } from "primereact/menuitem";
 import { useContext } from "react";
@@ -9,7 +9,7 @@ interface BreadCrumbThemeProps {
 }
 
 export const BreadCrumbTheme = ({ items, home }: BreadCrumbThemeProps) => {
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
 
   return (
     <BreadCrumb

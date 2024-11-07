@@ -1,7 +1,7 @@
 import { originalURL } from "@/shared/libs/config";
 import { MenuItem } from "primereact/menuitem";
-import { useContext, useEffect } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useEffect } from "react";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import ListComicsOfAuthor from "../comic-page/ListComicsOfAuthor";
 import ListComicsRanking from "../home-page/components/comic-ranking/ListComicsRanking";
 import EmptyComic from "@/shared/components/EmptyComic";
@@ -17,7 +17,6 @@ import { BreadCrumbTheme } from "@/shared/components/restyle-prime-component/Bre
 
 interface itemProps {
   detailComic: Comic;
-  detailChapterA: DetailChapter;
 }
 
 const ChapterPage = ({ detailComic }: itemProps) => {
@@ -34,7 +33,7 @@ const ChapterPage = ({ detailComic }: itemProps) => {
     },
   ];
   const home: MenuItem = { icon: "pi pi-home", url: originalURL };
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
   useUpdateHistory(comic, true, chapter);
 
   useEffect(() => {

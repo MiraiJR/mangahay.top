@@ -7,11 +7,11 @@ export const optionStatus: OptionStatus[] = [
 export const optionSort: OptionSort[] = [
   {
     name: "A->Z",
-    code: "az",
+    code: "asc",
   },
   {
     name: "Z->A",
-    code: "za",
+    code: "desc",
   },
   {
     name: "Xem nhiều nhất",

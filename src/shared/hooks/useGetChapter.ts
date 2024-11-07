@@ -1,25 +1,23 @@
 import { useRouter } from "next/router";
-import { extractIdFromSlugChapter } from "../helpers/helpers";
 import { useQuery } from "@tanstack/react-query";
 import ChapterService from "../services/chapterService";
 
 export const useGetChapter = () => {
   const router = useRouter();
-  const { slugChapter } = router.query;
-  const chapterId = extractIdFromSlugChapter(slugChapter as string) ?? null;
+  const { slugChapter = "" } = router.query;
 
   const {
     data: chapter,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["chapter", { chapterId }],
+    queryKey: ["chapter", { slugChapter }],
     queryFn: async () => {
-      const { data } = await ChapterService.getChapter(chapterId);
+      const { data } = await ChapterService.getChapter(slugChapter as string);
 
       return data;
     },
-    enabled: !!chapterId,
+    enabled: slugChapter !== "",
   });
 
   return {

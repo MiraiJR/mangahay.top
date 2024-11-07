@@ -1,8 +1,7 @@
 import CardRanking from "@/shared/components/card/CardRanking";
 import { ChevronsRight } from "lucide-react";
-import { useContext } from "react";
 import Link from "next/link";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useListComicsOfAuthor } from "./useListComicsOfAuthor";
 import { useTranslation } from "react-i18next";
 
@@ -12,7 +11,7 @@ interface itemProps {
 }
 
 const ListComicsOfAuthor = ({ title, author }: itemProps) => {
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const { comics } = useListComicsOfAuthor(author);
   const { t } = useTranslation();
 

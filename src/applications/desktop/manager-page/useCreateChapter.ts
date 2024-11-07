@@ -4,18 +4,19 @@ import { useMutation } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { extractComicId } from "@/shared/helpers/helpers";
-import ComicService from "@/shared/services/comicService";
+import ChapterService from "@/shared/services/chapterService";
 
 export const useCreateChapter = () => {
   const { t } = useTranslation();
   const [comicName, setComicName] = useState<string>("");
   const [chapterName, setChapterName] = useState<string>("");
+  const [isEnd, setIsEnd] = useState<boolean>(false);
   const {
     fileUploadRef,
     handleUploadMultipleFile,
     uploadedMultipleFile: chapterImages,
     clearUploadedFile,
-  } = useUploadFile();
+  } = useUploadFile(null);
 
   const validate = () => {
     if (
@@ -30,9 +31,12 @@ export const useCreateChapter = () => {
 
   const buildFormData = () => {
     const formData = new FormData();
-    formData.append("nameChapter", chapterName.replaceAll("/", ""));
+    formData.append("name", chapterName.replaceAll("/", ""));
+    const comicId = extractComicId(comicName);
+    formData.append("comicId", comicId as unknown as string);
+    formData.append("isEnd", isEnd ? "1" : "0");
     chapterImages.forEach((image) => {
-      formData.append("files", image);
+      formData.append("images", image);
     });
 
     return formData;
@@ -41,6 +45,7 @@ export const useCreateChapter = () => {
   const reset = () => {
     setComicName("");
     setChapterName("");
+    setIsEnd(false);
     clearUploadedFile();
   };
 
@@ -48,10 +53,8 @@ export const useCreateChapter = () => {
     mutationKey: ["chapter.create"],
     mutationFn: async () => {
       validate();
-
       const formData = buildFormData();
-      const comicId = extractComicId(comicName);
-      const { data } = await ComicService.createChapter(comicId, formData);
+      const { data } = await ChapterService.createChapter(formData);
       return data;
     },
     onError: (error) => {
@@ -68,6 +71,8 @@ export const useCreateChapter = () => {
     setComicName,
     chapterName,
     setChapterName,
+    isEnd,
+    setIsEnd,
     fileUploadRef,
     handleUploadMultipleFile,
     chapterImages,

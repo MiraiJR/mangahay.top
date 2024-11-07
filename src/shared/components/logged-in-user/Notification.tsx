@@ -1,4 +1,4 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { Bell } from "lucide-react";
 import { useContext } from "react";
 import MyLoading from "../MyLoading";
@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { useNotification } from "@/shared/hooks/useNotification";
 
 export const Notification = () => {
-  const { oppositeTheme, theme } = useContext(ThemeContext);
+  const { oppositeTheme, theme } = useThemeContext();
   const {
     notifyRef,
     isShowNotification,

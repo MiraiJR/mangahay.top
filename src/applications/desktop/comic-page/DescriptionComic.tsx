@@ -1,8 +1,6 @@
 import Image from "next/image";
-import { useContext } from "react";
 import Link from "next/link";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
-import { convertWebpResource } from "@/shared/helpers/helpers";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useRouter } from "next/router";
 import { ComicInteraction } from "./ComicIntertion";
 import { useTranslation } from "react-i18next";
@@ -17,7 +15,7 @@ interface itemProps {
 
 const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
   const { t } = useTranslation();
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
   const router = useRouter();
   const { slugChapter } = router.query;
 
@@ -36,7 +34,7 @@ const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
         width={0}
         height={0}
         className="col-span-3 shadow-lg p-5 mobile:col-span-12 w-[100%] max-h-[800px] object-cover object-top"
-        src={convertWebpResource(comic.thumb)}
+        src={comic.thumb}
         alt={comic.name}
       />
       <div className="col-span-7 flex flex-col gap-4 mobile:col-span-12 mobile:mx-4">

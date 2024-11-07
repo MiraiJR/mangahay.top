@@ -1,12 +1,12 @@
 import MyLoading from "@/shared/components/MyLoading";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useGetGenres } from "@/shared/hooks/useGetGenres";
 import themeStore from "@/shared/stores/theme-storage";
 import { useContext } from "react";
 
 const ListGenres = () => {
   const { genres, isLoading } = useGetGenres();
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useThemeContext();
 
   return (
     <div

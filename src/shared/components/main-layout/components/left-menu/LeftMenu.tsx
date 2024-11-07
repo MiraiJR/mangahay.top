@@ -2,11 +2,11 @@ import { ChevronDown } from "lucide-react";
 import { useLeftMenu } from "./useLeftMenu";
 import ListGenres from "@/shared/components/main-layout/components/left-menu/ListGenres";
 import { useContext } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 
 export const LeftMenu = () => {
   const { leftMenuData, showListGenres, genreRef } = useLeftMenu();
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   return (
     <div>
       <div className="flex gap-4 mobile:gap-1">

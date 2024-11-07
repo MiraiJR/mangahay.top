@@ -1,31 +1,26 @@
-import { globalStore } from "@/shared/stores/global-storage";
 import { useTranslation } from "react-i18next";
 import { useInteractionComic } from "./useInteractionComic";
 import { toast } from "react-toastify";
 import MeService, { TypeComicInteraction } from "@/shared/services/meService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuthContext } from "@/shared/contexts/AuthContext";
 
 export const useLikeComic = (comicId: number) => {
-  const { isLogined } = globalStore();
+  const { isLoggedIn } = useAuthContext();
   const { t } = useTranslation();
   const { statusInteractComic } = useInteractionComic(comicId);
   const queryClient = useQueryClient();
 
   const validate = () => {
-    if (!isLogined) {
-      toast.warn(t("requiredLogin", { ns: "common" }));
-      return false;
+    if (!isLoggedIn) {
+      throw new Error(t("requiredLogin", { ns: "common" }));
     }
-
-    return true;
   };
 
   const mutation = useMutation({
     mutationKey: ["comic.like", { comicId }],
     mutationFn: async () => {
-      if (!validate()) {
-        return;
-      }
+      validate();
 
       await MeService.interactWithComic(
         comicId,

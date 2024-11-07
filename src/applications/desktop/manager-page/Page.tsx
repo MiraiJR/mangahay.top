@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { TabMenu } from "primereact/tabmenu";
 import { MenuItem } from "primereact/menuitem";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import dynamic from "next/dynamic";
 import { DialogProvider } from "@/shared/contexts/DialogContext";
 import { useRouter } from "next/router";
@@ -26,7 +26,7 @@ enum TabType {
 
 const ManagerPage = () => {
   const router = useRouter();
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
   const [activeTab, setActiveTab] = useState<number>(TabType.CREATED_COMICS);
 
   const items: MenuItem[] = [

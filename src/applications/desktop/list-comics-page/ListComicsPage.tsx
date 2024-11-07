@@ -1,5 +1,5 @@
 import CardComic from "@/shared/components/card/CardComic";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { originalURL } from "@/shared/libs/config";
 import { cn } from "@/shared/libs/utils";
 import ComicService from "@/shared/services/comicService";
@@ -9,7 +9,7 @@ import { BreadCrumb } from "primereact/breadcrumb";
 import { MenuItem } from "primereact/menuitem";
 import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import EmptyComic from "@/shared/components/EmptyComic";
 import MyLoading from "@/shared/components/MyLoading";
 import { useRouter } from "next/router";
@@ -23,13 +23,13 @@ const THE_NUMBER_OF_COMICS_PER_PAGE: number = 30;
 
 const ListComicsPage = ({ genres, dataComics }: itemProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { genre } = useParams();
+  const { genre = null } = useParams();
   const currentGenre = genre ?? null;
   const items: MenuItem[] = [
     { label: "Danh sách truyện", url: `${originalURL}/danh-sach-truyen` },
   ];
   const home: MenuItem = { icon: "pi pi-home", url: originalURL };
-  const {} = useContext(ThemeContext);
+  const {} = useThemeContext();
   const [comics, setComics] = useState<Comic[]>(dataComics ?? []);
   const [first, setFirst] = useState<number>(0);
   const [pageComics, setPageComics] = useState<Comic[]>([]);

@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import Link from "next/link";
 import { AdminFeature } from "./AdminFeature";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { Notification } from "./Notification";
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import { LoggoutButton } from "./LogoutButton";
@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { Avatar } from "primereact/avatar";
 
 const LoginedUser = () => {
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
   const {
     elementRef: menuProfileRef,
     isVisiable: showMenu,
@@ -34,7 +34,7 @@ const LoginedUser = () => {
             }}
             icon="pi pi-user"
             image={myProfile.avatar}
-            label="P"
+            label={myProfile.fullname[0]}
             size="large"
             onClick={() => {
               setShowMenu(!showMenu);

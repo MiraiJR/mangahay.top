@@ -28,7 +28,7 @@ export const useCreateComic = (comic: Comic | null) => {
     handleUploadImage,
     uploadedFile: comicThumb,
     setUploadedFile: setComicThumb,
-  } = useUploadFile(comic?.thumb);
+  } = useUploadFile(comic?.thumb ?? null);
 
   const reset = () => {
     setComicName("");

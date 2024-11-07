@@ -1,4 +1,4 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useComment } from "@/shared/hooks/useComment";
 import { Editor, EditorTextChangeEvent } from "primereact/editor";
 import { useContext } from "react";
@@ -12,7 +12,7 @@ export const CommentEditor = ({ comicId }: CommentEditorProps) => {
   const { t } = useTranslation();
   const { contentComment, setContentComment, handleComment } =
     useComment(comicId);
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
 
   return (
     <>

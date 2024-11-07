@@ -1,5 +1,4 @@
-import { convertWebpResource, shortImageName } from "@/shared/helpers/helpers";
-import { Navigation, Pagination } from "swiper/modules";
+import { shortImageName } from "@/shared/helpers/helpers";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
 import themeStore from "@/shared/stores/theme-storage";
@@ -50,7 +49,7 @@ const ChapterViewTypeSlide = ({
                   width={0}
                   height={0}
                   className="w-[80%] mobile:w-[100%] object-fit"
-                  src={convertWebpResource(image, "best")}
+                  src={image}
                   alt={`${chapterName}-${comicName}`}
                   onLoad={() => setIsLoading(true)}
                   onLoadingComplete={() => setIsLoading(false)}

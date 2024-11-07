@@ -5,7 +5,7 @@ import { ChangeEvent, useContext, useEffect } from "react";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import { toast } from "react-toastify";
 import comicService from "@/shared/services/comicService";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { optionSort, optionStatus } from "./constant";
 import { useSearchState } from "./useSearchState";
 import { useGetGenres } from "@/shared/hooks/useGetGenres";
@@ -16,7 +16,7 @@ interface itemProps {
 }
 
 const BoxSearch = ({ setComics, resultRef }: itemProps) => {
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
   const { genres } = useGetGenres();
   const {
     comicName,
@@ -75,11 +75,11 @@ const BoxSearch = ({ setComics, resultRef }: itemProps) => {
 
     try {
       const { data } = await comicService.searchComics({
-        comicName,
-        filterAuthor,
-        filterGenres,
-        filterSort: filterSort?.code,
-        filterState: filterState?.name,
+        name: comicName,
+        author: filterAuthor,
+        genres: filterGenres,
+        orderBy: filterSort?.code ?? "updatedAt",
+        status: filterState?.name,
       });
 
       setComics(data.comics);

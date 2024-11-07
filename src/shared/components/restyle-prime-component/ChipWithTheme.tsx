@@ -1,4 +1,4 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { Chip } from "primereact/chip";
 import { useContext } from "react";
 
@@ -11,7 +11,7 @@ export const ChipWithTheme = ({
   label,
   removable = false,
 }: ChipWithThemeProps) => {
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
 
   return (
     <Chip

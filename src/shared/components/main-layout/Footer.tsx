@@ -7,11 +7,11 @@ import Link from "next/link";
 import { keywordRelatedComic } from "./constant";
 import { useTranslation } from "react-i18next";
 import { useContext } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 
 const Footer = () => {
   const { t } = useTranslation();
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
 
   return (
     <div className={`container mx-auto bg-${theme} p-5 text-${oppositeTheme}`}>

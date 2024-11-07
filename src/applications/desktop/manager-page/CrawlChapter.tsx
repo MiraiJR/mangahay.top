@@ -73,7 +73,7 @@ const CrawlChapter = () => {
   };
 
   const getComics = async (name: string): Promise<Comic[]> => {
-    const { data } = await comicService.searchComics({ comicName: name });
+    const { data } = await comicService.searchComics({ name: name });
     return data.comics;
   };
 

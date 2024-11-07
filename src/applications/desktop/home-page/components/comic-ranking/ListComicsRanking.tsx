@@ -2,8 +2,7 @@ import CardRanking from "@/shared/components/card/CardRanking";
 import { ChevronsRight } from "lucide-react";
 import Link from "next/link";
 import { useGetRankingComics } from "@/shared/hooks/useGetRankingComics";
-import { useContext } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { ListComicsRankingSkeleton } from "./ListComicsRankingSkeleton";
 import { useTranslation } from "react-i18next";
 
@@ -14,7 +13,7 @@ interface ItemProps {
 }
 
 const ListComicsRanking = ({ title, field, amountComic }: ItemProps) => {
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const { comics, isLoading } = useGetRankingComics(field, amountComic);
   const shouldShowSkeleton = isLoading || comics.length === 0;
   const { t } = useTranslation();

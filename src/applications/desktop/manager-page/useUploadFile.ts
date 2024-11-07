@@ -2,7 +2,7 @@ import { FileUploadFile, FileUploadSelectEvent } from "primereact/fileupload";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-export const useUploadFile = (imageUrl?: string) => {
+export const useUploadFile = (imageUrl: string | null) => {
   const fileUploadRef = useRef<any>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadedMultipleFile, setUploadMultipleFile] = useState<File[]>([]);

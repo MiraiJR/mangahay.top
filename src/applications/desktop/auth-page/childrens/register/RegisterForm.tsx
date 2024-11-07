@@ -4,8 +4,7 @@ import { Helmet } from "react-helmet";
 import Image from "next/image";
 import Link from "next/link";
 import { useRegister } from "./useRegister";
-import { useContext } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useTranslation } from "react-i18next";
 
 const RegisterForm = () => {
@@ -21,7 +20,7 @@ const RegisterForm = () => {
     setFullname,
     handleRegister,
   } = useRegister();
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const { t } = useTranslation();
 
   return (

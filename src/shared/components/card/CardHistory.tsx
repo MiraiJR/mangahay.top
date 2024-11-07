@@ -1,10 +1,9 @@
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import themeStore from "@/shared/stores/theme-storage";
 import Image from "next/image";
 import Link from "next/link";
 import { Rating } from "primereact/rating";
-import { useState, useContext, useEffect } from "react";
-import { reduceQualityImage } from "@/shared/helpers/helpers";
+import { useState, useEffect } from "react";
 
 interface itemProps {
   comic: Comic;
@@ -16,7 +15,7 @@ interface itemPropsPreviewComic {
 }
 
 const PreviewComic = ({ comic, position }: itemPropsPreviewComic) => {
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useThemeContext();
 
   useEffect(() => {
     const previewComicElement = document.getElementById(
@@ -68,7 +67,7 @@ const PreviewComic = ({ comic, position }: itemPropsPreviewComic) => {
 };
 
 const CardComicHistory = ({ comic }: itemProps) => {
-  const {} = useContext(ThemeContext);
+  const {} = useThemeContext();
   const [isOpenPreview, setIsOpenPreview] = useState<boolean>(false);
   const [previewPosition, setPreviewPostion] = useState<ElementPostion>({
     top: 0,
@@ -102,7 +101,7 @@ const CardComicHistory = ({ comic }: itemProps) => {
           height={100}
           width={100}
           className="w-[100%] object-cover h-[280px] mobile:max-h-[200px]"
-          src={reduceQualityImage(comic.thumb)}
+          src={comic.thumb}
           alt={comic.name}
         />
       </Link>

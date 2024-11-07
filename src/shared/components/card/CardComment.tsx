@@ -3,9 +3,10 @@ import { Avatar } from "primereact/avatar";
 import { useTranslation } from "react-i18next";
 import { AnswerEditor } from "../comments/AnswerEditor";
 import { useContext } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useAnswerCommentContext } from "@/shared/contexts/AnswerCommentEditorContext";
 import { useGetListAnswerOfComment } from "@/shared/hooks/useGetListAnswerOfComment";
+import { ChevronUp } from "lucide-react";
 
 interface itemProps {
   comment: UserCommentResponse;
@@ -13,7 +14,7 @@ interface itemProps {
 const CardComment = ({ comment }: itemProps) => {
   const { t } = useTranslation();
   const { activeEditorId, setActiveEditorId } = useAnswerCommentContext();
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const isAnswerEditorVisible = activeEditorId
     ? activeEditorId === comment.id
     : false;
@@ -21,7 +22,9 @@ const CardComment = ({ comment }: itemProps) => {
   const toggleAnswerEditor = () => {
     setActiveEditorId(isAnswerEditorVisible ? null : comment.id);
   };
-  const { answers, fetchNextPage } = useGetListAnswerOfComment(comment.id);
+  const { answers, fetchNextPage, reset } = useGetListAnswerOfComment(
+    comment.id
+  );
 
   return (
     <div className="flex gap-4 mb-5">
@@ -81,6 +84,20 @@ const CardComment = ({ comment }: itemProps) => {
             fetchNextPage={fetchNextPage}
           />
         )}
+        {!comment.parentCommentId &&
+          comment.theNumberOfAnswer !== 0 &&
+          answers.length === comment.theNumberOfAnswer && (
+            <div
+              className={`text-${oppositeTheme} cursor-pointer
+               hover:text-blue-600 w-fit border-b-[1px] border-${oppositeTheme} hover:border-blue-600 mb-2 flex items-center`}
+              onClick={() => {
+                reset();
+              }}
+            >
+              <span>{t("collapse", { ns: "common" })}</span>
+              <ChevronUp />
+            </div>
+          )}
         <div>
           {answers.map((answer) => (
             <CardComment comment={answer} key={answer.id} />

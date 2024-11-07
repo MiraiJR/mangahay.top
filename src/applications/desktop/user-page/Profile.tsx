@@ -5,10 +5,10 @@ import { useUpdateProfile } from "./useUpdateProfile";
 import { UserAvatar } from "./components/avatar/UserAvatar";
 import { UserWallPaper } from "./components/wallpaper/UserWallpaper";
 import { useContext } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 
 const Profile = () => {
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
   const { userProfile } = userStore();
   const {
     fullName,

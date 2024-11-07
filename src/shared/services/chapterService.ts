@@ -1,8 +1,13 @@
 import axiosClient from "../libs/axiosClient";
 
 const ChapterService = {
-  getChapter: (chapterId: number) =>
-    axiosClient.get<Chapter>(`/chapters/${chapterId}`),
+  getChapter: (slug: string) => axiosClient.get<Chapter>(`/chapters/${slug}`),
+  createChapter: (formdata: FormData) =>
+    axiosClient.post<string>(`/chapters`, formdata, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    }),
 };
 
 export default ChapterService;

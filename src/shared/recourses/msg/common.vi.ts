@@ -84,6 +84,7 @@ export const common = {
     genres: "Thể loại:",
   },
   canDragAndDropImage: "Có thể kéo thả ảnh vào đây",
+  collapse: "Thu gọn",
 };
 
 export type CommonResouce = typeof common;

@@ -1,4 +1,4 @@
-import { convertWebpResource, shortImageName } from "@/shared/helpers/helpers";
+import { shortImageName } from "@/shared/helpers/helpers";
 import Image from "next/image";
 
 interface itemProps {
@@ -20,7 +20,7 @@ const ChapterViewTypeDefault = ({
           width={0}
           height={0}
           className="w-full mobile:w-[100%] object-fit"
-          src={convertWebpResource(image)}
+          src={image}
           alt={`${chapterName}-${comicName}`}
           key={_index}
         />

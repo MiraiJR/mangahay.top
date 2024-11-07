@@ -2,6 +2,7 @@ import { NOTIFICATION_STATUS } from "@/applications/desktop/user-page/components
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import MeService from "@/shared/services/meService";
 import { useQuery } from "@tanstack/react-query";
+import { useAuthContext } from "../contexts/AuthContext";
 
 interface UseNotificationParams {
   page: number;
@@ -14,6 +15,8 @@ export const useNotification = ({
   limit = Number.MAX_VALUE,
   type = NOTIFICATION_STATUS.UNREAD,
 }: UseNotificationParams) => {
+  const { isLoggedIn } = useAuthContext();
+
   const {
     elementRef: notifyRef,
     isVisiable: isShowNotification,
@@ -34,6 +37,7 @@ export const useNotification = ({
         return data;
       } catch (error: any) {}
     },
+    enabled: isLoggedIn,
   });
 
   return {

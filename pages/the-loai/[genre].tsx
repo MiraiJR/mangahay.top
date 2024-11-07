@@ -17,9 +17,9 @@ const ListComicsPage = dynamic(
 export async function getServerSideProps(context: any) {
   try {
     const comics = await ComicService.searchComics({
-      filterGenres: [context.query.genre],
+      genres: [context.query.genre],
       page: 1,
-      limit: 10000000,
+      size: 10000,
     });
 
     return {

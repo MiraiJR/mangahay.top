@@ -1,19 +1,19 @@
 import { ReactElement, useEffect, useState } from "react";
 import MyLoading from "../components/MyLoading";
 import { originalURL } from "../libs/config";
-import { useLogin } from "./useLogin";
+import { useAuthContext } from "../contexts/AuthContext";
 
 const useAuthHook = (targetComponent: ReactElement) => {
   const [component, setComponent] = useState<ReactElement>(MyLoading);
-  const { isLogined } = useLogin();
+  const { isLoggedIn } = useAuthContext();
 
   useEffect(() => {
-    if (isLogined) {
+    if (isLoggedIn) {
       window.location.href = `${originalURL}`;
     } else {
       setComponent(targetComponent);
     }
-  }, [isLogined, setComponent]);
+  }, [isLoggedIn, setComponent]);
 
   return { component };
 };

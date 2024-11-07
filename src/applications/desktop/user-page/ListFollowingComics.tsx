@@ -1,4 +1,4 @@
-import { formatDate, reduceQualityImage } from "@/shared/helpers/helpers";
+import { formatDate } from "@/shared/helpers/helpers";
 import MeService, { TypeComicInteraction } from "@/shared/services/meService";
 import { Rating } from "primereact/rating";
 import { useContext, useEffect, useState } from "react";
@@ -9,10 +9,10 @@ import MyLoading from "@/shared/components/MyLoading";
 import EmptyComic from "@/shared/components/EmptyComic";
 import { Button } from "primereact/button";
 import { toast } from "react-toastify";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 
 const ListFollowingComics = () => {
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [comics, setComics] = useState<Comic[]>([]);
   const [isUpdateData, setIsUpdateData] = useState<boolean>(false);
@@ -51,7 +51,7 @@ const ListFollowingComics = () => {
               width={0}
               height={0}
               className="w-[100%]"
-              src={reduceQualityImage(comic.thumb)}
+              src={comic.thumb}
               alt={comic.name}
             />
           </Link>

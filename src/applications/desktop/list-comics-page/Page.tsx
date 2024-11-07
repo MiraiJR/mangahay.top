@@ -1,5 +1,5 @@
 import CardComic from "@/shared/components/card/CardComic";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { originalURL } from "@/shared/libs/config";
 import ComicService from "@/shared/services/comicService";
 import { BreadCrumb } from "primereact/breadcrumb";
@@ -19,7 +19,7 @@ interface itemProps {
 const THE_NUMBER_OF_COMICS_PER_PAGE: number = 30;
 
 const ListComicsPage = ({ dataComics }: itemProps) => {
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { oppositeTheme } = useThemeContext();
   const items: MenuItem[] = [
     { label: "Danh sách truyện", url: `${originalURL}/danh-sach-truyen` },
   ];

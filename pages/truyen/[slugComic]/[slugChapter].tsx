@@ -1,8 +1,8 @@
 import ChapterPage from "@/applications/desktop/chapter-page/Page";
 import MetaTags from "@/shared/components/MetaTags";
 import { getNextPreAofChapterFromId } from "@/shared/helpers/ChapterHelper";
-import { extractIdFromSlugChapter } from "@/shared/helpers/helpers";
 import { originalURL } from "@/shared/libs/config";
+import ChapterService from "@/shared/services/chapterService";
 import ComicService from "@/shared/services/comicService";
 
 interface itemProps {
@@ -14,15 +14,12 @@ export async function getServerSideProps(context: any) {
   try {
     const { slugComic, slugChapter } = context.query;
     const { data: comic } = await ComicService.getComicBySlug(slugComic);
-    const currentChapterId = extractIdFromSlugChapter(slugChapter as string);
+    const { data: chapter } = await ChapterService.getChapter(slugChapter);
 
     return {
       props: {
         detailComic: comic,
-        detailChapter: getNextPreAofChapterFromId(
-          currentChapterId,
-          comic.chapters
-        ),
+        detailChapter: getNextPreAofChapterFromId(chapter.id, comic.chapters),
       },
     };
   } catch (error) {
@@ -48,7 +45,7 @@ export default function ChapterRoute({
         image={detailComic.thumb}
         url={`${originalURL}/truyen/${detailComic.slug}/${currentChapter.slug}`}
       />
-      <ChapterPage detailComic={detailComic} detailChapterA={detailChapter} />
+      <ChapterPage detailComic={detailComic} />
     </>
   );
 }

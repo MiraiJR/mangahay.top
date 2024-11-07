@@ -1,6 +1,6 @@
 import CreateComicForm from "@/applications/desktop/manager-page/CreateComicForm";
 import { useDialogContext } from "@/shared/contexts/DialogContext";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { Dialog } from "primereact/dialog";
 import { useContext } from "react";
 
@@ -9,7 +9,7 @@ interface itemProps {
 }
 
 const DialogUpdateComic = ({ comic }: itemProps) => {
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeContext();
   const { visible, changeVisible } = useDialogContext();
 
   return (

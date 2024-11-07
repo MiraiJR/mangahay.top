@@ -11,4 +11,5 @@ export const chapter: ChapterResource = {
   chapterName: "Chapter Name",
   chapterImages: "Chapter Content Images",
   createChapterButton: "Create chapter",
+  theLastChapter: "The last chapter",
 };

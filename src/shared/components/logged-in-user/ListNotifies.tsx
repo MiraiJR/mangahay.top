@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import CardNotify from "../card/CardNotify";
-import { useContext } from "react";
-import { ThemeContext } from "../../contexts/ThemeContext";
+import { useThemeContext } from "../../contexts/ThemeContext";
 
 interface ListNotifiesProps {
   notifies: Notify[];
@@ -9,7 +8,7 @@ interface ListNotifiesProps {
 
 const ListNotifies = ({ notifies }: ListNotifiesProps) => {
   const { t } = useTranslation();
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useThemeContext();
 
   return (
     <div

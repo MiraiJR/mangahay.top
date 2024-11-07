@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from "react";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import dynamic from "next/dynamic";
 import MetaTags from "@/shared/components/MetaTags";
 import { originalURL } from "@/shared/libs/config";
@@ -13,7 +13,7 @@ const ListComics = dynamic(
 const SearchPage = () => {
   const resultRef = useRef<any>(null);
   const [comics, setComics] = useState<Comic[]>([]);
-  const {} = useContext(ThemeContext);
+  const {} = useThemeContext();
 
   return (
     <div>

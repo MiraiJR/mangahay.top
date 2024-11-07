@@ -12,7 +12,7 @@ import { Button } from "primereact/button";
 import { StatusComic } from "@/shared/types/enums/StatusComic";
 import { RadioButton } from "primereact/radiobutton";
 import { useGetGenres } from "@/shared/hooks/useGetGenres";
-import { ThemeContext } from "@/shared/contexts/ThemeContext";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useCreateComic } from "./useCreateComic";
 
 interface itemProps {
@@ -20,7 +20,7 @@ interface itemProps {
 }
 
 const CreateComicForm = ({ comic = null }: itemProps) => {
-  const { oppositeTheme, theme } = useContext(ThemeContext);
+  const { oppositeTheme, theme } = useThemeContext();
   const { genres } = useGetGenres();
   const {
     setComicName,

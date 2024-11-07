@@ -1,6 +1,5 @@
 import ComicService from "@/shared/services/comicService";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 
 export const useListComicsOfAuthor = (author: string) => {
   const {
@@ -18,9 +17,9 @@ export const useListComicsOfAuthor = (author: string) => {
     ],
     queryFn: async () => {
       const { data } = await ComicService.searchComics({
-        filterAuthor: author,
+        author,
         page: 1,
-        limit: 5,
+        size: 5,
       });
 
       return data.comics;
