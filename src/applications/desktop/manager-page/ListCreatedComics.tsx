@@ -11,6 +11,7 @@ import { useGetMyCreatedComic } from "./useGetMyCreatedComic";
 import { useDeleteComic } from "./useDeleteComic";
 import { Button } from "primereact/button";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/router";
 
 const THE_DEFAULT_AMOUNT_COMICS: number = 10;
 
@@ -18,11 +19,11 @@ const ListCreatedComics = () => {
   const { t } = useTranslation();
   const { theme, oppositeTheme } = useThemeContext();
   const { changeVisible: changeVisibleDialogUpdateComic } = useDialogContext();
-  const [_showDetail, setShowDetail] = useState<boolean>(false);
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
   const { comics } = useGetMyCreatedComic();
   const { handleDeleteComic, isLoading: isLoadingDeleteComic } =
     useDeleteComic();
+  const router = useRouter();
 
   const confirmDeleteComic = (event: any, comicId: number) => {
     confirmPopup({
@@ -83,7 +84,7 @@ const ListCreatedComics = () => {
             <div className="flex gap-4">
               <button
                 className="btn-primary bg-green-400"
-                onClick={() => setShowDetail(true)}
+                onClick={() => router.push(`/truyen/${comic.slug}`)}
               >
                 {t("comicAction.view", { ns: "common" })}
               </button>

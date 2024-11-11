@@ -3,7 +3,7 @@ type QuerySearch = {
   page?: number;
   size?: number;
   status?: string;
-  orderBy?: 'asc' | 'desc' | 'updatedAt' | 'view' | 'follow' | 'like' = 'updatedAt';
+  orderBy?: 'asc' | 'desc' | 'updatedAt' | 'view' = 'updatedAt';
   author?: string;
   genres?: string[];
 };

@@ -8,6 +8,7 @@ import { useRemoveAllNotification } from "./useRemoveAllNotification";
 import { Check, X } from "lucide-react";
 import { useMarkAllReadNotification } from "./useMarkAllReadNotification";
 import { NOTIFICATION_STATUS } from "./enum";
+import { NotificationContextProvider } from "@/shared/contexts/NotificationContext";
 
 const notificationFilterButtonDatas: NotificationFilter[] = [
   {
@@ -32,69 +33,71 @@ const Notification = () => {
   const { handleMarkAllReadNotification } = useMarkAllReadNotification();
 
   return (
-    <div className="flex flex-col w-[100%]">
-      <div className="pt-4 text-center font-bold text-xl">
-        Danh sách thông báo
-      </div>
-      <div className="my-10 card flex justify-content-center items-center justify-between">
-        <SelectButton
-          value={notificationFilterData}
-          onChange={(e) => {
-            setNotificationFilterData(e.value);
-          }}
-          options={notificationFilterButtonDatas}
-        />
-
-        <div className="flex gap-4">
-          <div
-            className="flex items-center text-green-600 cursor-pointer"
-            onClick={() => handleMarkAllReadNotification()}
-          >
-            <Check />
-            <span>Đánh dấu đã đọc hết</span>
-          </div>
-          <div
-            className="flex items-center text-red-600 cursor-pointer"
-            onClick={() => {
-              handleRemoveAllNotification();
+    <NotificationContextProvider>
+      <div className="flex flex-col w-[100%]">
+        <div className="pt-4 text-center font-bold text-xl">
+          Danh sách thông báo
+        </div>
+        <div className="my-10 card flex justify-content-center items-center justify-between">
+          <SelectButton
+            value={notificationFilterData}
+            onChange={(e) => {
+              setNotificationFilterData(e.value);
             }}
-          >
-            <X />
-            <span>Xoá tất cả</span>
+            options={notificationFilterButtonDatas}
+          />
+
+          <div className="flex gap-4">
+            <div
+              className="flex items-center text-green-600 cursor-pointer"
+              onClick={() => handleMarkAllReadNotification()}
+            >
+              <Check />
+              <span>Đánh dấu đã đọc hết</span>
+            </div>
+            <div
+              className="flex items-center text-red-600 cursor-pointer"
+              onClick={() => {
+                handleRemoveAllNotification();
+              }}
+            >
+              <X />
+              <span>Xoá tất cả</span>
+            </div>
           </div>
         </div>
-      </div>
-      {isLoading && (
-        <div className="flex items-center justify-center w-[100%] col-span-12">
-          <ProgressSpinner
-            style={{ width: "100px", height: "100px" }}
-            strokeWidth="8"
-            fill="var(--surface-ground)"
-            animationDuration=".5s"
-          />
-        </div>
-      )}
-      {notifications ? (
-        notifications.length === 0 && !isLoading ? (
-          <EmptyComic content="Không có thông báo" />
+        {isLoading && (
+          <div className="flex items-center justify-center w-[100%] col-span-12">
+            <ProgressSpinner
+              style={{ width: "100px", height: "100px" }}
+              strokeWidth="8"
+              fill="var(--surface-ground)"
+              animationDuration=".5s"
+            />
+          </div>
+        )}
+        {notifications ? (
+          notifications.length === 0 && !isLoading ? (
+            <EmptyComic content="Không có thông báo" />
+          ) : (
+            <div className="w-[100%]">
+              {notifications.map((notify) => (
+                <CardNotify notify={notify} imageHeight={150} key={notify.id} />
+              ))}
+            </div>
+          )
         ) : (
-          <div className="w-[100%]">
-            {notifications.map((notify) => (
-              <CardNotify notify={notify} imageHeight={150} key={notify.id} />
-            ))}
+          <div className="flex items-center justify-center w-[100%] col-span-12">
+            <ProgressSpinner
+              style={{ width: "100px", height: "100px" }}
+              strokeWidth="8"
+              fill="var(--surface-ground)"
+              animationDuration=".5s"
+            />
           </div>
-        )
-      ) : (
-        <div className="flex items-center justify-center w-[100%] col-span-12">
-          <ProgressSpinner
-            style={{ width: "100px", height: "100px" }}
-            strokeWidth="8"
-            fill="var(--surface-ground)"
-            animationDuration=".5s"
-          />
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </NotificationContextProvider>
   );
 };
 

@@ -18,14 +18,6 @@ export const optionSort: OptionSort[] = [
     code: "view",
   },
   {
-    name: "Thích nhiều nhất",
-    code: "like",
-  },
-  {
-    name: "Theo dõi nhiều nhất",
-    code: "follow",
-  },
-  {
     name: "Mới cập nhật",
     code: "updatedAt",
   },

@@ -1,8 +1,8 @@
 import { NOTIFICATION_STATUS } from "@/applications/desktop/user-page/components/notification/enum";
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
-import MeService from "@/shared/services/meService";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthContext } from "../contexts/AuthContext";
+import NotifyService from "../services/notifyService";
 
 interface UseNotificationParams {
   page: number;
@@ -23,19 +23,17 @@ export const useNotification = ({
     setIsVisiable: setIsShowNotification,
   } = useClickOutside();
   const { data: notifications = [], isLoading } = useQuery({
-    queryKey: ["notification", { page, limit }, type],
+    queryKey: ["notification", { page, limit, type }],
     queryFn: async () => {
-      try {
-        const { data } = await MeService.getNotifies(
-          {
-            page,
-            limit,
-          },
-          type
-        );
+      const { data } = await NotifyService.getMyNotification(
+        {
+          page,
+          limit,
+        },
+        type
+      );
 
-        return data;
-      } catch (error: any) {}
+      return data;
     },
     enabled: isLoggedIn,
   });

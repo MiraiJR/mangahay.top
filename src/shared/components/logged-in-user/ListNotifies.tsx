@@ -12,7 +12,7 @@ const ListNotifies = ({ notifies }: ListNotifiesProps) => {
 
   return (
     <div
-      className={`max-h-[500px] w-[100%] overflow-y-scroll pt-4 bg-${theme} no-scrollbar`}
+      className={`max-h-[500px] w-[100%] overflow-y-scroll bg-${theme} no-scrollbar py-2`}
     >
       {notifies.length === 0 ? (
         <div className="text-center">

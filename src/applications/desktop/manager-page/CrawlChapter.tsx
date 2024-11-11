@@ -1,5 +1,3 @@
-import { extractComicId } from "@/shared/helpers/helpers";
-import comicService from "@/shared/services/comicService";
 import themeStore from "@/shared/stores/theme-storage";
 import {
   AutoComplete,
@@ -7,80 +5,29 @@ import {
 } from "primereact/autocomplete";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { useState } from "react";
-import { toast } from "react-toastify";
-
-interface StatusLoading {
-  isCrawling: boolean;
-}
+import { useCrawlChapter } from "./useCrawlChapter";
+import { useRecommendedComicByName } from "@/shared/hooks/useRecommendedComicByName";
+import { useTranslation } from "react-i18next";
 
 const CrawlChapter = () => {
-  const [urlPost, setUrlPost] = useState<string>("");
-  const [querySelector, setQuerySelector] = useState<string>("");
-  const [comicName, setComicName] = useState<string>("");
-  const [attribute, setAttribute] = useState<string>("");
-  const [chapterName, setChapterName] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState<StatusLoading>({
-    isCrawling: false,
-  });
-  const [items, setItems] = useState<string[]>([]);
-
-  const handleCrawlChapter = async () => {
-    if (
-      comicName.trim() === "" ||
-      urlPost.trim() === "" ||
-      chapterName.trim() === ""
-    ) {
-      setErrorMessage("Vui lòng điền đầy đủ thông tin!");
-      return;
-    }
-
-    setErrorMessage(null);
-    setLoading((pre) => {
-      return {
-        ...pre,
-        isCrawling: true,
-      };
-    });
-
-    try {
-      const comicId = extractComicId(comicName);
-      const { data } = await comicService.crawlChapter(
-        comicId,
-        urlPost,
-        chapterName,
-        querySelector,
-        attribute
-      );
-
-      toast.success(data);
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setLoading((pre) => {
-        return {
-          ...pre,
-          isCrawling: false,
-        };
-      });
-      resetInput();
-    }
-  };
-
-  const resetInput = () => {
-    setUrlPost("");
-  };
-
-  const getComics = async (name: string): Promise<Comic[]> => {
-    const { data } = await comicService.searchComics({ name: name });
-    return data.comics;
-  };
-
-  const handleSearch = async (e: AutoCompleteCompleteEvent) => {
-    const comics = await getComics(e.query);
-    setItems(comics.map((comic) => `${comic.id}/${comic.name}`));
-  };
+  const { t } = useTranslation();
+  const {
+    urlPost,
+    setUrlPost,
+    querySelector,
+    setQuerySelector,
+    comicName,
+    setComicName,
+    attribute,
+    setAttribute,
+    chapterName,
+    setChapterName,
+    handleCrawlChapter,
+    isCrawling,
+    errorMessage,
+  } = useCrawlChapter();
+  const { recommendedComics, handleGetRecommendedComics } =
+    useRecommendedComicByName();
 
   return (
     <div
@@ -88,23 +35,31 @@ const CrawlChapter = () => {
     >
       {errorMessage && <div className="text-red-400">{errorMessage}</div>}
       <div className="flex flex-col gap-4 w-[100%]">
-        <div className="font-bold">Đăng chapter mới cho truyện</div>
+        <div className="font-bold">
+          {t("crawlChapter.comicName.label", { ns: "common" })}
+        </div>
         <AutoComplete
-          placeholder="Nhập tên truyện"
+          placeholder={t("crawlChapter.comicName.placeholder", {
+            ns: "common",
+          })}
           inputStyle={{
             width: "100%",
           }}
           value={comicName}
-          suggestions={items}
-          completeMethod={(e: AutoCompleteCompleteEvent) => handleSearch(e)}
+          suggestions={recommendedComics}
+          completeMethod={(e: AutoCompleteCompleteEvent) =>
+            handleGetRecommendedComics(e.query)
+          }
           onChange={(e) => setComicName(e.value)}
         />
       </div>
       <div className="flex flex-col gap-2 w-[100%]">
-        <label htmlFor="urlPost">Link Url</label>
+        <label htmlFor="urlPost">
+          {t("crawlChapter.linkUrl.label", { ns: "common" })}
+        </label>
         <InputText
           id="urlPost"
-          placeholder="Nhập liên kết"
+          placeholder={t("crawlChapter.linkUrl.placeholder", { ns: "common" })}
           aria-describedby="username-help"
           className="w-[100%]"
           value={urlPost}
@@ -114,10 +69,14 @@ const CrawlChapter = () => {
         />
       </div>
       <div className="flex flex-col gap-2 w-[100%]">
-        <label htmlFor="chapterName">Tên chapter</label>
+        <label htmlFor="chapterName">
+          {t("crawlChapter.chapterName.label", { ns: "common" })}
+        </label>
         <InputText
           id="chapterName"
-          placeholder="Nhập tên chapter"
+          placeholder={t("crawlChapter.chapterName.placeholder", {
+            ns: "common",
+          })}
           aria-describedby="username-help"
           className="w-[100%]"
           value={chapterName}
@@ -128,10 +87,14 @@ const CrawlChapter = () => {
       </div>
       <div className="flex gap-4">
         <div className="flex flex-col gap-2 w-[100%]">
-          <label htmlFor="querySelector">Query Selector</label>
+          <label htmlFor="querySelector">
+            {t("crawlChapter.querySelector.label", { ns: "common" })}
+          </label>
           <InputText
             id="querySelector"
-            placeholder="Nhập query selector"
+            placeholder={t("crawlChapter.querySelector.placeholder", {
+              ns: "common",
+            })}
             aria-describedby="username-help"
             className="w-[100%]"
             value={querySelector}
@@ -141,10 +104,14 @@ const CrawlChapter = () => {
           />
         </div>
         <div className="flex flex-col gap-2 w-[100%]">
-          <label htmlFor="attribute">Attribute</label>
+          <label htmlFor="attribute">
+            {t("crawlChapter.attribute.label", { ns: "common" })}
+          </label>
           <InputText
             id="attribute"
-            placeholder="Nhập attribute"
+            placeholder={t("crawlChapter.attribute.placeholder", {
+              ns: "common",
+            })}
             aria-describedby="username-help"
             className="w-[100%]"
             value={attribute}
@@ -156,10 +123,10 @@ const CrawlChapter = () => {
       </div>
       <div className="flex items-center justify-center">
         <Button
-          label={"Cào chương"}
+          label={t("crawlChapter.button.label", { ns: "common" })}
           icon="pi pi-check"
-          loading={loading.isCrawling}
-          onClick={handleCrawlChapter}
+          loading={isCrawling}
+          onClick={() => handleCrawlChapter()}
         />
       </div>
     </div>

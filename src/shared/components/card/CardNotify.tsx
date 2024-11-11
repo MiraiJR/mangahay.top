@@ -1,3 +1,4 @@
+import { useNotificationContext } from "@/shared/contexts/NotificationContext";
 import { formatDate } from "@/shared/helpers/helpers";
 import { cn } from "@/shared/libs/utils";
 import NotifyService from "@/shared/services/notifyService";
@@ -7,19 +8,20 @@ import { useState } from "react";
 
 interface itemProps {
   notify: Notify;
-  imageWidth?: number;
   imageHeight?: number;
 }
 
-const CardNotify = ({ notify, imageWidth, imageHeight }: itemProps) => {
+const CardNotify = ({ notify, imageHeight }: itemProps) => {
   const [data, setData] = useState<Notify>(notify);
   const router = useRouter();
+  const { refetchNotification } = useNotificationContext();
 
   const handleReadNotify = async () => {
     try {
       const { data } = await NotifyService.changeState(notify.id);
 
       setData(data);
+      refetchNotification();
       router.push(`${notify.redirectUrl}`);
     } catch (error: any) {}
   };

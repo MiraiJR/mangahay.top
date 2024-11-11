@@ -46,7 +46,6 @@ export const SearchComic = () => {
               if (event.key === "Enter") {
                 router.push(`/tim-kiem?comicName=${inputSearch}`);
                 setIsShowSearchResult(false);
-                reset();
               }
             }}
           />

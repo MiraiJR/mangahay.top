@@ -1,4 +1,5 @@
+type Language = "en" | "vi";
 interface Country {
   name: string;
-  code: string;
+  code: Language;
 }

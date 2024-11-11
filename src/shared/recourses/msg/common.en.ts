@@ -5,6 +5,7 @@ export const common: CommonResouce = {
   notification: {
     label: "Notification",
     noNotification: "No notifications",
+    list: "List notification",
   },
   search: {
     placeholder: "Search comics",
@@ -87,4 +88,30 @@ export const common: CommonResouce = {
   },
   canDragAndDropImage: "You can drag and drop images here.",
   collapse: "Collapse",
+  crawlChapter: {
+    label: "Scrape new chapter for the comic",
+    button: {
+      label: "Scrape chapter",
+    },
+    attribute: {
+      label: "HTML attribute",
+      placeholder: "Enter the attribute to extract",
+    },
+    querySelector: {
+      label: "Query Selector",
+      placeholder: "Enter query selector",
+    },
+    chapterName: {
+      label: "Chapter name",
+      placeholder: "Enter chapter name",
+    },
+    linkUrl: {
+      label: "URL",
+      placeholder: "Enter the URL to scrape",
+    },
+    comicName: {
+      label: "Search comic",
+      placeholder: "Enter comic name to search",
+    },
+  },
 };

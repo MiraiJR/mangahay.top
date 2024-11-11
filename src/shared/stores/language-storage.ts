@@ -1,12 +1,14 @@
 const isClient = typeof window !== "undefined";
 
 const LanguageStorage = () => {
-  let currentLanguage = "vi";
+  let currentLanguage: Language = "vi";
   const LANGUAGE_STORAGE = "language";
 
-  const getCurrentLanguage = () => {
+  const getLanguage = () => {
     if (isClient) {
-      const languageFromStorage = window.localStorage.getItem(LANGUAGE_STORAGE);
+      const languageFromStorage = window.localStorage.getItem(
+        LANGUAGE_STORAGE
+      ) as Language;
       if (languageFromStorage) {
         currentLanguage = languageFromStorage;
       }
@@ -14,7 +16,7 @@ const LanguageStorage = () => {
     return currentLanguage;
   };
 
-  const changeLanguage = (targetLanguage: string) => {
+  const changeLanguage = (targetLanguage: Language) => {
     if (isClient) {
       window.localStorage.setItem(LANGUAGE_STORAGE, targetLanguage);
       currentLanguage = targetLanguage;
@@ -22,9 +24,9 @@ const LanguageStorage = () => {
   };
 
   return {
-    getCurrentLanguage,
+    getLanguage,
     changeLanguage,
   };
 };
 
-export default LanguageStorage;
+export default LanguageStorage();

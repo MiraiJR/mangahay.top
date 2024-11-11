@@ -17,13 +17,6 @@ const MeService = {
     axiosClient.put<StatusInteractWithComic>(
       `/users/me/interact/${comicId}?action=${action}`
     ),
-  getNotifies: (paging: Paging | null, type: string = "2") =>
-    axiosClient.get<Notify[]>(`/users/me/notifies`, {
-      params: {
-        paging,
-        type,
-      },
-    }),
   getFollowingComics: () =>
     axiosClient.get<Comic[]>(`/users/me/comics/following`),
   updateAvatar: (formData: FormData) =>

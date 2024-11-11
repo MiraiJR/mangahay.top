@@ -22,6 +22,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { PrimeReactProvider } from "primereact/api";
 import { AuthContextProvider } from "@/shared/contexts/AuthContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { LanguageContextProvider } from "@/shared/contexts/LanguageContext";
 
 const store = createStore();
 const StoreContext = React.createContext<any>({});
@@ -43,16 +44,18 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
       <QueryClientProvider client={queryClient}>
         <StoreContext.Provider value={store}>
           <ThemProvider>
-            <PrimeReactProvider>
-              <AuthContextProvider>
-                <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-                  <MainLayout>
-                    <Component {...pageProps} />
-                    <ToastContainer position="bottom-right" autoClose={500} />
-                  </MainLayout>
-                </GoogleOAuthProvider>
-              </AuthContextProvider>
-            </PrimeReactProvider>
+            <LanguageContextProvider>
+              <PrimeReactProvider>
+                <AuthContextProvider>
+                  <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+                    <MainLayout>
+                      <Component {...pageProps} />
+                      <ToastContainer position="bottom-right" autoClose={500} />
+                    </MainLayout>
+                  </GoogleOAuthProvider>
+                </AuthContextProvider>
+              </PrimeReactProvider>
+            </LanguageContextProvider>
           </ThemProvider>
         </StoreContext.Provider>
       </QueryClientProvider>

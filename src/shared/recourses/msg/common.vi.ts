@@ -3,6 +3,7 @@ export const common = {
   notification: {
     label: "Thông báo",
     noNotification: "Không có thông báo",
+    list: "Danh sách thông báo",
   },
   search: {
     placeholder: "Tìm kiếm truyện",
@@ -85,6 +86,32 @@ export const common = {
   },
   canDragAndDropImage: "Có thể kéo thả ảnh vào đây",
   collapse: "Thu gọn",
+  crawlChapter: {
+    label: "Cào chương mới cho truyện",
+    button: {
+      label: "Cào chương",
+    },
+    attribute: {
+      label: "Thuộc tính html",
+      placeholder: "Nhập thuộc tính muốn lấy",
+    },
+    querySelector: {
+      label: "Query Selector",
+      placeholder: "Nhập query selector",
+    },
+    chapterName: {
+      label: "Tên chương",
+      placeholder: "Nhập tên chương",
+    },
+    linkUrl: {
+      label: "Đường dẫn",
+      placeholder: "Nhập đường dẫn muốn cào",
+    },
+    comicName: {
+      label: "Tìm truyện",
+      placeholder: "Nhập tên truyện để tìm",
+    },
+  },
 };
 
 export type CommonResouce = typeof common;
