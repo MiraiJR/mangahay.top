@@ -1,5 +1,5 @@
 import { extractComicId } from "@/shared/helpers/helpers";
-import ComicService from "@/shared/services/comicService";
+import ChapterService from "@/shared/services/chapterService";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -28,12 +28,12 @@ export const useCrawlChapter = () => {
   };
 
   const mutation = useMutation({
-    mutationKey: ["comic.crawlChapter"],
+    mutationKey: ["chapter.crawlSingle"],
     mutationFn: async () => {
       validate();
 
       const comicId = extractComicId(comicName);
-      const { data } = await ComicService.crawlChapter(
+      const { data } = await ChapterService.crawlSingleChapter(
         comicId,
         urlPost,
         chapterName,

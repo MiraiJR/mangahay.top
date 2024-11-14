@@ -36,7 +36,7 @@ const MainLayout = ({
       id="main-layout"
       className={`min-h-screen relative bg-${theme} ${className}`}
     >
-      <div className={cn(`bg-${theme} relative drop-shadow-lg z-50`)}>
+      <div className={cn(`bg-${theme} relative drop-shadow-lg z-10`)}>
         <Header />
       </div>
       <div className={cn("container relative mx-auto my-10 mobile:p-2")}>

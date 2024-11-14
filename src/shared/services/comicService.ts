@@ -46,19 +46,6 @@ const ComicService = {
     }),
   deleteComic: (comicId: number) =>
     axiosClient.delete<string>(`/comics/${comicId}`),
-  crawlChapter: (
-    comicId: number,
-    urlPost: string,
-    nameChapter: string,
-    querySelector: string,
-    attribute: string
-  ) =>
-    axiosClient.post<string>(`/comics/${comicId}/crawl-chapter`, {
-      urlPost,
-      nameChapter,
-      querySelector,
-      attribute,
-    }),
   getComicsCreatedByMe: () => axiosClient.get<Comic[]>(`/comics/created-by-me`),
   getComicsWithChapters: () => axiosClient.get<Comic[]>(`/comics/chapters`),
   getListChapters: (comicId: number) =>

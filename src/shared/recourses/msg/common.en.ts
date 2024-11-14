@@ -114,4 +114,42 @@ export const common: CommonResouce = {
       placeholder: "Enter comic name to search",
     },
   },
+  manager: {
+    myCreatedComics: "My Published Comics",
+    createComic: "Create Comic",
+    createNewChapter: "Create New Chapter",
+    crawlChapter: "Crawl Chapter",
+  },
+  createComic: {
+    name: {
+      label: "Comic Name",
+      placeholder: "Enter comic name",
+    },
+    anotherName: {
+      label: "Alternate Name",
+      placeholder: "Enter alternate name",
+    },
+    author: {
+      label: "Author",
+      placeholder: "Enter author's name",
+    },
+    translator: {
+      label: "Translation Group",
+      placeholder: "Enter translation group",
+    },
+    status: {
+      label: "Comic Status",
+    },
+    genre: {
+      label: "Genre",
+    },
+    description: {
+      label: "Description",
+    },
+    images: {
+      label: "Thumbnail Image",
+    },
+    updateComic: "Update Comic",
+    createComic: "Create Comic",
+  },
 };

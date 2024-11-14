@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import MenuChapter from "./MenuChapter";
 import router from "next/router";
 import { ArrowLeftCircle, ArrowRightCircle, MenuSquare } from "lucide-react";
-import { cn } from "@/shared/libs/utils";
 import { Button } from "primereact/button";
 
 interface NavigationChapterProps {

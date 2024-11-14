@@ -19,8 +19,7 @@ export async function getServerSideProps(context: any) {
         detailComic: data,
       },
     };
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
     return {
       redirect: {
         permanent: false,

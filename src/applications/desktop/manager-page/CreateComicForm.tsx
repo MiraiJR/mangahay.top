@@ -13,12 +13,14 @@ import { RadioButton } from "primereact/radiobutton";
 import { useGetGenres } from "@/shared/hooks/useGetGenres";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useCreateComic } from "./useCreateComic";
+import { useTranslation } from "react-i18next";
 
 interface itemProps {
   comic?: Comic | null;
 }
 
 const CreateComicForm = ({ comic = null }: itemProps) => {
+  const { t } = useTranslation();
   const { oppositeTheme, theme } = useThemeContext();
   const { genres } = useGetGenres();
   const {
@@ -59,10 +61,12 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
       <div className={`flex gap-4 flex-col text-${oppositeTheme}`}>
         <div className="flex gap-4  mobile:flex-col">
           <div className="flex flex-col gap-2 w-[100%] ">
-            <label htmlFor="comicName">Tên truyện</label>
+            <label htmlFor="comicName">
+              {t("createComic.name.label", { ns: "common" })}
+            </label>
             <InputText
               id="comicName"
-              placeholder="Nhập tên truyện"
+              placeholder={t("createComic.name.placeholder", { ns: "common" })}
               aria-describedby="username-help"
               className="w-[100%]"
               value={comicName}
@@ -72,10 +76,14 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
             />
           </div>
           <div className="flex flex-col gap-2 w-[100%]">
-            <label htmlFor="anotherName">Tên khác của truyện</label>
+            <label htmlFor="anotherName">
+              {t("createComic.anotherName.label", { ns: "common" })}
+            </label>
             <InputText
               id="anotherName"
-              placeholder="Nhập tên khác của truyện"
+              placeholder={t("createComic.anotherName.placeholder", {
+                ns: "common",
+              })}
               aria-describedby="username-help"
               className="w-[100%]"
               value={comicAnotherName}
@@ -87,12 +95,16 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
         </div>
         <div className="flex gap-4 mobile:flex-col">
           <div className="flex flex-col gap-2 w-[100%]">
-            <label htmlFor="authors">Tác giả</label>
+            <label htmlFor="authors">
+              {t("createComic.author.label", { ns: "common" })}
+            </label>
             <Chips
               pt={{
                 container: { className: "w-[100%]" },
               }}
-              placeholder="Tên tác giả"
+              placeholder={t("createComic.author.placeholder", {
+                ns: "common",
+              })}
               inputId="authors"
               max={10}
               value={comicAuthors}
@@ -102,12 +114,16 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
             />
           </div>
           <div className="flex flex-col gap-2 w-[100%]">
-            <label htmlFor="translators">Nhóm dịch</label>
+            <label htmlFor="translators">
+              {t("createComic.translator.label", { ns: "common" })}
+            </label>
             <Chips
               pt={{
                 container: { className: "w-[100%]" },
               }}
-              placeholder="Tên nhóm dịch"
+              placeholder={t("createComic.translator.placeholder", {
+                ns: "common",
+              })}
               inputId="translators"
               max={10}
               value={comicTranslators}
@@ -119,7 +135,9 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
         </div>
       </div>
       <div className={`flex flex-col gap-4 text-${oppositeTheme}`}>
-        <label htmlFor="translators">Trạng thái truyện</label>
+        <label htmlFor="translators">
+          {t("createComic.status.label", { ns: "common" })}
+        </label>
         <div className="flex flex-wrap gap-3">
           {Object.values(StatusComic).map((status, _index) => (
             <div className="flex align-items-center" key={_index}>
@@ -139,7 +157,9 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
       </div>
       <div className={`flex gap-4 flex-col text-${oppositeTheme}`}>
         <div>
-          <h2 className="font-bold mb-4">Thể loại</h2>
+          <h2 className="font-bold mb-4">
+            {t("createComic.genre.label", { ns: "common" })}
+          </h2>
           <div className="grid grid-cols-6 mobile:grid-cols-3 gap-2">
             {genres.map((genre) => (
               <div
@@ -164,7 +184,9 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
         </div>
       </div>
       <div className={`flex flex-col gap-2 text-${oppositeTheme}`}>
-        <label htmlFor="briefDescription">Mô tả</label>
+        <label htmlFor="briefDescription">
+          {t("createComic.description.label", { ns: "common" })}
+        </label>
         <Editor
           value={comicBriefDescription}
           onTextChange={(e: EditorTextChangeEvent) => {
@@ -177,7 +199,9 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
         />
       </div>
       <div className={`flex flex-col gap-2 text-${oppositeTheme}`}>
-        <label htmlFor="iamge">Ảnh mô tả</label>
+        <label htmlFor="iamge">
+          {t("createComic.images.label", { ns: "common" })}
+        </label>
         <FileUpload
           ref={fileUploadRef}
           onSelect={(event: FileUploadSelectEvent) => {
@@ -192,14 +216,14 @@ const CreateComicForm = ({ comic = null }: itemProps) => {
       <div className="flex items-center justify-center">
         {comic ? (
           <Button
-            label={"Cập nhật truyện"}
+            label={t("createComic.updateComic", { ns: "common" })}
             icon="pi pi-check"
             loading={isLoadingUpdateComic}
             onClick={() => handleUpdateComic()}
           />
         ) : (
           <Button
-            label={"Tạo truyện"}
+            label={t("createComic.createComic", { ns: "common" })}
             icon="pi pi-check"
             loading={isLoadingCreateComic}
             onClick={() => handleCreateComic()}

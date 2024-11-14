@@ -1,7 +1,7 @@
 import ComicService from "@/shared/services/comicService";
 import { useState } from "react";
 
-export const useSearchComic = () => {
+export const useSearchComicInHeader = () => {
   const [inputSearch, setInputSearch] = useState<string>("");
   const [isShowSearchResult, setIsShowSearchResult] = useState<boolean>(false);
   const [searchResult, setSearchResult] = useState<Comic[]>([]);

@@ -1,12 +1,11 @@
 import { ChevronDown } from "lucide-react";
 import { useLeftMenu } from "./useLeftMenu";
-import ListGenres from "@/shared/components/main-layout/components/left-menu/ListGenres";
-import { useContext } from "react";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 
 export const LeftMenu = () => {
   const { leftMenuData, showListGenres, genreRef } = useLeftMenu();
   const { oppositeTheme } = useThemeContext();
+
   return (
     <div>
       <div className="flex gap-4 mobile:gap-1">
@@ -23,17 +22,17 @@ export const LeftMenu = () => {
             {item.isChevronDown && (
               <ChevronDown size={15} className="mobile:hidden" />
             )}
+            {showListGenres && (
+              <div
+                className="absolute z-50 top-full w-max desktop:top-3/4 mobile:left-0"
+                ref={genreRef}
+              >
+                {item.component && <item.component />}
+              </div>
+            )}
           </div>
         ))}
       </div>
-      {showListGenres && (
-        <div
-          className="absolute z-50 top-full w-max desktop:top-3/4 mobile:left-0"
-          ref={genreRef}
-        >
-          <ListGenres />
-        </div>
-      )}
     </div>
   );
 };

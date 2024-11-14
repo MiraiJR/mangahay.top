@@ -4,8 +4,8 @@ import ComicService from "../services/comicService";
 interface SearchComicParams {
   comicName?: string;
   filterAuthor?: string;
-  filterSort?: OptionSort;
-  filterState?: OptionStatus;
+  filterSort?: OptionSort | null;
+  filterState?: OptionStatus | null;
   filterGenres?: string[];
   page?: number;
   size?: number;
@@ -21,31 +21,27 @@ export const useSearchComic = ({
   size,
 }: SearchComicParams) => {
   const buildParams = () => {
-    let params = "?";
+    let params = [];
 
     if (comicName !== "") {
-      params += `comicName=${comicName}`;
+      params.push(`comicName=${comicName}`);
     }
 
     if (filterAuthor?.length !== 0) {
-      params += `filterAuthor=${filterAuthor}`;
+      params.push(`filterAuthor=${filterAuthor}`);
     }
 
     if (filterGenres?.length !== 0) {
-      params += `filterGenres=${filterGenres}`;
+      params.push(`filterGenres=${filterGenres}`);
     }
     if (filterState) {
-      params += `filterState=${filterState?.name}`;
+      params.push(`filterState=${filterState?.name}`);
     }
     if (filterSort) {
-      params += `filterSort=${filterSort?.code}`;
+      params.push(`filterSort=${filterSort?.code}`);
     }
 
-    if (params === "?") {
-      params = "";
-    }
-
-    return params;
+    return params.length !== 0 ? `?${params.join("&")}` : "";
   };
 
   const searchComics = async () => {

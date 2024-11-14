@@ -1,10 +1,8 @@
 import { Divider } from "primereact/divider";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
-import { ChangeEvent, useContext, useEffect } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
-import { toast } from "react-toastify";
-import comicService from "@/shared/services/comicService";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { optionSort, optionStatus } from "./constant";
 import { useSearchState } from "./useSearchState";
@@ -31,12 +29,13 @@ const BoxSearch = ({ setComics, resultRef }: itemProps) => {
     setFilterGenres,
     showAdvancedSearch,
     setShowAdvancedSearch,
+    handleSearchComic,
     initialSearchResult,
   } = useSearchState();
 
   useEffect(() => {
     setComics(initialSearchResult);
-  }, [initialSearchResult]);
+  }, []);
 
   const onIngredientsChange = (e: CheckboxChangeEvent) => {
     let _filterGenres = [...filterGenres];
@@ -47,49 +46,17 @@ const BoxSearch = ({ setComics, resultRef }: itemProps) => {
     setFilterGenres(_filterGenres);
   };
 
-  const handleSearchComic = async () => {
-    let params = "?";
+  const scrollToResult = () => {
+    resultRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
+  };
 
-    if (comicName !== "") {
-      params += `comicName=${comicName}`;
-    }
-
-    if (filterAuthor.length !== 0) {
-      params += `filterAuthor=${filterAuthor}`;
-    }
-    if (filterGenres.length !== 0) {
-      params += `filterGenres=${filterGenres}`;
-    }
-    if (filterState) {
-      params += `filterState=${filterState?.name}`;
-    }
-    if (filterSort) {
-      params += `filterSort=${filterSort?.code}`;
-    }
-
-    if (params === "?") {
-      params = "";
-    }
-
-    window.history.pushState({}, "", params);
-
-    try {
-      const { data } = await comicService.searchComics({
-        name: comicName,
-        author: filterAuthor,
-        genres: filterGenres,
-        orderBy: filterSort?.code ?? "updatedAt",
-        status: filterState?.name,
-      });
-
-      setComics(data.comics);
-      resultRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-      });
-    } catch (error: any) {
-      toast.error(error.message);
-    }
+  const searchAndSearchResult = async () => {
+    const comics = await handleSearchComic();
+    setComics(comics);
+    scrollToResult();
   };
 
   return (
@@ -115,13 +82,15 @@ const BoxSearch = ({ setComics, resultRef }: itemProps) => {
           }
           onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
             if (event.key === "Enter") {
-              handleSearchComic();
+              searchAndSearchResult();
             }
           }}
         />
         <i
           className="pi pi-search px-4 py-2 cursor-pointer"
-          onClick={handleSearchComic}
+          onClick={() => {
+            searchAndSearchResult();
+          }}
         ></i>
       </div>
       <div

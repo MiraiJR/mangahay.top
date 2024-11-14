@@ -1,10 +1,11 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { TabMenu } from "primereact/tabmenu";
 import { MenuItem } from "primereact/menuitem";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import dynamic from "next/dynamic";
 import { DialogProvider } from "@/shared/contexts/DialogContext";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 const CreateComicForm = dynamic(() => import("./CreateComicForm"), {
   ssr: false,
@@ -25,34 +26,35 @@ enum TabType {
 }
 
 const ManagerPage = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const { theme, oppositeTheme } = useThemeContext();
   const [activeTab, setActiveTab] = useState<number>(TabType.CREATED_COMICS);
 
   const items: MenuItem[] = [
     {
-      label: "Truyện đã đăng",
+      label: t("manager.myCreatedComics", { ns: "common" }),
       command: () => {
         setActiveTab(TabType.CREATED_COMICS);
         router.replace(`${router.pathname}#${TabType.CREATED_COMICS}`);
       },
     },
     {
-      label: "Tạo truyện",
+      label: t("manager.createComic", { ns: "common" }),
       command: () => {
         setActiveTab(TabType.CREATE_COMIC);
         router.replace(`${router.pathname}#${TabType.CREATE_COMIC}`);
       },
     },
     {
-      label: "Tạo chương mới",
+      label: t("manager.createNewChapter", { ns: "common" }),
       command: () => {
         setActiveTab(TabType.CREATE_CHAPTER);
         router.replace(`${router.pathname}#${TabType.CREATE_CHAPTER}`);
       },
     },
     {
-      label: "Cào chapter",
+      label: t("manager.crawlChapter", { ns: "common" }),
       command: () => {
         setActiveTab(TabType.CRAWL_CHAPTER);
         router.replace(`${router.pathname}#${TabType.CRAWL_CHAPTER}`);

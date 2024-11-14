@@ -2,6 +2,7 @@ import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import { Library, History, LucideIcon } from "lucide-react";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
+import ListGenres from "./ListGenres";
 
 export type ItemLeftMenu = {
   id: number;
@@ -10,6 +11,7 @@ export type ItemLeftMenu = {
   handle: any;
   Icon?: LucideIcon;
   ref?: React.Ref<any>;
+  component?: React.ComponentType;
 };
 
 export const useLeftMenu = () => {
@@ -30,6 +32,7 @@ export const useLeftMenu = () => {
       },
       Icon: Library,
       ref: genreRef,
+      component: ListGenres,
     },
     {
       id: 2,

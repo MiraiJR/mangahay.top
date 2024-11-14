@@ -15,9 +15,16 @@ export const useSearchState = () => {
     filterAuthor: filterAuthorFromUrl,
     filterGenres: filterGenresFromUrl,
     comicName: comicNameFromUrl,
+    filterState: filterStateFromUrl,
   } = router.query;
 
   useEffect(() => {
+    if (filterStateFromUrl && typeof filterStateFromUrl === "string") {
+      setFilterState({
+        name: filterStateFromUrl,
+      });
+    }
+
     if (filterAuthorFromUrl && typeof filterAuthorFromUrl === "string") {
       setFilterAuthor(filterAuthorFromUrl);
     }
@@ -31,10 +38,14 @@ export const useSearchState = () => {
     }
   }, [router]);
 
-  const { comics } = useSearchComic({
+  const { searchComics, comics } = useSearchComic({
     comicName,
     filterAuthor,
+    filterSort,
+    filterState,
     filterGenres,
+    page: 1,
+    size: 16,
   });
 
   return {
@@ -50,6 +61,7 @@ export const useSearchState = () => {
     setFilterGenres,
     showAdvancedSearch,
     setShowAdvancedSearch,
+    handleSearchComic: searchComics,
     initialSearchResult: comics,
   };
 };

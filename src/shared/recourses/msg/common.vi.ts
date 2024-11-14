@@ -112,6 +112,50 @@ export const common = {
       placeholder: "Nhập tên truyện để tìm",
     },
   },
+  manager: {
+    myCreatedComics: "Truyện đã đăng",
+    createComic: "Tạo truyện",
+    createNewChapter: "Tạo chương mới",
+    crawlChapter: "Cào chương",
+  },
+  createComic: {
+    name: {
+      label: "Tên truyện",
+      placeholder: "Nhập tên truyện",
+    },
+    anotherName: {
+      label: "Tên khác của truyện",
+      placeholder: "Nhập tên khác của truyện",
+    },
+    author: {
+      label: "Tác giả",
+      placeholder: "Nhập tên tác giả",
+    },
+    translator: {
+      label: "Nhóm dịch",
+      placeholder: "Nhập nhóm dịch",
+    },
+    status: {
+      label: "Trạng thái truyện",
+    },
+    genre: {
+      label: "Thể loại",
+    },
+    description: {
+      label: "Mô tả",
+    },
+    images: {
+      label: "Ảnh mô tả",
+    },
+    updateComic: "Cập nhật truyện",
+    createComic: "Tạo truyện",
+  },
+  advanceSearch: {
+    comicName: {
+      label: "Tên truyện",
+      placeholder: "Nhập tên truyện cần tìm",
+    },
+  },
 };
 
 export type CommonResouce = typeof common;

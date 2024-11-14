@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { InputText } from "primereact/inputtext";
 import ListSearchingComics from "./ListResultSearchComics";
-import { useSearchComic } from "./useSearchComic";
+import { useSearchComicInHeader } from "./useSearchComic";
 import { useTranslation } from "react-i18next";
 
 export const SearchComic = () => {
@@ -15,8 +15,7 @@ export const SearchComic = () => {
     isShowSearchResult,
     setIsShowSearchResult,
     handleSearchComic,
-    reset,
-  } = useSearchComic();
+  } = useSearchComicInHeader();
   const router = useRouter();
 
   return (
@@ -24,7 +23,7 @@ export const SearchComic = () => {
       <div className="mobile:hidden">
         <div className="p-input-icon-left relative">
           <i
-            className="pi pi-search cursor-pointer right-0 px-3"
+            className={`pi pi-search cursor-pointer right-0 px-3 text-black`}
             onClick={() => router.push(`/tim-kiem?comicName=${inputSearch}`)}
           />
           <InputText
