@@ -12,6 +12,7 @@ export type ItemLeftMenu = {
   Icon?: LucideIcon;
   ref?: React.Ref<any>;
   component?: React.ComponentType;
+  isShowComponent?: boolean;
 };
 
 export const useLeftMenu = () => {
@@ -33,6 +34,7 @@ export const useLeftMenu = () => {
       Icon: Library,
       ref: genreRef,
       component: ListGenres,
+      isShowComponent: showListGenres,
     },
     {
       id: 2,

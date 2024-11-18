@@ -4,10 +4,12 @@ import { userStore } from "@/shared/stores/user-storage";
 import { useUpdateProfile } from "./useUpdateProfile";
 import { UserAvatar } from "./components/avatar/UserAvatar";
 import { UserWallPaper } from "./components/wallpaper/UserWallpaper";
-import { useContext } from "react";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
+import { Button } from "primereact/button";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
+  const { t } = useTranslation();
   const { theme, oppositeTheme } = useThemeContext();
   const { userProfile } = userStore();
   const {
@@ -29,10 +31,14 @@ const Profile = () => {
           </div>
           <div className="mt-[100px] flex flex-col gap-4 items-center">
             <div className="flex flex-col gap-2 w-[100%] ">
-              <label htmlFor="fullname">Tên hiển thị</label>
+              <label htmlFor="fullname">
+                {t("profileField.displayName.label", { ns: "profile" })}
+              </label>
               <InputText
                 id="fullname"
-                placeholder="Cập nhật họ và tên"
+                placeholder={t("profileField.displayName.placeholder", {
+                  ns: "profile",
+                })}
                 aria-describedby="username-help"
                 className="w-[100%]"
                 value={fullName}
@@ -43,14 +49,20 @@ const Profile = () => {
             </div>
             <div className="flex flex-col gap-2 w-[100%] ">
               <div className="flex gap-3">
-                <label htmlFor="phone">Số điện thoại</label>
+                <label htmlFor="phone">
+                  {t("profileField.phone.label", { ns: "profile" })}
+                </label>
                 {!userProfile.phone && (
-                  <span className="text-red-400">*Cập nhật số điện thoại</span>
+                  <span className="text-red-400">
+                    *{t("profileField.phone.placeholder", { ns: "profile" })}
+                  </span>
                 )}
               </div>
               <InputText
                 id="phone"
-                placeholder="Cập nhật số điện thoại"
+                placeholder={t("profileField.phone.placeholder", {
+                  ns: "profile",
+                })}
                 aria-describedby="username-help"
                 className="w-[100%]"
                 value={phoneNumber}
@@ -60,17 +72,21 @@ const Profile = () => {
               />
             </div>
             <div className="flex flex-col gap-2 w-[100%] ">
-              <label htmlFor="email">Địa chỉ email</label>
+              <label htmlFor="email">
+                {t("profileField.email.label", { ns: "profile" })}
+              </label>
               <InputText
                 id="email"
-                placeholder="Cập nhật số điện thoại"
+                placeholder={t("profileField.email.placeholder", {
+                  ns: "profile",
+                })}
                 aria-describedby="username-help"
                 className="w-[100%]"
                 disabled
                 value={userProfile.email}
               />
             </div>
-            <button
+            <Button
               disabled={isLoadingProfile}
               className="btn-primary w-fit"
               onClick={() => handleUpdateProfile()}
@@ -83,9 +99,9 @@ const Profile = () => {
                   animationDuration=".5s"
                 />
               ) : (
-                <span>Cập nhật</span>
+                <span>{t("profileField.updateButton", { ns: "profile" })}</span>
               )}
-            </button>
+            </Button>
           </div>
         </div>
       )}

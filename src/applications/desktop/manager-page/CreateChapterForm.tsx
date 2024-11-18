@@ -98,7 +98,7 @@ const CreateChapterForm = () => {
       </div>
       <div className="flex items-center justify-center">
         <Button
-          label={"Tạo chương"}
+          label={t("createChapterButton", { ns: "chapter" })}
           icon="pi pi-check"
           loading={isLoading}
           onClick={() => handleCreateChapter()}

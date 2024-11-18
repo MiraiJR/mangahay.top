@@ -27,7 +27,7 @@ const RecommendedComics = ({
   const { comics, isLoading } = useSearchComic({
     filterGenres: [genre],
     page: 1,
-    limit: MAX_THE_NUMBER_OF_RECOMMENDED_COMICS,
+    size: MAX_THE_NUMBER_OF_RECOMMENDED_COMICS,
   });
   const { t } = useTranslation();
 

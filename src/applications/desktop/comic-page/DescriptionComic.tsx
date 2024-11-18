@@ -55,11 +55,11 @@ const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
           </h2>
           <span>{comic.anotherName}</span>
         </div>
-        <div className="flex gap-2 items-center mobile:flex-col mobile:items-start">
+        <div className="flex gap-2 flex-wrap items-center mobile:flex-col mobile:items-start">
           <h2 className="font-bold">
             {t("comicProperty.author", { ns: "common" })}
           </h2>
-          <ul className="flex ">
+          <ul className="flex gap-2">
             {comic.authors.map((author, _index) => (
               <Link
                 key={_index}
@@ -72,7 +72,7 @@ const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
             ))}
           </ul>
         </div>
-        <div className="flex gap-2 items-center mobile:flex-col mobile:items-start">
+        <div className="flex gap-2 flex-wrap items-center mobile:flex-col mobile:items-start">
           <h2 className="font-bold">
             {t("comicProperty.translors", { ns: "common" })}
           </h2>
@@ -89,7 +89,7 @@ const DescriptionComic = ({ comic, firstChapter, lastChapter }: itemProps) => {
             ))}
           </ul>
         </div>
-        <div className="flex gap-2 items-center mobile:flex-col mobile:items-start">
+        <div className="flex gap-2 flex-wrap items-center mobile:flex-col mobile:items-start">
           <h2 className="font-bold">
             {t("comicProperty.genres", { ns: "common" })}
           </h2>

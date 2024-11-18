@@ -38,7 +38,7 @@ const BoxComics = ({ title, field }: ItemProps) => {
         <Link
           rel="preload"
           className="flex items-center text-red-400"
-          href={`/danh-sach-truyen?field=${field}`}
+          href={`/tim-kiem?filterSort=updatedAt`}
           hrefLang="vi"
         >
           <span className="text-sm mobile:text-xs not-italic">

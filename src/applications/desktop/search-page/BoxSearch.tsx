@@ -1,12 +1,14 @@
 import { Divider } from "primereact/divider";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
-import { ChangeEvent, useEffect } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { optionSort, optionStatus } from "./constant";
 import { useSearchState } from "./useSearchState";
 import { useGetGenres } from "@/shared/hooks/useGetGenres";
+import { useTranslation } from "react-i18next";
+import { useSearchComic } from "@/shared/hooks/useSearchComic";
 
 interface itemProps {
   setComics: any;
@@ -14,6 +16,7 @@ interface itemProps {
 }
 
 const BoxSearch = ({ setComics, resultRef }: itemProps) => {
+  const { t } = useTranslation();
   const { theme, oppositeTheme } = useThemeContext();
   const { genres } = useGetGenres();
   const {
@@ -30,20 +33,20 @@ const BoxSearch = ({ setComics, resultRef }: itemProps) => {
     showAdvancedSearch,
     setShowAdvancedSearch,
     handleSearchComic,
-    initialSearchResult,
+    initialComicsResult,
   } = useSearchState();
 
   useEffect(() => {
-    setComics(initialSearchResult);
-  }, []);
+    setComics(initialComicsResult);
+  }, [initialComicsResult]);
 
-  const onIngredientsChange = (e: CheckboxChangeEvent) => {
-    let _filterGenres = [...filterGenres];
+  const handleSelectGenre = (e: CheckboxChangeEvent) => {
+    let selectedGenres = [...filterGenres];
 
-    if (e.checked) _filterGenres.push(e.value);
-    else _filterGenres.splice(_filterGenres.indexOf(e.value), 1);
+    if (e.checked) selectedGenres.push(e.value);
+    else selectedGenres.splice(selectedGenres.indexOf(e.value), 1);
 
-    setFilterGenres(_filterGenres);
+    setFilterGenres(selectedGenres);
   };
 
   const scrollToResult = () => {
@@ -64,18 +67,18 @@ const BoxSearch = ({ setComics, resultRef }: itemProps) => {
       className={`bg-${theme} border border-${oppositeTheme} text-${oppositeTheme} p-4`}
     >
       <div
-        title="Tìm kiếm truyện"
+        title={t("searchAction.label", { ns: "search" })}
         className="flex gap-2 items-center text-xl font-bold mobile:text-lg "
       >
         <i className="pi pi-search"></i>
-        <span>Tìm kiếm truyện</span>
+        <span>{t("searchAction.label", { ns: "search" })}</span>
       </div>
       <Divider type="solid" />
       <div className="flex items-center">
         <input
           className={`w-[100%] p-2 text-black border border-${oppositeTheme}`}
           type="text"
-          placeholder="Nhập tên truyện cần tìm"
+          placeholder={t("searchAction.placeholder", { ns: "search" })}
           value={comicName}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             setComicName(event.target.value)
@@ -98,17 +101,23 @@ const BoxSearch = ({ setComics, resultRef }: itemProps) => {
         onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
       >
         <i className="pi pi-filter-fill"></i>
-        <div title="Tìm kiếm truyện">Tìm kiếm nâng cao</div>
+        <div title="Tìm kiếm truyện">
+          {t("advanceSearch.label", { ns: "search" })}
+        </div>
       </div>
       {showAdvancedSearch && (
         <div className="grid grid-cols-2 mobile:grid-cols-1 gap-2">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-4">
-              <label htmlFor="author">Tác giả</label>
+              <label htmlFor="author">
+                {t("advanceSearch.author.label", { ns: "search" })}
+              </label>
               <InputText
                 type="author"
                 id="author"
-                placeholder="Nhập tên tác giả"
+                placeholder={t("advanceSearch.author.placeholder", {
+                  ns: "search",
+                })}
                 aria-describedby="username-help"
                 className="w-[100%]"
                 value={filterAuthor}
@@ -118,32 +127,42 @@ const BoxSearch = ({ setComics, resultRef }: itemProps) => {
               />
             </div>
             <div className="flex flex-col gap-4">
-              <label htmlFor="status">Trạng thái</label>
+              <label htmlFor="status">
+                {t("advanceSearch.status.label", { ns: "search" })}
+              </label>
               <Dropdown
                 id="status"
                 value={filterState}
                 onChange={(e: DropdownChangeEvent) => setFilterState(e.value)}
                 options={optionStatus}
                 optionLabel="name"
-                placeholder="Trạng thái"
+                placeholder={t("advanceSearch.status.placeholder", {
+                  ns: "search",
+                })}
                 className="w-full md:w-14rem"
               />
             </div>
             <div className="flex flex-col gap-4">
-              <label htmlFor="sort">Sắp xếp</label>
+              <label htmlFor="sort">
+                {t("advanceSearch.sort.label", { ns: "search" })}
+              </label>
               <Dropdown
                 id="sort"
                 value={filterSort}
                 onChange={(e: DropdownChangeEvent) => setFilterSort(e.value)}
                 options={optionSort}
                 optionLabel="name"
-                placeholder="Sắp xếp"
+                placeholder={t("advanceSearch.sort.placeholder", {
+                  ns: "search",
+                })}
                 className="w-full md:w-14rem"
               />
             </div>
           </div>
           <div>
-            <h2 className="font-bold mb-4">Thể loại</h2>
+            <h2 className="font-bold mb-4">
+              {t("advanceSearch.genre.label", { ns: "search" })}
+            </h2>
             <div className="grid grid-cols-4 mobile:grid-cols-3 gap-2">
               {genres.map((genre) => (
                 <div
@@ -154,7 +173,7 @@ const BoxSearch = ({ setComics, resultRef }: itemProps) => {
                   <Checkbox
                     inputId={genre.slug}
                     value={genre.slug}
-                    onChange={onIngredientsChange}
+                    onChange={handleSelectGenre}
                     checked={filterGenres.includes(genre.slug)}
                   />
                   <label htmlFor={genre.slug} className="ml-2 mobile:text-xs">

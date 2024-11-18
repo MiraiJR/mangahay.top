@@ -1,13 +1,13 @@
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { MenuItem } from "primereact/menuitem";
 import { TabMenu } from "primereact/tabmenu";
-import { useContext } from "react";
 import themeStore from "@/shared/stores/theme-storage";
 import dynamic from "next/dynamic";
 import UserSettingPage from "./setting-page/Page";
 import { useRouter } from "next/router";
 import { useActiveTab } from "./useActiveTab";
 import { TabType } from "./enum";
+import { useTranslation } from "react-i18next";
 
 const Profile = dynamic(() => import("./Profile"), { ssr: false });
 const Notification = dynamic(
@@ -22,31 +22,32 @@ const UserPage = () => {
   const { oppositeTheme, theme } = useThemeContext();
   const router = useRouter();
   const { activeTab, setActiveTab } = useActiveTab();
+  const { t } = useTranslation();
 
   const items: MenuItem[] = [
     {
-      label: "Thông tin cá nhân",
+      label: t("personalInformation", { ns: "profile" }),
       command: () => {
         setActiveTab(TabType.PROFILE);
         router.replace(`${router.pathname}#${TabType.PROFILE}`);
       },
     },
     {
-      label: "Thông báo",
+      label: t("notification", { ns: "profile" }),
       command: () => {
         setActiveTab(TabType.NOTIFICATION);
         router.replace(`${router.pathname}#${TabType.NOTIFICATION}`);
       },
     },
     {
-      label: "Truyện theo dõi",
+      label: t("listFollowedComic", { ns: "profile" }),
       command: () => {
         setActiveTab(TabType.FOLLOWING_COMIC);
         router.replace(`${router.pathname}#${TabType.FOLLOWING_COMIC}`);
       },
     },
     {
-      label: "Cài đặt",
+      label: t("setting", { ns: "profile" }),
       command: () => {
         setActiveTab(TabType.SETTING);
         router.replace(`${router.pathname}#${TabType.SETTING}`);

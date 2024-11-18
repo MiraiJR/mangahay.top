@@ -30,25 +30,29 @@ const ChapterViewTypeIndex = ({
     }
   }, [userProfile]);
 
-  return (
-    <>
-      {setting.chapterSetting.type === ChapterViewType.DEFAULT && (
-        <ChapterViewTypeDefault
-          images={images}
-          chapterName={chapterName}
-          comicName={comicName}
-        />
-      )}
-      {setting.chapterSetting.type === ChapterViewType.SLIDER_PER_VIEW && (
-        <ChapterViewTypeSlide
-          images={images}
-          chapterName={chapterName}
-          comicName={comicName}
-          sliderPerView={setting.chapterSetting.amount}
-        />
-      )}
-    </>
-  );
+  const renderChapterStyle = () => {
+    switch (setting.chapterSetting.type) {
+      case ChapterViewType.SLIDER_PER_VIEW:
+        return (
+          <ChapterViewTypeSlide
+            images={images}
+            chapterName={chapterName}
+            comicName={comicName}
+            sliderPerView={setting.chapterSetting.amount}
+          />
+        );
+      default:
+        return (
+          <ChapterViewTypeDefault
+            images={images}
+            chapterName={chapterName}
+            comicName={comicName}
+          />
+        );
+    }
+  };
+
+  return renderChapterStyle();
 };
 
 export default ChapterViewTypeIndex;

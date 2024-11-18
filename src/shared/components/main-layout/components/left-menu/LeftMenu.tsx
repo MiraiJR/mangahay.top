@@ -3,7 +3,7 @@ import { useLeftMenu } from "./useLeftMenu";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 
 export const LeftMenu = () => {
-  const { leftMenuData, showListGenres, genreRef } = useLeftMenu();
+  const { leftMenuData, showListGenres } = useLeftMenu();
   const { oppositeTheme } = useThemeContext();
 
   return (
@@ -22,10 +22,10 @@ export const LeftMenu = () => {
             {item.isChevronDown && (
               <ChevronDown size={15} className="mobile:hidden" />
             )}
-            {showListGenres && (
+            {item.isShowComponent && (
               <div
-                className="absolute z-50 top-full w-max desktop:top-3/4 mobile:left-0"
-                ref={genreRef}
+                className={`absolute z-50 top-full w-max desktop:top-3/4 mobile:left-0`}
+                ref={item.ref}
               >
                 {item.component && <item.component />}
               </div>

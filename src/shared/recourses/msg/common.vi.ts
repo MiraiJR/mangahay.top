@@ -156,6 +156,10 @@ export const common = {
       placeholder: "Nhập tên truyện cần tìm",
     },
   },
+  genre: "Thể loại",
+  listComicPage: {
+    label: "Danh sách truyện",
+  },
 };
 
 export type CommonResouce = typeof common;

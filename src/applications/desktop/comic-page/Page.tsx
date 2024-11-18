@@ -37,8 +37,8 @@ const ComicPage = () => {
           </div>
           {comic && (
             <DescriptionComic
-              firstChapter={comic.chapters[comic.chapters.length - 1] ?? null}
-              lastChapter={comic.chapters[0] ?? null}
+              firstChapter={comic.chapters[0] ?? null}
+              lastChapter={comic.chapters[comic.chapters.length - 1] ?? null}
               comic={comic}
             />
           )}

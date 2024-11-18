@@ -1,8 +1,8 @@
-import { useContext, useRef, useState } from "react";
-import { useThemeContext } from "@/shared/contexts/ThemeContext";
+import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import MetaTags from "@/shared/components/MetaTags";
 import { originalURL } from "@/shared/libs/config";
+import { useTranslation } from "react-i18next";
 
 const BoxSearch = dynamic(() => import("./BoxSearch"), { ssr: false });
 const ListComics = dynamic(
@@ -13,7 +13,7 @@ const ListComics = dynamic(
 const SearchPage = () => {
   const resultRef = useRef<any>(null);
   const [comics, setComics] = useState<Comic[]>([]);
-  const {} = useThemeContext();
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -27,7 +27,10 @@ const SearchPage = () => {
       />
       <BoxSearch resultRef={resultRef} setComics={setComics} />
       <div ref={resultRef}>
-        <ListComics title="Kết quả tìm kiếm" comics={comics} />
+        <ListComics
+          title={t("searchResult", { ns: "search" })}
+          comics={comics}
+        />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useComment } from "@/shared/hooks/useComment";
+import { Button } from "primereact/button";
 import { Editor, EditorTextChangeEvent } from "primereact/editor";
-import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 
 interface CommentEditorProps {
@@ -10,7 +10,7 @@ interface CommentEditorProps {
 
 export const CommentEditor = ({ comicId }: CommentEditorProps) => {
   const { t } = useTranslation();
-  const { contentComment, setContentComment, handleComment } =
+  const { contentComment, setContentComment, handleComment, isLoading } =
     useComment(comicId);
   const { oppositeTheme } = useThemeContext();
 
@@ -37,9 +37,12 @@ export const CommentEditor = ({ comicId }: CommentEditorProps) => {
           handleComment();
         }}
       >
-        <button className="btn-primary w-fit mt-2 float-right">
+        <Button
+          className="btn-primary w-fit mt-2 float-right"
+          loading={isLoading}
+        >
           {t("listComment.comment", { ns: "common" })}
-        </button>
+        </Button>
       </div>
     </>
   );

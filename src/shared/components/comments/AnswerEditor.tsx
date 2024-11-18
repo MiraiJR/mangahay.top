@@ -2,7 +2,6 @@ import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useAnswerComment } from "@/shared/hooks/useAnswerComment";
 import { Button } from "primereact/button";
 import { Editor, EditorTextChangeEvent } from "primereact/editor";
-import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 
 interface AnswerEditorProps {
@@ -50,6 +49,7 @@ export const AnswerEditor = ({
             }
           }}
           disabled={isLoading}
+          loading={isLoading}
         >
           {t("listComment.answer", { ns: "common" })}
         </Button>

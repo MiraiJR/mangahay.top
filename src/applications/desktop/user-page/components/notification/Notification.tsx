@@ -9,19 +9,20 @@ import { Check, X } from "lucide-react";
 import { useMarkAllReadNotification } from "./useMarkAllReadNotification";
 import { NOTIFICATION_STATUS } from "./enum";
 import { NotificationContextProvider } from "@/shared/contexts/NotificationContext";
-
-const notificationFilterButtonDatas: NotificationFilter[] = [
-  {
-    label: "Đã đọc",
-    type: NOTIFICATION_STATUS.READ,
-  },
-  {
-    label: "Chưa đọc",
-    type: NOTIFICATION_STATUS.UNREAD,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const Notification = () => {
+  const { t } = useTranslation();
+  const notificationFilterButtonDatas: NotificationFilter[] = [
+    {
+      label: t("notificationPage.type.read", { ns: "profile" }),
+      type: NOTIFICATION_STATUS.READ,
+    },
+    {
+      label: t("notificationPage.type.unread", { ns: "profile" }),
+      type: NOTIFICATION_STATUS.UNREAD,
+    },
+  ];
   const [notificationFilterData, setNotificationFilterData] =
     useState<NotificationFilter>(notificationFilterButtonDatas[0]);
   const { notifications, isLoading } = useNotification({
@@ -36,7 +37,7 @@ const Notification = () => {
     <NotificationContextProvider>
       <div className="flex flex-col w-[100%]">
         <div className="pt-4 text-center font-bold text-xl">
-          Danh sách thông báo
+          {t("notificationPage.list", { ns: "profile" })}
         </div>
         <div className="my-10 card flex justify-content-center items-center justify-between">
           <SelectButton
@@ -53,7 +54,9 @@ const Notification = () => {
               onClick={() => handleMarkAllReadNotification()}
             >
               <Check />
-              <span>Đánh dấu đã đọc hết</span>
+              <span>
+                {t("notificationPage.markAllReadButton", { ns: "profile" })}
+              </span>
             </div>
             <div
               className="flex items-center text-red-600 cursor-pointer"
@@ -62,7 +65,9 @@ const Notification = () => {
               }}
             >
               <X />
-              <span>Xoá tất cả</span>
+              <span>
+                {t("notificationPage.removeAllButton", { ns: "profile" })}
+              </span>
             </div>
           </div>
         </div>

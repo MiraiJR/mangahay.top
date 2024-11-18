@@ -1,14 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { useInteractionComic } from "./useInteractionComic";
 import MeService, { TypeComicInteraction } from "@/shared/services/meService";
 import { useAuthContext } from "@/shared/contexts/AuthContext";
 
-export const useFollowComic = (comicId: number) => {
+export const useFollowComic = () => {
   const { isLoggedIn } = useAuthContext();
   const { t } = useTranslation();
-  const { statusInteractComic } = useInteractionComic(comicId);
   const queryClient = useQueryClient();
 
   const validate = () => {
@@ -18,9 +16,12 @@ export const useFollowComic = (comicId: number) => {
   };
 
   const mutation = useMutation({
-    mutationKey: ["comic.follow", { comicId }],
-    mutationFn: async () => {
+    mutationKey: ["comic.follow"],
+    mutationFn: async (comicId: number) => {
       validate();
+
+      const { data: statusInteractComic } =
+        await MeService.getInteractionWithComic(comicId);
 
       await MeService.interactWithComic(
         comicId,
@@ -40,5 +41,6 @@ export const useFollowComic = (comicId: number) => {
 
   return {
     handleFollow: mutation.mutate,
+    isSuccess: mutation.isSuccess,
   };
 };

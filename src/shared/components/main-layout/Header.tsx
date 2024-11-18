@@ -22,50 +22,57 @@ const Header = () => {
   );
 
   return (
-    <div
-      className={`container mx-auto bg-${theme} text-${oppositeTheme} p-5 flex justify-between items-center relative`}
-    >
-      <div className="flex items-center gap-5 font-medium text-lg">
-        <Link href="/" hrefLang="vi">
-          <Image
-            priority
-            width={0}
-            height={100}
-            className="mobile:h-[50px] mobile:w-fit h-[100px]"
-            src={theme === "light" ? LogoWeb : LogoWebLight}
-            alt="mangahay.top logo"
-          />
-        </Link>
-        <LeftMenu />
-      </div>
-      <div className="card flex flex-wrap items-center justify-content-center gap-3">
-        <FlagCountries />
-        <div className="flex items-center gap-2 mobile:hidden">
-          <label htmlFor="theme">{t(`theme.${theme}`, { ns: "common" })}</label>
-          <InputSwitch
-            id="theme"
-            checked={checkedChangeTheme}
-            onChange={(e: InputSwitchChangeEvent) => {
-              toggleTheme();
-              setCheckedChangeTheme(e.value ?? true);
-            }}
-          />
-        </div>
-        <SearchComic />
-        {isLoggedIn ? (
-          <LoginedUser />
-        ) : (
-          <Link href="/dang-nhap" hrefLang="vi">
-            <button
-              className={`desktop:rounded-full mobile:rounded mobile:p-2 py-2 px-4 font-bold bg-${oppositeTheme} text-${theme}`}
-            >
-              <UserCircle2 size={20} className="desktop:hidden" />
-              <span className="mobile:hidden">
-                {t("login.label", { ns: "auth" })}
-              </span>
-            </button>
+    <div className="p-2">
+      <div
+        className={`container mx-auto bg-${theme} text-${oppositeTheme} p-5 flex justify-between items-center relative`}
+      >
+        <div className="flex items-center gap-5 font-medium text-lg">
+          <Link href="/" hrefLang="vi">
+            <Image
+              priority
+              width={0}
+              height={100}
+              className="mobile:h-[30px] mobile:w-fit h-[100px]"
+              src={theme === "light" ? LogoWeb : LogoWebLight}
+              alt="mangahay.top logo"
+            />
           </Link>
-        )}
+          <LeftMenu />
+        </div>
+        <div className="card flex flex-wrap items-center justify-content-center gap-3">
+          <div className="flex items-center gap-2 mobile:hidden">
+            <FlagCountries />
+            <label htmlFor="theme">
+              {t(`theme.${theme}`, { ns: "common" })}
+            </label>
+            <InputSwitch
+              id="theme"
+              checked={checkedChangeTheme}
+              onChange={(e: InputSwitchChangeEvent) => {
+                toggleTheme();
+                setCheckedChangeTheme(e.value ?? true);
+              }}
+            />
+          </div>
+          <SearchComic />
+          {isLoggedIn ? (
+            <LoginedUser />
+          ) : (
+            <Link href="/dang-nhap" hrefLang="vi">
+              <button
+                className={`desktop:rounded-full mobile:rounded mobile:p-2 py-2 px-4 font-bold bg-${oppositeTheme} text-${theme}`}
+              >
+                <UserCircle2 size={20} className="desktop:hidden" />
+                <span className="mobile:hidden">
+                  {t("login.label", { ns: "auth" })}
+                </span>
+              </button>
+            </Link>
+          )}
+        </div>
+      </div>
+      <div className="desktop:hidden">
+        <FlagCountries />
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import BoxComics from "./components/box-comic/BoxComics";
 import ListComicsRanking from "./components/comic-ranking/ListComicsRanking";
 import RecommendedComics from "./components/recommended-comic/RecommendedComics";
 import { useTranslation } from "react-i18next";
-// import PageFacebookPlugin from "@/shared/components/socials/PageFacebookPlugin";
+import PageFacebookPlugin from "@/shared/components/socials/PageFacebookPlugin";
 
 const HomePage = () => {
   const { t } = useTranslation();
@@ -28,7 +28,7 @@ const HomePage = () => {
             field={"view"}
             amountComic={10}
           />
-          {/* <PageFacebookPlugin /> */}
+          <PageFacebookPlugin />
         </div>
       </div>
       <div>

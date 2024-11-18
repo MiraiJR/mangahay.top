@@ -1,7 +1,6 @@
 import { formatDate } from "@/shared/helpers/helpers";
 import MeService, { TypeComicInteraction } from "@/shared/services/meService";
 import { Rating } from "primereact/rating";
-import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { DataScroller } from "primereact/datascroller";
 import Link from "next/link";
@@ -10,37 +9,26 @@ import EmptyComic from "@/shared/components/EmptyComic";
 import { Button } from "primereact/button";
 import { toast } from "react-toastify";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
+import { useGetListFollowedComic } from "./useGetListFollowedComic";
+import { useTranslation } from "react-i18next";
+import { useFollowComic } from "../comic-page/useFollowComic";
+import { useEffect } from "react";
 
 const ListFollowingComics = () => {
+  const { t } = useTranslation();
   const { theme, oppositeTheme } = useThemeContext();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [comics, setComics] = useState<Comic[]>([]);
-  const [isUpdateData, setIsUpdateData] = useState<boolean>(false);
+  const {
+    comics,
+    isLoading,
+    refetch: refetchListFollowedComic,
+  } = useGetListFollowedComic();
+  const { handleFollow, isSuccess } = useFollowComic();
 
   useEffect(() => {
-    setIsLoading(true);
-
-    const getFollowingComics = async () => {
-      try {
-        const { data } = await MeService.getFollowingComics();
-        setComics(data);
-        setIsLoading(false);
-      } catch (error: any) {}
-    };
-
-    getFollowingComics();
-  }, [isUpdateData]);
-
-  const unfollowedComic = async (comicId: number) => {
-    try {
-      await MeService.interactWithComic(comicId, TypeComicInteraction.unfollow);
-
-      setIsUpdateData(!isUpdateData);
-      toast.success("Huỷ theo dõi truyện thành công!");
-    } catch (error: any) {
-      toast.error(error.message);
+    if (isSuccess) {
+      refetchListFollowedComic();
     }
-  };
+  }, [isSuccess]);
 
   const itemTemplate = (comic: Comic) => {
     return (
@@ -92,9 +80,11 @@ const ListFollowingComics = () => {
           <span className="text-orange-400">{comic.state}</span>
           <Button
             className="!py-1 !px-2"
-            label="Huỷ theo dõi"
+            label={t("followingComicPage.action.unfollow")}
             severity="danger"
-            onClick={() => unfollowedComic(comic.id)}
+            onClick={async () => {
+              handleFollow(comic.id);
+            }}
           />
         </div>
       </div>
@@ -106,7 +96,9 @@ const ListFollowingComics = () => {
       {isLoading ? (
         <MyLoading />
       ) : comics.length === 0 ? (
-        <EmptyComic content="Bạn chưa theo dõi truyện nào cả!!" />
+        <EmptyComic
+          content={t("followingComicPage.emptyList", { ns: "profile" })}
+        />
       ) : (
         <DataScroller
           pt={{
@@ -127,7 +119,7 @@ const ListFollowingComics = () => {
           itemTemplate={itemTemplate}
           rows={5}
           buffer={0.4}
-          header="Danh sách truyện đang theo dõi"
+          header={t("followingComicPage.label", { ns: "profile" })}
         />
       )}
     </div>

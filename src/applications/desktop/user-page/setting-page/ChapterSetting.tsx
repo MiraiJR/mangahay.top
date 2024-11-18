@@ -6,6 +6,7 @@ import { Button } from "primereact/button";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputNumber } from "primereact/inputnumber";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 interface itemProps {
@@ -16,13 +17,13 @@ interface ChapterView {
   code: string;
 }
 
-const DEFAULT_CHAPTER_VIEW_SETTING: ChapterView = {
-  name: "DEFAULT (Lướt từ trên xuống dưới)",
-  code: `${ChapterViewType.DEFAULT}`,
-};
-const DEFAUL_AMOUNT_SLIDE_PER_VIEW: number = 1;
-
 const ChapterSettingComponent = ({ currentSetting }: itemProps) => {
+  const { t } = useTranslation();
+  const DEFAULT_CHAPTER_VIEW_SETTING: ChapterView = {
+    name: "DEFAULT (Lướt từ trên xuống dưới)",
+    code: `${ChapterViewType.DEFAULT}`,
+  };
+  const DEFAUL_AMOUNT_SLIDE_PER_VIEW: number = 1;
   const { setUserChapterSetting } = userStore();
   const [selectedChapterView, setSelectedChapterView] = useState<ChapterView>(
     DEFAULT_CHAPTER_VIEW_SETTING
@@ -33,11 +34,11 @@ const ChapterSettingComponent = ({ currentSetting }: itemProps) => {
   );
   const cities: ChapterView[] = [
     {
-      name: "DEFAULT (Lướt từ trên xuống dưới)",
+      name: t("settingPage.viewStyle.default", { ns: "profile" }),
       code: `${ChapterViewType.DEFAULT}`,
     },
     {
-      name: "LEFT TO RIGHT (Lướt từ trái sang phải)",
+      name: t("settingPage.viewStyle.leftToRight", { ns: "profile" }),
       code: `${ChapterViewType.SLIDER_PER_VIEW}`,
     },
   ];
@@ -45,7 +46,7 @@ const ChapterSettingComponent = ({ currentSetting }: itemProps) => {
   useEffect(() => {
     if (currentSetting.type === ChapterViewType.SLIDER_PER_VIEW) {
       setSelectedChapterView({
-        name: "LEFT TO RIGHT (Lướt từ trái sang phải)",
+        name: t("settingPage.viewStyle.leftToRight", { ns: "profile" }),
         code: `${ChapterViewType.SLIDER_PER_VIEW}`,
       });
       setAmountSetting(currentSetting.amount);
@@ -68,7 +69,7 @@ const ChapterSettingComponent = ({ currentSetting }: itemProps) => {
       });
 
       setUserChapterSetting(data);
-      toast.success("Cập nhập cài đặt thành công!");
+      toast.success(t("settingPage.updateSettingSuccess", { ns: "profile" }));
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -77,19 +78,25 @@ const ChapterSettingComponent = ({ currentSetting }: itemProps) => {
   return (
     <div className="card flex item-center gap-4 flex-wrap">
       <div className="flex items-center gap-4 flex-wrap">
-        <h2>Kiểu xem</h2>
+        <h2>{t("settingPage.viewStyle.label", { ns: "profile" })}</h2>
         <Dropdown
           value={selectedChapterView}
           onChange={(e: DropdownChangeEvent) => setSelectedChapterView(e.value)}
           options={cities}
           optionLabel="name"
-          placeholder="Chọn kiểu xem chương"
+          placeholder={t("settingPage.viewStyle.placeholder", {
+            ns: "profile",
+          })}
           className="md:w-14rem"
         />
       </div>
       {showAmountSetting && (
         <div className="flex mobile:items-start items-center justify-center gap-4 flex-wrap mobile:flex-col mobile:gap-0">
-          <h2>Số lượng trang truyện mỗi slide</h2>
+          <h2>
+            {t("settingPage.viewStyle.theNumberOfImagePerSlide", {
+              ns: "profile",
+            })}
+          </h2>
           <InputNumber
             value={amountSetting}
             onValueChange={(e) =>
@@ -100,7 +107,12 @@ const ChapterSettingComponent = ({ currentSetting }: itemProps) => {
           />
         </div>
       )}
-      <Button label="Lưu" onClick={handleUpdateChapterSetting} />
+      <Button
+        label={t("settingPage.saveButton", {
+          ns: "profile",
+        })}
+        onClick={handleUpdateChapterSetting}
+      />
     </div>
   );
 };

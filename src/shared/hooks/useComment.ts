@@ -43,5 +43,6 @@ export const useComment = (comicId: number) => {
     contentComment,
     setContentComment,
     handleComment: mutation.mutate,
+    isLoading: mutation.isPending,
   };
 };

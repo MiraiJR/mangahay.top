@@ -15,7 +15,7 @@ interface ComicInteractionProps {
 export const ComicInteraction = ({ comic }: ComicInteractionProps) => {
   const { statusInteractComic } = useInteractionComic(comic.id);
   const { setScoreStar, scoreStar, handleRatingComic } = useRatingComic(comic);
-  const { handleFollow } = useFollowComic(comic.id);
+  const { handleFollow } = useFollowComic();
   const { handleLike } = useLikeComic(comic.id);
   const { t } = useTranslation();
 
@@ -57,7 +57,7 @@ export const ComicInteraction = ({ comic }: ComicInteractionProps) => {
             "pi-heart": !statusInteractComic.isFollowed,
           })}
           style={{ fontSize: "2.5rem" }}
-          onClick={() => handleFollow()}
+          onClick={() => handleFollow(comic.id)}
         ></i>
         <i
           className={cn("pi text-blue-600 cursor-pointer", {
