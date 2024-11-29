@@ -42,7 +42,7 @@ export const NavigationChapter = ({
   }, [chapter, chapters]);
 
   return (
-    <div className="relative z-10 flex justify-center items-center mobile:flex-col mobile:items-start">
+    <div className="relative z-5 flex justify-center items-center mobile:flex-col mobile:items-start">
       <div className="flex gap-4 mobile:w-[100%] mobile:justify-center">
         <Button
           pt={{
