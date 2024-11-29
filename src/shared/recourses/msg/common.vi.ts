@@ -71,13 +71,13 @@ export const common = {
   comic: "Truyện",
   notEmptyContent: "Nội dung không thể để trống!",
   deletedUser: "Người dùng đã bị xoá",
-  confirmDelete: "Bạn thực sự muốn xoá truyện này?",
+  confirmDelete: "Bạn thực sự muốn xoá truyện tên [{{comicName}}]?",
   comicAction: {
     view: "Xem",
     modify: "Sửa",
     delete: "Xoá",
   },
-  listCreatedComic: "Danh sách truyện bạn đã đăng",
+  listCreatedComic: "Danh sách truyện đang quản lý",
   comicProperty: {
     anotherName: "Tên khác:",
     author: "Tác giả:",
@@ -113,7 +113,7 @@ export const common = {
     },
   },
   manager: {
-    myCreatedComics: "Truyện đã đăng",
+    myCreatedComics: "Truyện đang quản lý",
     createComic: "Tạo truyện",
     createNewChapter: "Tạo chương mới",
     crawlChapter: "Cào chương",

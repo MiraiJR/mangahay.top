@@ -1,14 +1,13 @@
 import { StatusComic } from "@/shared/types/enums/StatusComic";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUploadFile } from "./useUploadFile";
 import { removeRelatedToColorStyleCss } from "@/shared/helpers/helpers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ComicService from "@/shared/services/comicService";
 import { toast } from "react-toastify";
-import { useDialogContext } from "@/shared/contexts/DialogContext";
 import { useTranslation } from "react-i18next";
 
-export const useCreateComic = (comic: Comic | null) => {
+export const useCreateComic = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [comicName, setComicName] = useState<string>("");
@@ -21,14 +20,13 @@ export const useCreateComic = (comic: Comic | null) => {
   const [statusComic, setStatusComic] = useState<string>(
     StatusComic.PROCESSING
   );
-  const { changeVisible } = useDialogContext();
   const {
     fileUploadRef,
     clearUploadedFile,
     handleUploadImage,
     uploadedFile: comicThumb,
     setUploadedFile: setComicThumb,
-  } = useUploadFile(comic?.thumb ?? null);
+  } = useUploadFile(null);
 
   const reset = () => {
     setComicName("");
@@ -48,13 +46,13 @@ export const useCreateComic = (comic: Comic | null) => {
       comicAnotherName.trim() === "" ||
       comicGenres.length === 0 ||
       comicBriefDescription.trim() === "" ||
-      (!comic && !comicThumb)
+      !comicThumb
     ) {
       throw new Error(t("notEmptyContent", { ns: "common" }));
     }
   };
 
-  const buildFormData = () => {
+  const buildFormDataForCreating = () => {
     let formData = new FormData();
     formData.append("name", comicName.replaceAll("/", ""));
     formData.append("anotherName", comicAnotherName);
@@ -84,7 +82,7 @@ export const useCreateComic = (comic: Comic | null) => {
     mutationKey: ["comic.create"],
     mutationFn: async () => {
       validate();
-      const formData = buildFormData();
+      const formData = buildFormDataForCreating();
 
       const resposne = await ComicService.createComic(formData);
       reset();
@@ -100,42 +98,6 @@ export const useCreateComic = (comic: Comic | null) => {
       });
     },
   });
-
-  const updateMutation = useMutation({
-    mutationKey: ["comic.update"],
-    mutationFn: async () => {
-      validate();
-
-      const formData = buildFormData();
-
-      if (comic) {
-        const response = await ComicService.updateComic(comic.id, formData);
-        return response;
-      }
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-    onSuccess: () => {
-      toast.success(`Cập nhật truyện ${comic?.id} thành công!`);
-      changeVisible(false);
-      queryClient.invalidateQueries({
-        queryKey: ["comic.myCreatedComic"],
-      });
-    },
-  });
-
-  useEffect(() => {
-    if (comic) {
-      setComicName(comic.name);
-      setComicAnotherName(comic.anotherName);
-      setBriefDescription(comic.briefDescription);
-      setComicAuthors(comic.authors);
-      setComicTranslators(comic.translators);
-      setComicGenres(comic.genres);
-      setStatusComic(comic.state);
-    }
-  }, [comic]);
 
   return {
     setComicName,
@@ -160,7 +122,5 @@ export const useCreateComic = (comic: Comic | null) => {
     setComicThumb,
     handleCreateComic: createMutation.mutate,
     isLoadingCreateComic: createMutation.isPending,
-    handleUpdateComic: updateMutation.mutate,
-    isLoadingUpdateComic: updateMutation.isPending,
   };
 };

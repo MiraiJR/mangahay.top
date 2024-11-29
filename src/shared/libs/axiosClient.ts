@@ -45,7 +45,6 @@ axiosClient.interceptors.response.use(
           return axios(originalRequest);
         } catch (error: any) {
           jwt.deleteToken();
-          console.log(error);
           if (error.message === "Token không hợp lệ") {
             window.location.reload();
           }

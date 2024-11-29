@@ -9,7 +9,6 @@ interface itemProps {
 
 export async function getServerSideProps(context: any) {
   const slugComic = context.query.slugComic;
-  console.log(slugComic);
 
   try {
     const { data } = await ComicService.getComicBySlug(slugComic);

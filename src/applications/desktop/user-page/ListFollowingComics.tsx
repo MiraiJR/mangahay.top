@@ -1,5 +1,4 @@
 import { formatDate } from "@/shared/helpers/helpers";
-import MeService, { TypeComicInteraction } from "@/shared/services/meService";
 import { Rating } from "primereact/rating";
 import Image from "next/image";
 import { DataScroller } from "primereact/datascroller";
@@ -7,7 +6,6 @@ import Link from "next/link";
 import MyLoading from "@/shared/components/MyLoading";
 import EmptyComic from "@/shared/components/EmptyComic";
 import { Button } from "primereact/button";
-import { toast } from "react-toastify";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useGetListFollowedComic } from "./useGetListFollowedComic";
 import { useTranslation } from "react-i18next";
@@ -80,7 +78,7 @@ const ListFollowingComics = () => {
           <span className="text-orange-400">{comic.state}</span>
           <Button
             className="!py-1 !px-2"
-            label={t("followingComicPage.action.unfollow")}
+            label={t("followingComicPage.action.unfollow", { ns: "profile" })}
             severity="danger"
             onClick={async () => {
               handleFollow(comic.id);

@@ -6,14 +6,18 @@ import dynamic from "next/dynamic";
 import { DialogProvider } from "@/shared/contexts/DialogContext";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
+import { useAuthContext } from "@/shared/contexts/AuthContext";
 
 const CreateComicForm = dynamic(() => import("./CreateComicForm"), {
   ssr: false,
 });
 const CrawlChapter = dynamic(() => import("./CrawlChapter"), { ssr: false });
-const ListCreatedComics = dynamic(() => import("./ListCreatedComics"), {
-  ssr: false,
-});
+const ListCreatedComics = dynamic(
+  () => import("./components/list-created-comic/ListCreatedComics"),
+  {
+    ssr: false,
+  }
+);
 const CreateChapterForm = dynamic(() => import("./CreateChapterForm"), {
   ssr: false,
 });
@@ -30,6 +34,11 @@ const ManagerPage = () => {
   const router = useRouter();
   const { theme, oppositeTheme } = useThemeContext();
   const [activeTab, setActiveTab] = useState<number>(TabType.CREATED_COMICS);
+  const { isAdminOrTranslator } = useAuthContext();
+
+  if (!isAdminOrTranslator) {
+    router.push("/");
+  }
 
   const items: MenuItem[] = [
     {

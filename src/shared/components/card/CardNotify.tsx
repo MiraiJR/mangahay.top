@@ -47,9 +47,11 @@ const CardNotify = ({ notify, imageHeight }: itemProps) => {
         <h2 title={data.title} className="capitalize font-bold text-md">
           {data.title}
         </h2>
-        <h2 title={data.body} className="capitalize font-thin text-md">
-          {data.body}
-        </h2>
+        <h2
+          title={data.body}
+          className="capitalize text-md"
+          dangerouslySetInnerHTML={{ __html: data.body }}
+        ></h2>
         <span className="text-sm w-[100%] text-right">
           {formatDate(data.createdAt)}
         </span>

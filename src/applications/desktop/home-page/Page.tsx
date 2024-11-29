@@ -28,20 +28,20 @@ const HomePage = () => {
             field={"view"}
             amountComic={10}
           />
-          <PageFacebookPlugin />
+          {/* <PageFacebookPlugin /> */}
         </div>
       </div>
       <div>
         <RecommendedComics
-          genre={"manga"}
+          genre={"Manga"}
           title={t("homePage.newJapanComic", { ns: "common" })}
         />
         <RecommendedComics
-          genre={"manhwa"}
+          genre={"Manhwa"}
           title={t("homePage.newKoreaComic", { ns: "common" })}
         />
         <RecommendedComics
-          genre={"manhua"}
+          genre={"Manhua"}
           title={t("homePage.newChinaComic", { ns: "common" })}
         />
       </div>

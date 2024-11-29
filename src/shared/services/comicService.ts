@@ -46,7 +46,6 @@ const ComicService = {
     }),
   deleteComic: (comicId: number) =>
     axiosClient.delete<string>(`/comics/${comicId}`),
-  getComicsCreatedByMe: () => axiosClient.get<Comic[]>(`/comics/created-by-me`),
   getComicsWithChapters: () => axiosClient.get<Comic[]>(`/comics/chapters`),
   getListChapters: (comicId: number) =>
     axiosClient.get<Chapter[]>(`/comics/${comicId}/chapters`),
@@ -60,6 +59,17 @@ const ComicService = {
         page,
         size,
       },
+    }),
+  getListPrivilege: (comicId: number) =>
+    axiosClient.get<ComicPrivilege[]>(`/comics/${comicId}/privileges`),
+  updateSingleUserRight: (
+    comicId: number,
+    userId: number,
+    permissions: number[]
+  ) =>
+    axiosClient.put<string>(`/comics/${comicId}/privileges`, {
+      userId,
+      permissions,
     }),
 };
 export default ComicService;

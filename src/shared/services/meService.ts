@@ -30,6 +30,8 @@ const MeService = {
       fullname,
       phone,
     }),
+  getComicsManagedByMe: () =>
+    axiosClient.get<Comic[]>(`/users/me/management/comics`),
 };
 
 export default MeService;

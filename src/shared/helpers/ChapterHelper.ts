@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const getNextPreAofChapterFromId = (
   chapterId: number,
   chapters: Chapter[]
@@ -18,4 +20,11 @@ export const getNextPreAofChapterFromId = (
     currentChapter,
     nextChapter,
   };
+};
+
+export const isNewChapter = (date: Date) => {
+  const currentDate = moment();
+  const givenDate = moment(date);
+
+  return currentDate.diff(givenDate, "days") <= 3;
 };

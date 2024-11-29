@@ -5,17 +5,17 @@ import {
 import { Button } from "primereact/button";
 import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
 import { InputText } from "primereact/inputtext";
-import { useRecommendedComicByName } from "@/shared/hooks/useRecommendedComicByName";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useCreateChapter } from "./useCreateChapter";
 import { useTranslation } from "react-i18next";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
+import { useRecommendedComics } from "./useRecommendedComics";
 
 const CreateChapterForm = () => {
   const { t } = useTranslation();
   const { oppositeTheme } = useThemeContext();
-  const { recommendedComics, handleGetRecommendedComics } =
-    useRecommendedComicByName();
+  const { recommendedComics, handleSearchRecommendedComics } =
+    useRecommendedComics();
   const {
     comicName,
     setComicName,
@@ -43,7 +43,7 @@ const CreateChapterForm = () => {
           value={comicName}
           suggestions={recommendedComics}
           completeMethod={(e: AutoCompleteCompleteEvent) => {
-            handleGetRecommendedComics(e.query);
+            handleSearchRecommendedComics(e.query);
           }}
           onChange={(e) => {
             setComicName(e.value);

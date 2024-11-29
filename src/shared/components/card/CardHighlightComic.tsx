@@ -41,12 +41,12 @@ const CardHighlightComic = ({ comic }: itemProps) => {
         <Rating value={comic.star} cancel={false} readOnly />
         <span>{comic.star}</span>
       </div>
-      <div className="flex flex-wrap items-center justify-center">
+      <div className="flex flex-wrap items-center justify-center gap-2">
         {comic.genres.map((genre, _index) => (
           <Link
             rel="preload"
             href={""}
-            className="flex flex-wrap m-1"
+            className={`bg-${theme} rounded-md border border-${oppositeTheme} p-1 capitalize text-${oppositeTheme}`}
             key={_index}
             lang="vi"
           >

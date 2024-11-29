@@ -9,9 +9,6 @@ export const useIncreaseViewComic = (comicId?: number) => {
         await ComicService.increaseView(comicId);
       }
     },
-    onError: (error) => {
-      console.log(error);
-    },
   });
 
   return {

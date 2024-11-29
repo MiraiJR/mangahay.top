@@ -32,9 +32,6 @@ export const useGoogleLogin = () => {
     },
     flow: "auth-code",
     select_account: true,
-    onError: (error: any) => {
-      console.log(error);
-    },
   });
 
   return {

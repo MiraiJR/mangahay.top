@@ -3,6 +3,7 @@ import { common } from "./msg/common.vi";
 import { chapter } from "./msg/chapter.vi";
 import { profile } from "./msg/profile.vi";
 import { search } from "./msg/search.vi";
+import { comic } from "./msg/comic.vi";
 
 export const vi = {
   auth,
@@ -10,4 +11,5 @@ export const vi = {
   chapter,
   profile,
   search,
+  comic,
 };

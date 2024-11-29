@@ -12,12 +12,14 @@ type Comic = {
   like: number;
   follow: number;
   star: number;
-  creator: number;
+  creator: User;
+  creatorId: number | null;
   createdAt: Date;
   updatedAt: Date;
   translators: string[];
   chapters: Chapter[];
   comments: UserCommentResponse[];
+  privileges: number[];
 };
 
 type PagingComic = {
@@ -32,4 +34,15 @@ type SearchComicResult = {
   total: number;
   comics: Comic[];
   hasNext: boolean;
+};
+
+type ComicPrivilege = {
+  id: number;
+  comicId: number;
+  permissions: number[];
+  user: {
+    id: number;
+    fullname: string;
+    avatar: string;
+  };
 };

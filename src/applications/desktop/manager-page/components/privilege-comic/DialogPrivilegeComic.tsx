@@ -1,23 +1,26 @@
-import CreateComicForm from "@/applications/desktop/manager-page/CreateComicForm";
-import { useDialogContext } from "@/shared/contexts/DialogContext";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { Dialog } from "primereact/dialog";
-import { useContext } from "react";
+import { PrivilegeTable } from "./PrivilegeTable";
+import { PrivilegeContextProvider } from "./PrivilegeContext";
 
-interface itemProps {
-  comic: Comic;
+interface DialogPrivilegeComicProps {
+  visible: boolean;
+  changeVisible: Function;
+  comicId: number;
 }
 
-const DialogUpdateComic = ({ comic }: itemProps) => {
+export const DialogPrivilegeComic = ({
+  visible,
+  changeVisible,
+  comicId,
+}: DialogPrivilegeComicProps) => {
   const { theme, oppositeTheme } = useThemeContext();
-  const { visible, changeVisible } = useDialogContext();
 
   return (
     <Dialog
-      header={comic.name}
+      header={"User right"}
       visible={visible}
       maximizable
-      style={{ width: "50vw" }}
       onHide={() => changeVisible(false)}
       dismissableMask={true}
       pt={{
@@ -32,9 +35,9 @@ const DialogUpdateComic = ({ comic }: itemProps) => {
         },
       }}
     >
-      <CreateComicForm comic={comic} />
+      <PrivilegeContextProvider>
+        <PrivilegeTable comicId={comicId} />
+      </PrivilegeContextProvider>
     </Dialog>
   );
 };
-
-export default DialogUpdateComic;

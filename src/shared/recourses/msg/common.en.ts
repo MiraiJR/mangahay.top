@@ -73,13 +73,13 @@ export const common: CommonResouce = {
   comic: "Comic",
   notEmptyContent: "Content cannot be empty!",
   deletedUser: "Deleted user",
-  confirmDelete: "Do you want to delete this comic?",
+  confirmDelete: "Do you want to delete this comic with name [{{comicName}}]?",
   comicAction: {
     view: "View",
     modify: "Modify",
     delete: "Delete",
   },
-  listCreatedComic: "List of comics you have posted",
+  listCreatedComic: "List of comics is managed by you",
   comicProperty: {
     anotherName: "Other Name:",
     author: "Author:",
@@ -115,7 +115,7 @@ export const common: CommonResouce = {
     },
   },
   manager: {
-    myCreatedComics: "My Published Comics",
+    myCreatedComics: "My managed comics",
     createComic: "Create Comic",
     createNewChapter: "Create New Chapter",
     crawlChapter: "Crawl Chapter",
@@ -151,5 +151,15 @@ export const common: CommonResouce = {
     },
     updateComic: "Update Comic",
     createComic: "Create Comic",
+  },
+  advanceSearch: {
+    comicName: {
+      label: "Comic Name",
+      placeholder: "Enter the name of the comic to search for",
+    },
+  },
+  genre: "Genre",
+  listComicPage: {
+    label: "Comic List",
   },
 };

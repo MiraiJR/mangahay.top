@@ -28,7 +28,6 @@ export const useUploadFile = (imageUrl: string | null) => {
   const addExistedImageUrlToUpload = async () => {
     try {
       if (imageUrl) {
-        console.log(imageUrl);
         const response = await fetch(imageUrl);
         const blob = await response.blob();
 

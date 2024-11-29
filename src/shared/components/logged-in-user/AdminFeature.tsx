@@ -21,7 +21,11 @@ export const AdminFeature = () => {
     },
   ];
 
-  if (userProfile?.role !== "admin") {
+  if (!userProfile) {
+    return <></>;
+  }
+
+  if (!["admin", "translator"].includes(userProfile.role)) {
     return <></>;
   }
 

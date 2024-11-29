@@ -1,21 +1,25 @@
-import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
-import { Editor, EditorTextChangeEvent } from "primereact/editor";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
+import { Button } from "primereact/button";
+import { useTranslation } from "react-i18next";
+import { useUpdateComic } from "./useUpdateComic";
 import { InputText } from "primereact/inputtext";
 import { Chips, ChipsChangeEvent } from "primereact/chips";
-import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
+import { RadioButton } from "primereact/radiobutton";
+import { StatusComic } from "@/shared/types/enums/StatusComic";
+import { useGetGenres } from "@/shared/hooks/useGetGenres";
+import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import {
   removeAccentsAndLowerCase,
   removeAccentsAndLowerCaseArray,
 } from "@/shared/helpers/StringHelper";
-import { Button } from "primereact/button";
-import { StatusComic } from "@/shared/types/enums/StatusComic";
-import { RadioButton } from "primereact/radiobutton";
-import { useGetGenres } from "@/shared/hooks/useGetGenres";
-import { useThemeContext } from "@/shared/contexts/ThemeContext";
-import { useCreateComic } from "./useCreateComic";
-import { useTranslation } from "react-i18next";
+import { Editor, EditorTextChangeEvent } from "primereact/editor";
+import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
 
-const CreateComicForm = () => {
+interface UpdateComicFormProps {
+  comic: Comic;
+}
+
+export const UpdateComicForm = ({ comic }: UpdateComicFormProps) => {
   const { t } = useTranslation();
   const { oppositeTheme, theme } = useThemeContext();
   const { genres } = useGetGenres();
@@ -37,9 +41,9 @@ const CreateComicForm = () => {
     statusComic,
     fileUploadRef,
     handleUploadImage,
-    handleCreateComic,
-    isLoadingCreateComic,
-  } = useCreateComic();
+    handleUpdateComic,
+    isLoadingUpdateComic,
+  } = useUpdateComic(comic);
 
   const setSelectedGenres = (e: CheckboxChangeEvent) => {
     let _filterGenres = [...comicGenres];
@@ -209,14 +213,12 @@ const CreateComicForm = () => {
       </div>
       <div className="flex items-center justify-center">
         <Button
-          label={t("createComic.createComic", { ns: "common" })}
+          label={t("createComic.updateComic", { ns: "common" })}
           icon="pi pi-check"
-          loading={isLoadingCreateComic}
-          onClick={() => handleCreateComic()}
+          loading={isLoadingUpdateComic}
+          onClick={() => handleUpdateComic()}
         />
       </div>
     </div>
   );
 };
-
-export default CreateComicForm;

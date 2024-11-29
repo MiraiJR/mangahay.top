@@ -1,4 +1,3 @@
-import themeStore from "@/shared/stores/theme-storage";
 import {
   AutoComplete,
   AutoCompleteCompleteEvent,
@@ -6,10 +5,12 @@ import {
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { useCrawlChapter } from "./useCrawlChapter";
-import { useRecommendedComicByName } from "@/shared/hooks/useRecommendedComicByName";
 import { useTranslation } from "react-i18next";
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
+import { useRecommendedComics } from "./useRecommendedComics";
 
 const CrawlChapter = () => {
+  const { oppositeTheme } = useThemeContext();
   const { t } = useTranslation();
   const {
     urlPost,
@@ -26,13 +27,11 @@ const CrawlChapter = () => {
     isCrawling,
     errorMessage,
   } = useCrawlChapter();
-  const { recommendedComics, handleGetRecommendedComics } =
-    useRecommendedComicByName();
+  const { recommendedComics, handleSearchRecommendedComics } =
+    useRecommendedComics();
 
   return (
-    <div
-      className={`flex flex-col gap-4 text-${themeStore.getOppositeTheme()}`}
-    >
+    <div className={`flex flex-col gap-4 text-${oppositeTheme}`}>
       {errorMessage && <div className="text-red-400">{errorMessage}</div>}
       <div className="flex flex-col gap-4 w-[100%]">
         <div className="font-bold">
@@ -48,7 +47,7 @@ const CrawlChapter = () => {
           value={comicName}
           suggestions={recommendedComics}
           completeMethod={(e: AutoCompleteCompleteEvent) =>
-            handleGetRecommendedComics(e.query)
+            handleSearchRecommendedComics(e.query)
           }
           onChange={(e) => setComicName(e.value)}
         />
