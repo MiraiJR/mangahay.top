@@ -4,6 +4,7 @@ import { chapter } from "./msg/chapter.vi";
 import { profile } from "./msg/profile.vi";
 import { search } from "./msg/search.vi";
 import { comic } from "./msg/comic.vi";
+import { error } from "./msg/error.vi";
 
 export const vi = {
   auth,
@@ -12,4 +13,5 @@ export const vi = {
   profile,
   search,
   comic,
+  error,
 };

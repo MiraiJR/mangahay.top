@@ -70,11 +70,16 @@ const ListCreatedComics = () => {
   };
 
   const itemTemplate = (comic: Comic) => {
+    const isCreatorComic = isCreator(comic);
+    const canInteractionWithChapter =
+      isCreatorComic ||
+      comic.privileges.includes(ComicPrivilegePermission.REMOVE_CHAPTER) ||
+      comic.privileges.includes(ComicPrivilegePermission.UPDATE_CHAPTER);
     const canRemove =
-      isCreator(comic) ||
+      isCreatorComic ||
       comic.privileges.includes(ComicPrivilegePermission.REMOVE_COMIC);
     const canUpdate =
-      isCreator(comic) ||
+      isCreatorComic ||
       comic.privileges.includes(ComicPrivilegePermission.UPDATE_COMIC);
 
     const isMe = userProfile?.id === comic.creatorId;
@@ -86,7 +91,7 @@ const ListCreatedComics = () => {
         command: () => {
           setIsShowListManagedChapter(true);
         },
-        visible: isCreator(comic),
+        visible: canInteractionWithChapter,
       },
       {
         label: t("comicAction.modify", { ns: "common" }),

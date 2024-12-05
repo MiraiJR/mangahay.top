@@ -2,6 +2,8 @@ import axios from "axios";
 import { baseURL } from "./config";
 import jwt from "./jwt";
 import authService from "../services/authService";
+import i18next from "i18next";
+import { toast } from "react-toastify";
 
 const axiosClient = axios.create({
   baseURL,
@@ -24,6 +26,13 @@ axiosClient.interceptors.response.use(
     return response;
   },
   async (error) => {
+    if (error?.code === "ERR_NETWORK") {
+      toast.error(i18next.t("network", { ns: "error" }));
+      return Promise.reject({
+        message: i18next.t("network", { ns: "error" }),
+      });
+    }
+
     const originalRequest = error.config;
     if (removeTokenInErrorCodes.includes(error.response.data.errorCode)) {
       jwt.deleteToken();

@@ -1,3 +1,4 @@
+import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { ComicPrivilegePermission } from "@/shared/types/enums/ComicPrevilegePermission.enum";
 import router from "next/router";
 import { SplitButton } from "primereact/splitbutton";
@@ -16,6 +17,7 @@ export const TemplateCardChapter = ({
   comicSlug,
   isCreatorComic = false,
 }: CardManagedChapterProps) => {
+  const { theme, oppositeTheme } = useThemeContext();
   const { t } = useTranslation();
   const canRemove =
     isCreatorComic ||
@@ -41,13 +43,21 @@ export const TemplateCardChapter = ({
   ];
 
   return (
-    <>
+    <div
+      className={`border border-${oppositeTheme} w-fit rounded-sm flex gap-2 p-2`}
+    >
       <div>{chapter.name}</div>
       <SplitButton
         label={t("comicAction.view", { ns: "common" })}
         onClick={() => router.push(`/truyen/${comicSlug}/${chapter.slug}`)}
         model={items}
+        text
+        pt={{
+          root: {
+            className: "w-fit h-[20px]",
+          },
+        }}
       />
-    </>
+    </div>
   );
 };

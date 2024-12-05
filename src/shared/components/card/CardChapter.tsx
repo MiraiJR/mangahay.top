@@ -1,5 +1,5 @@
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
-import { isNewChapter } from "@/shared/helpers/ChapterHelper";
+import { isNewChapter } from "@/shared/helpers/chapter";
 import { formatDate } from "@/shared/helpers/helpers";
 import { Sparkle } from "lucide-react";
 import Link from "next/link";

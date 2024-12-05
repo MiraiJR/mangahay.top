@@ -1,10 +1,10 @@
 import MyLoading from "@/shared/components/MyLoading";
 import { useGetListChapter } from "@/shared/hooks/useGetListChapter";
-import { TemplateCardChapter } from "./TemplateCardChapter";
 import { useGetListPrivilege } from "../privilege-comic/useGetListPrivilege";
 import { userStore } from "@/shared/stores/user-storage";
 import { Dialog } from "primereact/dialog";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
+import { TableChapter } from "./TableChapter";
 
 interface DialogListManagedChapterProps {
   visible: boolean;
@@ -22,6 +22,7 @@ export const DialogListManagedChapter = ({
   isCreatorComic,
 }: DialogListManagedChapterProps) => {
   const { chapters, isLoading } = useGetListChapter(comicId);
+  console.log(chapters);
   const { privileges } = useGetListPrivilege(comicId);
   const { userProfile } = userStore();
   const { theme, oppositeTheme } = useThemeContext();
@@ -34,6 +35,7 @@ export const DialogListManagedChapter = ({
     <Dialog
       header={"User right"}
       visible={visible}
+      style={{ width: "50vw" }}
       maximizable
       onHide={() => changeVisible(false)}
       dismissableMask={true}
@@ -49,18 +51,14 @@ export const DialogListManagedChapter = ({
         },
       }}
     >
-      {chapters.map((chapter) => (
-        <TemplateCardChapter
-          chapter={chapter}
-          privileges={
-            privileges.find(
-              (privilege) => privilege.user.id === userProfile?.id
-            )?.permissions ?? []
-          }
-          comicSlug={comicSlug}
-          isCreatorComic={isCreatorComic}
-        />
-      ))}
+      <TableChapter
+        chapters={chapters}
+        privileges={
+          privileges.find((privilege) => privilege.user.id === userProfile?.id)
+            ?.permissions ?? []
+        }
+        isCreatorComic={isCreatorComic}
+      />
     </Dialog>
   );
 };

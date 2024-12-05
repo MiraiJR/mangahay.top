@@ -1,6 +1,6 @@
 import ChapterPage from "@/applications/desktop/chapter-page/Page";
 import MetaTags from "@/shared/components/MetaTags";
-import { getNextPreAofChapterFromId } from "@/shared/helpers/ChapterHelper";
+import { getNextPreAofChapterFromId } from "@/shared/helpers/chapter";
 import { originalURL } from "@/shared/libs/config";
 import ChapterService from "@/shared/services/chapterService";
 import ComicService from "@/shared/services/comicService";
