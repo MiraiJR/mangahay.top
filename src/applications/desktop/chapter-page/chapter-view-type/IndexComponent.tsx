@@ -6,7 +6,7 @@ import { UserSetting } from "@/shared/types/UserSetting";
 import ChapterViewTypeSlide from "./ChapterViewTypeSlide";
 
 interface itemProps {
-  images: string[];
+  images: ChapterImage[];
   chapterName: string;
   comicName: string;
 }
@@ -35,7 +35,7 @@ const ChapterViewTypeIndex = ({
       case ChapterViewType.SLIDER_PER_VIEW:
         return (
           <ChapterViewTypeSlide
-            images={images}
+            images={images.map((image) => image.relativePath)}
             chapterName={chapterName}
             comicName={comicName}
             sliderPerView={setting.chapterSetting.amount}
@@ -44,7 +44,7 @@ const ChapterViewTypeIndex = ({
       default:
         return (
           <ChapterViewTypeDefault
-            images={images}
+            images={images.map((image) => image.relativePath)}
             chapterName={chapterName}
             comicName={comicName}
           />

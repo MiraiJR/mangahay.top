@@ -1,7 +1,7 @@
 type Chapter = {
   id: number;
   name: string;
-  images: string[];
+  images: ChapterImage[];
   slug: string;
   updatedAt: Date;
   comicId: number;
@@ -14,4 +14,10 @@ type CreatorChapter = {
   id: number;
   fullname: string;
   avatar: string;
+};
+
+type ChapterImage = {
+  id: number;
+  relativePath: string;
+  position: number;
 };

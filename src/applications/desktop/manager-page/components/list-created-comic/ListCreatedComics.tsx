@@ -14,7 +14,8 @@ import { useDeleteComic } from "../../useDeleteComic";
 import { DialogPrivilegeComic } from "../privilege-comic/DialogPrivilegeComic";
 import { SplitButton } from "primereact/splitbutton";
 import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
-import { DialogListManagedChapter } from "./DialogListManagedChapter";
+import { DialogListManagedChapter } from "../list-created-chapter/DialogListManagedChapter";
+import MyLoading from "@/shared/components/MyLoading";
 
 const THE_DEFAULT_AMOUNT_COMICS: number = 10;
 
@@ -23,7 +24,8 @@ const ListCreatedComics = () => {
   const { theme, oppositeTheme } = useThemeContext();
   const { changeVisible: changeVisibleDialogUpdateComic } = useDialogContext();
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
-  const { comics } = useGetMyCreatedComic();
+  const { comics, isLoading: isLoadingListMyCreatedComic } =
+    useGetMyCreatedComic();
   const { handleDeleteComic, isLoading: isLoadingDeleteComic } =
     useDeleteComic();
   const router = useRouter();
@@ -31,6 +33,10 @@ const ListCreatedComics = () => {
   const [isShowUserRight, setIsShowUserRight] = useState<boolean>(false);
   const [isShowListManagedChapter, setIsShowListManagedChapter] =
     useState<boolean>(false);
+
+  if (isLoadingListMyCreatedComic) {
+    return <MyLoading />;
+  }
 
   const mappingPermission: Record<number, string> = {
     1: t("permission.updateChapter", { ns: "comic" }),
@@ -197,7 +203,6 @@ const ListCreatedComics = () => {
                 visible={isShowListManagedChapter}
                 changeVisible={setIsShowListManagedChapter}
                 comicId={comic.id}
-                comicSlug={comic.slug}
                 isCreatorComic={isCreator(comic)}
               />
             </div>

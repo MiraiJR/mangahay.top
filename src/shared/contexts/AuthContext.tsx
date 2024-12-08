@@ -3,6 +3,7 @@ import { userStore } from "../stores/user-storage";
 import MeService from "../services/meService";
 import { useQuery } from "@tanstack/react-query";
 import { LoadingFullPage } from "../components/LoadingFullPage";
+import jwt from "../libs/jwt";
 
 interface AuthContextProps {
   isLoggedIn: boolean;
@@ -13,7 +14,7 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!jwt.getToken());
 
   const [isAdminOrTranslator, setIsAdminOrTranslator] =
     useState<boolean>(false);

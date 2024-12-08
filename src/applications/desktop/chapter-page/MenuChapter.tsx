@@ -21,7 +21,7 @@ const MenuChapter = ({ chapters }: itemProps) => {
     <motion.nav
       animate={"open"}
       variants={variants}
-      className={`fixed left-0 top-0 flex flex-col z-auto bg-${theme} text-${oppositeTheme} h-screen border-r-2 border-red-600`}
+      className={`fixed left-0 top-0 flex flex-col z-50 bg-${theme} text-${oppositeTheme} h-screen border-r-2 border-red-600`}
     >
       {chapters.map((chapter) => (
         <Link
