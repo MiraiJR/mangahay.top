@@ -16,6 +16,7 @@ import { SplitButton } from "primereact/splitbutton";
 import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
 import { DialogListManagedChapter } from "../list-created-chapter/DialogListManagedChapter";
 import MyLoading from "@/shared/components/MyLoading";
+import { ReorderListChapter } from "../reorder-chapter/ReorderListChapter";
 
 const THE_DEFAULT_AMOUNT_COMICS: number = 10;
 
@@ -32,6 +33,8 @@ const ListCreatedComics = () => {
   const { userProfile } = userStore();
   const [isShowUserRight, setIsShowUserRight] = useState<boolean>(false);
   const [isShowListManagedChapter, setIsShowListManagedChapter] =
+    useState<boolean>(false);
+  const [isShowReorderChapter, setIsShowReorderChapter] =
     useState<boolean>(false);
 
   if (isLoadingListMyCreatedComic) {
@@ -96,6 +99,14 @@ const ListCreatedComics = () => {
         icon: "pi pi-list",
         command: () => {
           setIsShowListManagedChapter(true);
+        },
+        visible: canInteractionWithChapter,
+      },
+      {
+        label: "Reorder chapter",
+        icon: "pi pi-sort",
+        command: () => {
+          setIsShowReorderChapter(true);
         },
         visible: canInteractionWithChapter,
       },
@@ -204,6 +215,11 @@ const ListCreatedComics = () => {
                 changeVisible={setIsShowListManagedChapter}
                 comicId={comic.id}
                 isCreatorComic={isCreator(comic)}
+              />
+              <ReorderListChapter
+                visible={isShowReorderChapter}
+                changeVisible={setIsShowReorderChapter}
+                comicId={comic.id}
               />
             </div>
             <span className="text-orange-400">{comic.state}</span>
