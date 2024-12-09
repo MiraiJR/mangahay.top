@@ -10,6 +10,7 @@ export const useTableChapterState = (comicId: number) => {
     setPage: setPageGetChapters,
     setSize: setSizeGetChapters,
     size: sizeGetChapters,
+    page: pageGetChapters,
   } = useGetListChapter(comicId);
   const { privileges } = useGetListPrivilege(comicId);
   const { userProfile } = userStore();
@@ -24,5 +25,6 @@ export const useTableChapterState = (comicId: number) => {
     setPageGetChapters,
     setSizeGetChapters,
     sizeGetChapters,
+    pageGetChapters,
   };
 };

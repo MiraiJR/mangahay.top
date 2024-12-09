@@ -38,7 +38,7 @@ export const TableChapter = ({
     useDeleteSingleChapter(comicId);
   const [isOpenModelUpdateChapter, setIsOpenModelUpdateChapter] =
     useState<boolean>(false);
-  const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
+  const [selectedChapter, setSelectedChapter] = useState<string>("");
 
   if (isLoading) {
     return <MyLoading />;
@@ -122,7 +122,7 @@ export const TableChapter = ({
             icon={<EditOutlined />}
             onClick={() => {
               setIsOpenModelUpdateChapter(true);
-              setSelectedChapter(chapter);
+              setSelectedChapter(chapter.slug);
             }}
           >
             Update
@@ -150,7 +150,7 @@ export const TableChapter = ({
         <ModelUpdateChapter
           isOpen={isOpenModelUpdateChapter}
           changeIsOpen={setIsOpenModelUpdateChapter}
-          chapter={selectedChapter}
+          chapterSlug={selectedChapter}
         />
       )}
     </>

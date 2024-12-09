@@ -14,7 +14,7 @@ export const useGetListChapter = (comicId: number) => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["comic.chapters", { comicId }],
+    queryKey: ["comic.chapters", { comicId, page, size }],
     queryFn: async () => {
       const { data } = await ComicService.getListChapters(comicId, {
         page,
