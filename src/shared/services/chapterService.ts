@@ -33,6 +33,14 @@ const ChapterService = {
         "content-type": "multipart/form-data",
       },
     }),
+  reorderListChapter: (
+    comicId: number,
+    listReorderedChapter: ReorderChapter[]
+  ) =>
+    axiosClient.patch<string>(`/${PREFIX_API}/reorder`, {
+      listReorderedChapter,
+      comicId,
+    }),
 };
 
 export default ChapterService;

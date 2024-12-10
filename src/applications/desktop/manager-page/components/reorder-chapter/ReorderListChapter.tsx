@@ -1,4 +1,4 @@
-import { List, Modal } from "antd";
+import { Modal } from "antd";
 import { useReorderListChapterState } from "./useReorderListChapterState";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -13,46 +13,49 @@ export const ReorderListChapter = ({
   visible,
   changeVisible,
 }: ReorderListChapterProps) => {
-  const { listChapterForView, isLoading, handleReorder } =
-    useReorderListChapterState(comicId);
+  const {
+    listChapterForView,
+    isLoading,
+    handleReorder,
+    handlePostReorderChapter,
+  } = useReorderListChapterState(comicId);
 
   return (
     <Modal
-      width="100vw"
+      width="50vw"
       title="Sắp xếp thứ tự chương"
       open={visible}
       centered
-      onOk={() => changeVisible(false)}
+      onOk={() => handlePostReorderChapter()}
       onCancel={() => changeVisible(false)}
       loading={isLoading}
     >
       <DragDropContext onDragEnd={handleReorder}>
-        <Droppable droppableId="chapterList">
+        <Droppable droppableId="listChapterForView">
           {(provided) => (
-            <List
-              size="large"
-              bordered
-              dataSource={listChapterForView}
-              renderItem={(chapter) => (
-                <Draggable
-                  index={chapter.id}
-                  draggableId={chapter.id.toString()}
-                  key={chapter.id}
-                >
+            <ul {...provided.droppableProps} ref={provided.innerRef}>
+              {listChapterForView.map(({ id, name }, index) => (
+                <Draggable key={id} draggableId={id.toString()} index={index}>
                   {(provided) => (
-                    <List.Item
+                    <li
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
+                      style={{
+                        ...provided.draggableProps.style,
+                        padding: "8px",
+                        margin: "4px",
+                        backgroundColor: "white",
+                        border: "1px solid gray",
+                      }}
                     >
-                      {chapter.name}
-                    </List.Item>
+                      <p>{name}</p>
+                    </li>
                   )}
                 </Draggable>
-              )}
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            />
+              ))}
+              {provided.placeholder}
+            </ul>
           )}
         </Droppable>
       </DragDropContext>

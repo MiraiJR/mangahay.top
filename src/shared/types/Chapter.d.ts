@@ -21,3 +21,8 @@ type ChapterImage = {
   relativePath: string;
   position: number;
 };
+
+type ReorderChapter = {
+  chapterId: number;
+  newOrder: number;
+};
