@@ -26,5 +26,5 @@ export const isNewChapter = (date: Date) => {
   const currentDate = moment();
   const givenDate = moment(date);
 
-  return currentDate.diff(givenDate, "days") <= 3;
+  return currentDate.diff(givenDate, "hours") <= 24 * 3;
 };

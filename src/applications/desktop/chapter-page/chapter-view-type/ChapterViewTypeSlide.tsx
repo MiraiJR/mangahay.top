@@ -1,4 +1,3 @@
-import { shortImageName } from "@/shared/helpers/helpers";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
 import themeStore from "@/shared/stores/theme-storage";
@@ -33,7 +32,7 @@ const ChapterViewTypeSlide = ({
         grabCursor={true}
         className="mobile:w-[100%] w-full"
       >
-        {shortImageName(images).map((image, _index) => (
+        {images.map((image, _index) => (
           <SwiperSlide key={_index}>
             <div className="flex flex-col items-center justify-center">
               <div

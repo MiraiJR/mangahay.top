@@ -1,13 +1,12 @@
-import { useContext } from "react";
 import Link from "next/link";
 import { AdminFeature } from "./AdminFeature";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { Notification } from "./Notification";
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import { LoggoutButton } from "./LogoutButton";
-import { useGetMyProfile } from "@/shared/hooks/useGetMyProfile";
 import { useTranslation } from "react-i18next";
 import { Avatar } from "primereact/avatar";
+import { userStore } from "@/shared/stores/user-storage";
 
 const LoginedUser = () => {
   const { theme, oppositeTheme } = useThemeContext();
@@ -16,14 +15,14 @@ const LoginedUser = () => {
     isVisiable: showMenu,
     setIsVisiable: setShowMenu,
   } = useClickOutside();
-  const { myProfile } = useGetMyProfile();
+  const { userProfile } = userStore();
   const { t } = useTranslation();
 
   return (
     <div className="relative cursor-pointer desktop:ml-10 flex gap-4">
       <Notification />
       <div ref={menuProfileRef}>
-        {myProfile && (
+        {userProfile && (
           <Avatar
             shape="circle"
             pt={{
@@ -33,8 +32,8 @@ const LoginedUser = () => {
               },
             }}
             icon="pi pi-user"
-            image={myProfile.avatar}
-            label={myProfile.fullname[0]}
+            image={userProfile.avatar}
+            label={userProfile.fullname[0]}
             size="large"
             onClick={() => {
               setShowMenu(!showMenu);
@@ -47,7 +46,7 @@ const LoginedUser = () => {
             className={`rounded-sm p-4 shadow-outer-lg-${oppositeTheme} absolute top-max right-0 flex items-center text-center bg-${theme} w-max`}
           >
             <ul className="flex flex-col">
-              {myProfile && (
+              {userProfile && (
                 <Link
                   rel="preload"
                   href="/me"

@@ -1,23 +1,43 @@
 import { useQuery } from "@tanstack/react-query";
 import ComicService from "../services/comicService";
+import { useState } from "react";
 
-export const useGetListChapter = (comicId: number) => {
+export const useGetListChapter = (
+  comicId: number,
+  isGetAll: boolean = false
+) => {
+  const [page, setPage] = useState<number>(1);
+  const [size, setSize] = useState<number>(
+    isGetAll ? Number.MAX_SAFE_INTEGER : 20
+  );
+
   const {
-    data: chapters = [],
+    data = {
+      total: 0,
+      chapters: [],
+    },
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["comic.chapters", { comicId }],
+    queryKey: ["comic.chapters", { comicId, page, size }],
     queryFn: async () => {
-      const { data } = await ComicService.getListChapters(comicId);
+      const { data } = await ComicService.getListChapters(comicId, {
+        page,
+        size,
+      });
       return data;
     },
     enabled: !!comicId,
   });
 
   return {
-    chapters,
+    totalChapters: data.total,
+    chapters: data.chapters,
     isLoading,
     error,
+    setPage,
+    setSize,
+    size,
+    page,
   };
 };

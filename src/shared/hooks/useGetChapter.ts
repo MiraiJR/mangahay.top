@@ -2,9 +2,12 @@ import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import ChapterService from "../services/chapterService";
 
-export const useGetChapter = () => {
+export const useGetChapter = (slug: string = "") => {
   const router = useRouter();
-  const { slugChapter = "" } = router.query;
+  let slugChapter = slug;
+  if (slugChapter === "") {
+    slugChapter = router.query["slugChapter"]?.toString() ?? "";
+  }
 
   const {
     data: chapter,

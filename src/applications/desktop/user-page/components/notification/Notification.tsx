@@ -1,7 +1,6 @@
 import { useState } from "react";
 import CardNotify from "@/shared/components/card/CardNotify";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { SelectButton } from "primereact/selectbutton";
 import EmptyComic from "@/shared/components/EmptyComic";
 import { useNotification } from "@/shared/hooks/useNotification";
 import { useRemoveAllNotification } from "./useRemoveAllNotification";
@@ -10,25 +9,18 @@ import { useMarkAllReadNotification } from "./useMarkAllReadNotification";
 import { NOTIFICATION_STATUS } from "./enum";
 import { NotificationContextProvider } from "@/shared/contexts/NotificationContext";
 import { useTranslation } from "react-i18next";
+import { Switch } from "antd";
 
 const Notification = () => {
   const { t } = useTranslation();
-  const notificationFilterButtonDatas: NotificationFilter[] = [
-    {
-      label: t("notificationPage.type.read", { ns: "profile" }),
-      type: NOTIFICATION_STATUS.READ,
-    },
-    {
-      label: t("notificationPage.type.unread", { ns: "profile" }),
-      type: NOTIFICATION_STATUS.UNREAD,
-    },
-  ];
-  const [notificationFilterData, setNotificationFilterData] =
-    useState<NotificationFilter>(notificationFilterButtonDatas[0]);
+  const [isTypeReadNotification, setIsTypeReadNotification] =
+    useState<boolean>(false);
   const { notifications, isLoading } = useNotification({
     page: 1,
     limit: Number.MAX_VALUE,
-    type: notificationFilterData?.type,
+    type: isTypeReadNotification
+      ? NOTIFICATION_STATUS.READ
+      : NOTIFICATION_STATUS.UNREAD,
   });
   const { handleRemoveAllNotification } = useRemoveAllNotification();
   const { handleMarkAllReadNotification } = useMarkAllReadNotification();
@@ -40,12 +32,15 @@ const Notification = () => {
           {t("notificationPage.list", { ns: "profile" })}
         </div>
         <div className="my-10 card flex justify-content-center items-center justify-between">
-          <SelectButton
-            value={notificationFilterData}
-            onChange={(e) => {
-              setNotificationFilterData(e.value);
+          <Switch
+            checkedChildren={t("notificationPage.type.read", { ns: "profile" })}
+            unCheckedChildren={t("notificationPage.type.unread", {
+              ns: "profile",
+            })}
+            onChange={(checked) => {
+              setIsTypeReadNotification(checked);
             }}
-            options={notificationFilterButtonDatas}
+            defaultValue={isTypeReadNotification}
           />
 
           <div className="flex gap-4">

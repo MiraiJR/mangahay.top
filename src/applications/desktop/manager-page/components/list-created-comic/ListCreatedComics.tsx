@@ -14,6 +14,9 @@ import { useDeleteComic } from "../../useDeleteComic";
 import { DialogPrivilegeComic } from "../privilege-comic/DialogPrivilegeComic";
 import { SplitButton } from "primereact/splitbutton";
 import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
+import { DialogListManagedChapter } from "../list-created-chapter/DialogListManagedChapter";
+import MyLoading from "@/shared/components/MyLoading";
+import { ReorderListChapter } from "../reorder-chapter/ReorderListChapter";
 
 const THE_DEFAULT_AMOUNT_COMICS: number = 10;
 
@@ -22,12 +25,21 @@ const ListCreatedComics = () => {
   const { theme, oppositeTheme } = useThemeContext();
   const { changeVisible: changeVisibleDialogUpdateComic } = useDialogContext();
   const [selectedComic, setSelectedComic] = useState<Comic | null>(null);
-  const { comics } = useGetMyCreatedComic();
+  const { comics, isLoading: isLoadingListMyCreatedComic } =
+    useGetMyCreatedComic();
   const { handleDeleteComic, isLoading: isLoadingDeleteComic } =
     useDeleteComic();
   const router = useRouter();
   const { userProfile } = userStore();
   const [isShowUserRight, setIsShowUserRight] = useState<boolean>(false);
+  const [isShowListManagedChapter, setIsShowListManagedChapter] =
+    useState<boolean>(false);
+  const [isShowReorderChapter, setIsShowReorderChapter] =
+    useState<boolean>(false);
+
+  if (isLoadingListMyCreatedComic) {
+    return <MyLoading />;
+  }
 
   const mappingPermission: Record<number, string> = {
     1: t("permission.updateChapter", { ns: "comic" }),
@@ -67,16 +79,37 @@ const ListCreatedComics = () => {
   };
 
   const itemTemplate = (comic: Comic) => {
+    const isCreatorComic = isCreator(comic);
+    const canInteractionWithChapter =
+      isCreatorComic ||
+      comic.privileges.includes(ComicPrivilegePermission.REMOVE_CHAPTER) ||
+      comic.privileges.includes(ComicPrivilegePermission.UPDATE_CHAPTER);
     const canRemove =
-      isCreator(comic) ||
+      isCreatorComic ||
       comic.privileges.includes(ComicPrivilegePermission.REMOVE_COMIC);
     const canUpdate =
-      isCreator(comic) ||
+      isCreatorComic ||
       comic.privileges.includes(ComicPrivilegePermission.UPDATE_COMIC);
 
     const isMe = userProfile?.id === comic.creatorId;
 
     const items = [
+      {
+        label: "List chapter",
+        icon: "pi pi-list",
+        command: () => {
+          setIsShowListManagedChapter(true);
+        },
+        visible: canInteractionWithChapter,
+      },
+      {
+        label: "Reorder chapter",
+        icon: "pi pi-sort",
+        command: () => {
+          setIsShowReorderChapter(true);
+        },
+        visible: canInteractionWithChapter,
+      },
       {
         label: t("comicAction.modify", { ns: "common" }),
         icon: "pi pi-pencil",
@@ -176,6 +209,17 @@ const ListCreatedComics = () => {
                 comicId={comic.id}
                 visible={isShowUserRight}
                 changeVisible={setIsShowUserRight}
+              />
+              <DialogListManagedChapter
+                visible={isShowListManagedChapter}
+                changeVisible={setIsShowListManagedChapter}
+                comicId={comic.id}
+                isCreatorComic={isCreator(comic)}
+              />
+              <ReorderListChapter
+                visible={isShowReorderChapter}
+                changeVisible={setIsShowReorderChapter}
+                comicId={comic.id}
               />
             </div>
             <span className="text-orange-400">{comic.state}</span>

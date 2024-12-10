@@ -1,4 +1,3 @@
-import { shortImageName } from "@/shared/helpers/helpers";
 import Image from "next/image";
 
 interface itemProps {
@@ -14,7 +13,7 @@ const ChapterViewTypeDefault = ({
 }: itemProps) => {
   return (
     <>
-      {shortImageName(images).map((image, _index) => (
+      {images.map((image, index) => (
         <Image
           loading="lazy"
           width={0}
@@ -22,7 +21,7 @@ const ChapterViewTypeDefault = ({
           className="w-[70%] mobile:w-[100%] object-fit"
           src={image}
           alt={`${chapterName}-${comicName}`}
-          key={_index}
+          key={index}
         />
       ))}
     </>

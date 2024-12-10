@@ -96,6 +96,7 @@ const CreateChapterForm = () => {
           />
         </div>
       </div>
+
       <div className="flex items-center justify-center">
         <Button
           label={t("createChapterButton", { ns: "chapter" })}
