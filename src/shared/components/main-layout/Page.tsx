@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 import { cn } from "@/shared/libs/utils";
@@ -6,6 +6,7 @@ import { globalStore } from "@/shared/stores/global-storage";
 import { ScrollToTop } from "./components/scroll-to-top/ScrollToTop";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { MOBILE_MAX_SIZE_SCREEN } from "@/shared/settings/CommonConfig";
+import { useRouter } from "next/router";
 
 const MainLayout = ({
   children,
@@ -14,8 +15,20 @@ const MainLayout = ({
   children: React.ReactNode;
   className?: string;
 }) => {
+  const router = useRouter();
   const { setIsMobile } = globalStore();
   const { theme, oppositeTheme } = useThemeContext();
+
+  if (router.pathname.startsWith("/test")) {
+    return (
+      <div
+        id="main-layout"
+        className={`min-h-screen relative bg-${theme} ${className}`}
+      >
+        {children}
+      </div>
+    );
+  }
 
   useEffect(() => {
     const handleResize = () => {
