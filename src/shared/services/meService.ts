@@ -30,8 +30,15 @@ const MeService = {
       fullname,
       phone,
     }),
-  getComicsManagedByMe: () =>
-    axiosClient.get<Comic[]>(`/users/me/management/comics`),
+  getComicsManagedByMe: (pagination: { page: number; size: number }) =>
+    axiosClient.get<{ total: number; comics: Comic[] }>(
+      `/users/me/management/comics`,
+      {
+        params: {
+          ...pagination,
+        },
+      }
+    ),
 };
 
 export default MeService;

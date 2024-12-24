@@ -1,5 +1,6 @@
+import axios from "axios";
 import { FileUploadFile, FileUploadSelectEvent } from "primereact/fileupload";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 export const useUploadFile = (imageUrl: string | null) => {
@@ -8,7 +9,9 @@ export const useUploadFile = (imageUrl: string | null) => {
   const [uploadedMultipleFile, setUploadMultipleFile] = useState<File[]>([]);
 
   const clearUploadedFile = () => {
-    fileUploadRef.current.clear();
+    if (fileUploadRef.current) {
+      fileUploadRef.current.clear();
+    }
   };
 
   const handleUploadImage = (e: FileUploadSelectEvent) => {
@@ -25,25 +28,31 @@ export const useUploadFile = (imageUrl: string | null) => {
     setUploadMultipleFile(e.files);
   };
 
-  const addExistedImageUrlToUpload = async () => {
+  const addExistedImageUrlToUpload = useCallback(async (url: string) => {
     try {
-      if (imageUrl) {
-        const response = await fetch(imageUrl);
-        const blob = await response.blob();
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const file = createFileUploadFile(blob);
 
-        const file = createFileUploadFile(blob);
+      if (fileUploadRef.current) {
+        fileUploadRef.current.setFiles([file]);
 
-        if (fileUploadRef.current) {
-          fileUploadRef.current.setFiles([file]);
-
-          handleUploadImage({
-            originalEvent: {} as DragEvent,
-            files: [file],
-          });
-        }
+        handleUploadImage({
+          originalEvent: {} as DragEvent,
+          files: [file],
+        });
       }
-    } catch (error) {}
-  };
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  }, []);
+
+  useEffect(() => {
+    clearUploadedFile();
+    if (imageUrl) {
+      addExistedImageUrlToUpload(imageUrl);
+    }
+  }, [imageUrl]);
 
   const createFileUploadFile = (blob: Blob): FileUploadFile => {
     const file = new File([blob], `${Date.now()}.jpg`, {
@@ -55,10 +64,6 @@ export const useUploadFile = (imageUrl: string | null) => {
 
     return Object.assign(file, { objectURL });
   };
-
-  useEffect(() => {
-    addExistedImageUrlToUpload();
-  }, [imageUrl]);
 
   return {
     fileUploadRef,

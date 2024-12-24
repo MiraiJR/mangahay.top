@@ -23,6 +23,7 @@ import { PrimeReactProvider } from "primereact/api";
 import { AuthContextProvider } from "@/shared/contexts/AuthContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { LanguageContextProvider } from "@/shared/contexts/LanguageContext";
+import { useRouter } from "next/router";
 
 const store = createStore();
 const StoreContext = React.createContext<any>({});
@@ -30,6 +31,11 @@ const StoreContext = React.createContext<any>({});
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string;
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
+  const router = useRouter();
+
+  const noLayoutRoutes = ["/quan-ly"];
+  const isNoLayoutRoute = noLayoutRoutes.includes(router.pathname);
+
   return (
     <>
       <Head>
@@ -48,10 +54,16 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
               <PrimeReactProvider>
                 <AuthContextProvider>
                   <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-                    <MainLayout>
-                      <Component {...pageProps} />
+                    <>
+                      {isNoLayoutRoute ? (
+                        <Component {...pageProps} />
+                      ) : (
+                        <MainLayout>
+                          <Component {...pageProps} />
+                        </MainLayout>
+                      )}
                       <ToastContainer position="bottom-right" autoClose={500} />
-                    </MainLayout>
+                    </>
                   </GoogleOAuthProvider>
                 </AuthContextProvider>
               </PrimeReactProvider>

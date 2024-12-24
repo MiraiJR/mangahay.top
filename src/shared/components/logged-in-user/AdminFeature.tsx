@@ -1,31 +1,24 @@
-import { userStore } from "@/shared/stores/user-storage";
+import { useAuthContext } from "@/shared/contexts/AuthContext";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
+interface AdminFeatureItem {
+  href: string;
+  text: string;
+}
+
 export const AdminFeature = () => {
-  const { userProfile } = userStore();
+  const { isAdminOrTranslator } = useAuthContext();
   const { t } = useTranslation();
 
-  const adminFeature = [
+  const adminFeature: AdminFeatureItem[] = [
     {
-      href: "/quan-ly#1",
-      text: t("adminFeature.publishComic", { ns: "common" }),
-    },
-    {
-      href: "/quan-ly#2",
-      text: t("adminFeature.publishChapter", { ns: "common" }),
-    },
-    {
-      href: "/quan-ly#3",
-      text: t("adminFeature.crawlChapter", { ns: "common" }),
+      href: "/quan-ly",
+      text: "Quản lý truyện",
     },
   ];
 
-  if (!userProfile) {
-    return <></>;
-  }
-
-  if (!["admin", "translator"].includes(userProfile.role)) {
+  if (!isAdminOrTranslator) {
     return <></>;
   }
 

@@ -4,7 +4,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-export const useReorderListChapterState = (comicId: number) => {
+export const useReorderListChapterState = (
+  comicId: number,
+  callBackSuccess: Function = () => {}
+) => {
   const queryClient = useQueryClient();
   const { chapters, isLoading } = useGetListChapter(comicId, true);
   const [listChapterForView, setListChapterForView] = useState<Chapter[]>([]);
@@ -20,6 +23,10 @@ export const useReorderListChapterState = (comicId: number) => {
         });
       }
     });
+
+    if (listReorderedChapter.length === 0) {
+      throw new Error("Không có gì thay đổi!");
+    }
 
     return listReorderedChapter;
   };
@@ -42,6 +49,7 @@ export const useReorderListChapterState = (comicId: number) => {
         queryKey: ["comic.chapters", { comicId }],
       });
       toast.success(data);
+      callBackSuccess();
     },
   });
 

@@ -47,12 +47,17 @@ const ComicService = {
   deleteComic: (comicId: number) =>
     axiosClient.delete<string>(`/comics/${comicId}`),
   getComicsWithChapters: () => axiosClient.get<Comic[]>(`/comics/chapters`),
-  getListChapters: (comicId: number, paging: { page: number; size: number }) =>
+  getListChapters: (
+    comicId: number,
+    paging?: { page: number; size: number },
+    isGetAll: boolean = false
+  ) =>
     axiosClient.get<{ total: number; chapters: Chapter[] }>(
       `/comics/${comicId}/chapters`,
       {
         params: {
           ...paging,
+          isGetAll,
         },
       }
     ),

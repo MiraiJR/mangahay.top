@@ -33,7 +33,6 @@ export const TableChapter = ({
     setSizeGetChapters,
     sizeGetChapters,
   } = useTableChapterState(comicId);
-  console.log(chapters);
   const { handleDeleteSingleChapter, isLoading: isDeleteLoading } =
     useDeleteSingleChapter(comicId);
   const [isOpenModelUpdateChapter, setIsOpenModelUpdateChapter] =

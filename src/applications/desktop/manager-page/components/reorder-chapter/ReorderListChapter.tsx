@@ -1,6 +1,7 @@
 import { Modal } from "antd";
 import { useReorderListChapterState } from "./useReorderListChapterState";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import MyLoading from "@/shared/components/MyLoading";
 
 interface ReorderListChapterProps {
   visible: boolean;
@@ -18,7 +19,9 @@ export const ReorderListChapter = ({
     isLoading,
     handleReorder,
     handlePostReorderChapter,
-  } = useReorderListChapterState(comicId);
+  } = useReorderListChapterState(comicId, () => {
+    changeVisible(false);
+  });
 
   return (
     <Modal
@@ -30,35 +33,39 @@ export const ReorderListChapter = ({
       onCancel={() => changeVisible(false)}
       loading={isLoading}
     >
-      <DragDropContext onDragEnd={handleReorder}>
-        <Droppable droppableId="listChapterForView">
-          {(provided) => (
-            <ul {...provided.droppableProps} ref={provided.innerRef}>
-              {listChapterForView.map(({ id, name }, index) => (
-                <Draggable key={id} draggableId={id.toString()} index={index}>
-                  {(provided) => (
-                    <li
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={{
-                        ...provided.draggableProps.style,
-                        padding: "8px",
-                        margin: "4px",
-                        backgroundColor: "white",
-                        border: "1px solid gray",
-                      }}
-                    >
-                      <p>{name}</p>
-                    </li>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </ul>
-          )}
-        </Droppable>
-      </DragDropContext>
+      {listChapterForView.length === 0 ? (
+        <div className="text-center py-6">Không có chương</div>
+      ) : (
+        <DragDropContext onDragEnd={handleReorder}>
+          <Droppable droppableId="listChapterForView">
+            {(provided) => (
+              <ul {...provided.droppableProps} ref={provided.innerRef}>
+                {listChapterForView.map(({ id, name }, index) => (
+                  <Draggable key={id} draggableId={id.toString()} index={index}>
+                    {(provided) => (
+                      <li
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={{
+                          ...provided.draggableProps.style,
+                          padding: "8px",
+                          margin: "4px",
+                          backgroundColor: "white",
+                          border: "1px solid gray",
+                        }}
+                      >
+                        <p>{name}</p>
+                      </li>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </ul>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
     </Modal>
   );
 };

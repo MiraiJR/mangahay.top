@@ -7,9 +7,7 @@ export const useGetListChapter = (
   isGetAll: boolean = false
 ) => {
   const [page, setPage] = useState<number>(1);
-  const [size, setSize] = useState<number>(
-    isGetAll ? Number.MAX_SAFE_INTEGER : 20
-  );
+  const [size, setSize] = useState<number>(20);
 
   const {
     data = {
@@ -21,10 +19,15 @@ export const useGetListChapter = (
   } = useQuery({
     queryKey: ["comic.chapters", { comicId, page, size }],
     queryFn: async () => {
-      const { data } = await ComicService.getListChapters(comicId, {
-        page,
-        size,
-      });
+      const { data } = await ComicService.getListChapters(
+        comicId,
+        {
+          page,
+          size,
+        },
+        isGetAll
+      );
+
       return data;
     },
     enabled: !!comicId,

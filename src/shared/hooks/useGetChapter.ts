@@ -16,7 +16,7 @@ export const useGetChapter = (slug: string = "") => {
   } = useQuery({
     queryKey: ["chapter", { slugChapter }],
     queryFn: async () => {
-      const { data } = await ChapterService.getChapter(slugChapter as string);
+      const { data } = await ChapterService.getChapter(slugChapter);
 
       return data;
     },
