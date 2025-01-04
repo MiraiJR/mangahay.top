@@ -1,14 +1,16 @@
 import React from "react";
 import { Button, Layout, Menu, theme } from "antd";
 import { useLayoutManagerData } from "./useLayoutManagerData";
-import CreateComicForm from "../../CreateComicForm";
-import CreateChapterForm from "../../CreateChapterForm";
-import CrawlChapter from "../../CrawlChapter";
+import CreateComicForm from "../create-comic/CreateComicForm";
+import CreateChapterForm from "../create-chapter/CreateChapterForm";
+import CrawlChapter from "../crawl-comic/CrawlChapter";
 import { TableComicsManagedByMe } from "../comic-manged-by-me/TableComicManagedByMe";
 import { useLogout } from "@/shared/components/logged-in-user/useLogout";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "@/shared/contexts/AuthContext";
 import { useRouter } from "next/router";
+import { MainLogo } from "@/shared/components/MainLogo";
+import { UploadImageProvider } from "@/shared/components/base-components/upload-files/UploadImageContext";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -42,9 +44,17 @@ export const LayoutManager = () => {
       case 1:
         return <TableComicsManagedByMe />;
       case 2:
-        return <CreateComicForm />;
+        return (
+          <UploadImageProvider>
+            <CreateComicForm />
+          </UploadImageProvider>
+        );
       case 3:
-        return <CreateChapterForm />;
+        return (
+          <UploadImageProvider>
+            <CreateChapterForm />
+          </UploadImageProvider>
+        );
       case 4:
         return <CrawlChapter />;
       default:
@@ -66,12 +76,13 @@ export const LayoutManager = () => {
       <Layout style={{ marginInlineStart: 250 }}>
         <Header
           style={{
-            padding: "10px",
+            padding: "20px",
             background: colorBgContainer,
             width: "100%",
           }}
-          className="flex justify-end items-center"
+          className="flex justify-between items-center"
         >
+          <MainLogo />
           <Button
             color="danger"
             variant="outlined"

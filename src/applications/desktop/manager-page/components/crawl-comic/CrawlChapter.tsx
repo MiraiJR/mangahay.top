@@ -2,12 +2,12 @@ import {
   AutoComplete,
   AutoCompleteCompleteEvent,
 } from "primereact/autocomplete";
-import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { useCrawlChapter } from "./useCrawlChapter";
 import { useTranslation } from "react-i18next";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
-import { useRecommendedComics } from "./useRecommendedComics";
+import { useRecommendedComics } from "../../hooks/useRecommendedComics";
+import { Button } from "antd";
 
 const CrawlChapter = () => {
   const { oppositeTheme } = useThemeContext();
@@ -122,11 +122,12 @@ const CrawlChapter = () => {
       </div>
       <div className="flex items-center justify-center">
         <Button
-          label={t("crawlChapter.button.label", { ns: "common" })}
-          icon="pi pi-check"
+          type="primary"
           loading={isCrawling}
           onClick={() => handleCrawlChapter()}
-        />
+        >
+          {t("crawlChapter.button.label", { ns: "common" })}
+        </Button>
       </div>
     </div>
   );

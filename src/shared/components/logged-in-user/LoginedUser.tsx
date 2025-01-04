@@ -18,28 +18,30 @@ const LoginedUser = () => {
   const { userProfile } = userStore();
   const { t } = useTranslation();
 
+  if (!userProfile) {
+    return <></>;
+  }
+
   return (
     <div className="relative cursor-pointer desktop:ml-10 flex gap-4">
       <Notification />
       <div ref={menuProfileRef}>
-        {userProfile && (
-          <Avatar
-            shape="circle"
-            pt={{
-              image: {
-                className:
-                  "mobile:w-[36px] w-[50px] mobile:h-[36px] h-[50px] object-cover rounded",
-              },
-            }}
-            icon="pi pi-user"
-            image={userProfile.avatar}
-            label={userProfile.fullname[0]}
-            size="large"
-            onClick={() => {
-              setShowMenu(!showMenu);
-            }}
-          />
-        )}
+        <Avatar
+          shape="circle"
+          pt={{
+            image: {
+              className:
+                "mobile:w-[36px] w-[50px] mobile:h-[36px] h-[50px] object-cover rounded",
+            },
+          }}
+          icon="pi pi-user"
+          image={userProfile.avatar}
+          label={userProfile.fullname[0]}
+          size="large"
+          onClick={() => {
+            setShowMenu(!showMenu);
+          }}
+        />
         {showMenu && (
           <div
             style={{ zIndex: "9999" }}

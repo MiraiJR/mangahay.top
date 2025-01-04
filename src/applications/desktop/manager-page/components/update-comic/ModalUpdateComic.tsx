@@ -5,7 +5,6 @@ import { useGetGenres } from "@/shared/hooks/useGetGenres";
 import { useUpdateComic } from "./useUpdateComic";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import { Editor, EditorTextChangeEvent } from "primereact/editor";
-import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
 import {
   removeAccentsAndLowerCase,
   removeAccentsAndLowerCaseArray,
@@ -14,6 +13,7 @@ import { RadioButton } from "primereact/radiobutton";
 import { StatusComic } from "@/shared/types/enums/StatusComic";
 import { Chips, ChipsChangeEvent } from "primereact/chips";
 import { InputText } from "primereact/inputtext";
+import { UploadImage } from "@/shared/components/base-components/upload-files/UploadImage";
 
 interface ModalUpdateComicProps {
   visible: boolean;
@@ -36,7 +36,6 @@ export const ModalUpdateComic = ({
     setComicAuthors,
     setComicTranslators,
     setBriefDescription,
-    setIsUpdateImage,
     setStatusComic,
     comicName,
     comicAnotherName,
@@ -45,8 +44,6 @@ export const ModalUpdateComic = ({
     comicTranslators,
     comicBriefDescription,
     statusComic,
-    fileUploadRef,
-    handleUploadImage,
     handleUpdateComic,
     comic,
     isLoadingComic,
@@ -59,12 +56,15 @@ export const ModalUpdateComic = ({
   }
 
   const setSelectedGenres = (e: CheckboxChangeEvent) => {
-    let _filterGenres = [...comicGenres];
+    const currentSelectedGenres = [...comicGenres];
 
-    if (e.checked) _filterGenres.push(e.value);
-    else _filterGenres.splice(_filterGenres.indexOf(e.value), 1);
+    if (e.checked) {
+      currentSelectedGenres.push(e.value);
+    } else {
+      currentSelectedGenres.splice(currentSelectedGenres.indexOf(e.value), 1);
+    }
 
-    setComicGenres(_filterGenres);
+    setComicGenres(currentSelectedGenres);
   };
 
   return (
@@ -226,16 +226,7 @@ export const ModalUpdateComic = ({
           <label htmlFor="iamge">
             {t("createComic.images.label", { ns: "common" })}
           </label>
-          <FileUpload
-            ref={fileUploadRef}
-            onSelect={(event: FileUploadSelectEvent) => {
-              handleUploadImage(event);
-              setIsUpdateImage(true);
-            }}
-            customUpload={true}
-            accept="image/*"
-            emptyTemplate={<p className="m-0">Có thể kéo thả ảnh vào đây</p>}
-          />
+          <UploadImage listInitialImageLink={[comic.thumb]} />
         </div>
       </div>
     </Modal>

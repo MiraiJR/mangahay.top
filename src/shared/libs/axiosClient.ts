@@ -1,9 +1,9 @@
 import axios from "axios";
 import { baseURL } from "./config";
 import jwt from "./jwt";
-import authService from "../services/authService";
 import i18next from "i18next";
 import { toast } from "react-toastify";
+import AuthService from "../services/authService";
 
 const axiosClient = axios.create({
   baseURL,
@@ -44,7 +44,7 @@ axiosClient.interceptors.response.use(
 
       if (token) {
         try {
-          const { data } = await authService.refreshToken(token.refreshToken);
+          const { data } = await AuthService.refreshToken(token.refreshToken);
           jwt.setToken(data);
 
           axiosClient.defaults.headers.common["Authorization"] =
@@ -54,7 +54,7 @@ axiosClient.interceptors.response.use(
           return axios(originalRequest);
         } catch (error: any) {
           jwt.deleteToken();
-          if (error.message === "Token không hợp lệ") {
+          if (error.errorCode === "AUTH_ERROR_0004") {
             window.location.reload();
           }
         }

@@ -20,6 +20,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     useState<boolean>(false);
   const { setUserProfile } = userStore();
 
+  jwt.onDeleteToken(() => {
+    setIsLoggedIn(false);
+  });
+
   const { isLoading } = useQuery({
     queryKey: ["me"],
     queryFn: async () => {

@@ -1,5 +1,5 @@
-import { useDeleteComic } from "@/applications/desktop/manager-page/useDeleteComic";
-import { useGetMyCreatedComic } from "@/applications/desktop/manager-page/useGetMyCreatedComic";
+import { useDeleteComic } from "@/applications/desktop/manager-page/hooks/useDeleteComic";
+import { useGetMyCreatedComic } from "@/applications/desktop/manager-page/components/comic-manged-by-me/useGetMyCreatedComic";
 import { useDialogContext } from "@/shared/contexts/DialogContext";
 import { userStore } from "@/shared/stores/user-storage";
 import { useState } from "react";

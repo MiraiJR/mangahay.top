@@ -1,34 +1,23 @@
-import { useUploadFile } from "@/shared/hooks/useUploadFile";
 import { Camera } from "lucide-react";
 import { Dialog } from "primereact/dialog";
-import { useUpdateAvatar } from "../../useUpdateAvatar";
-import { useEffect, useState } from "react";
+import { useUpdateAvatar } from "./useUpdateAvatar";
+import { useState } from "react";
 import Image from "next/image";
 import { userStore } from "@/shared/stores/user-storage";
 import { Button } from "primereact/button";
-import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
-import { ProgressSpinner } from "primereact/progressspinner";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
+import { UploadImage } from "@/shared/components/base-components/upload-files/UploadImage";
 
 export const UserAvatar = () => {
   const { oppositeTheme } = useThemeContext();
   const { userProfile } = userStore();
-  const {
-    file: avatar,
-    setFile: setAvatar,
-    handleUploadImage,
-  } = useUploadFile();
-  const {
-    handleUpdateAvatar,
-    isLoading: isLoadingAvatar,
-    isSuccess: isSuccessaAvatar,
-  } = useUpdateAvatar(avatar);
+  const { handleUpdateAvatar, isLoading: isLoadingAvatar } = useUpdateAvatar(
+    () => {
+      setIsVisibleDialog(false);
+    }
+  );
   const [showChangeAvatar, setShowChangeAvatar] = useState<boolean>(false);
   const [isVisibleDialog, setIsVisibleDialog] = useState<boolean>(false);
-
-  useEffect(() => {
-    setIsVisibleDialog(false);
-  }, [isSuccessaAvatar]);
 
   const dialogFooter = (
     <div>
@@ -38,7 +27,6 @@ export const UserAvatar = () => {
         icon="pi pi-times"
         onClick={() => {
           setIsVisibleDialog(false);
-          setAvatar(null);
         }}
         className="p-button-text"
       />
@@ -80,40 +68,6 @@ export const UserAvatar = () => {
                   <Camera />
                 </div>
               )}
-              <Dialog
-                header="Thay đổi ảnh đại diện"
-                visible={isVisibleDialog}
-                onHide={() => {
-                  setIsVisibleDialog(false);
-                  setAvatar(null);
-                }}
-                style={{ width: "50vw" }}
-                breakpoints={{ "960px": "75vw", "641px": "100vw" }}
-                footer={dialogFooter}
-              >
-                {!isLoadingAvatar ? (
-                  <FileUpload
-                    onSelect={(event: FileUploadSelectEvent) =>
-                      handleUploadImage(event)
-                    }
-                    customUpload={true}
-                    accept="image/*"
-                    emptyTemplate={
-                      <p className="m-0">Có thể kéo thả ảnh vào đây</p>
-                    }
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center w-[100%] col-span-12">
-                    <ProgressSpinner
-                      style={{ width: "50px", height: "50px" }}
-                      strokeWidth="8"
-                      fill="var(--surface-ground)"
-                      animationDuration=".5s"
-                    />
-                    <span>Đang tải ảnh lên</span>
-                  </div>
-                )}
-              </Dialog>
             </div>
             <h2>{userProfile.fullname}</h2>
             <h2 className={`capitalize p-2 bg-green-400 rounded-xl`}>
@@ -122,6 +76,18 @@ export const UserAvatar = () => {
           </div>
         </div>
       )}
+      <Dialog
+        header="Thay đổi ảnh đại diện"
+        visible={isVisibleDialog}
+        onHide={() => {
+          setIsVisibleDialog(false);
+        }}
+        style={{ width: "50vw" }}
+        breakpoints={{ "960px": "75vw", "641px": "100vw" }}
+        footer={dialogFooter}
+      >
+        <UploadImage />
+      </Dialog>
     </>
   );
 };

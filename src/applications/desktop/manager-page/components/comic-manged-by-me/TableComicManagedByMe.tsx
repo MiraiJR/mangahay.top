@@ -23,6 +23,7 @@ import { DialogPrivilegeComic } from "@/applications/desktop/manager-page/compon
 import { DialogListManagedChapter } from "@/applications/desktop/manager-page/components/list-created-chapter/DialogListManagedChapter";
 import { ReorderListChapter } from "@/applications/desktop/manager-page/components/reorder-chapter/ReorderListChapter";
 import { ModalUpdateComic } from "@/applications/desktop/manager-page/components/update-comic/ModalUpdateComic";
+import { UploadImageProvider } from "@/shared/components/base-components/upload-files/UploadImageContext";
 
 export const TableComicsManagedByMe = () => {
   const { t } = useTranslation();
@@ -230,11 +231,13 @@ export const TableComicsManagedByMe = () => {
               changeVisible={setIsShowReorderChapter}
               comicId={selectedComic.id}
             />
-            <ModalUpdateComic
-              visible={isShowUpdateComic}
-              changeVisible={setIsShowUpdateComic}
-              comicSlug={selectedComic.slug}
-            />
+            <UploadImageProvider>
+              <ModalUpdateComic
+                visible={isShowUpdateComic}
+                changeVisible={setIsShowUpdateComic}
+                comicSlug={selectedComic.slug}
+              />
+            </UploadImageProvider>
           </>
         )}
       </div>
@@ -242,20 +245,18 @@ export const TableComicsManagedByMe = () => {
   };
 
   return (
-    <>
-      <Table<Comic>
-        columns={columns}
-        dataSource={comics}
-        loading={isLoadingListMyCreatedComic}
-        pagination={{
-          total: totalComics,
-          pageSize: size,
-          onChange(page, pageSize) {
-            setPage(page);
-            setSize(pageSize);
-          },
-        }}
-      />
-    </>
+    <Table<Comic>
+      columns={columns}
+      dataSource={comics}
+      loading={isLoadingListMyCreatedComic}
+      pagination={{
+        total: totalComics,
+        pageSize: size,
+        onChange(page, pageSize) {
+          setPage(page);
+          setSize(pageSize);
+        },
+      }}
+    />
   );
 };

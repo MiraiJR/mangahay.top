@@ -14,9 +14,12 @@ const Notification = dynamic(
   () => import("./components/notification/Notification"),
   { ssr: false }
 );
-const ListFollowingComics = dynamic(() => import("./ListFollowingComics"), {
-  ssr: false,
-});
+const ListFollowingComics = dynamic(
+  () => import("./components/list-following-comics/ListFollowingComics"),
+  {
+    ssr: false,
+  }
+);
 
 const UserPage = () => {
   const { oppositeTheme, theme } = useThemeContext();
@@ -26,6 +29,7 @@ const UserPage = () => {
 
   const items: MenuItem[] = [
     {
+      id: "1",
       label: t("personalInformation", { ns: "profile" }),
       command: () => {
         setActiveTab(TabType.PROFILE);
@@ -33,6 +37,7 @@ const UserPage = () => {
       },
     },
     {
+      id: "2",
       label: t("notification", { ns: "profile" }),
       command: () => {
         setActiveTab(TabType.NOTIFICATION);
@@ -40,6 +45,7 @@ const UserPage = () => {
       },
     },
     {
+      id: "3",
       label: t("listFollowedComic", { ns: "profile" }),
       command: () => {
         setActiveTab(TabType.FOLLOWING_COMIC);
@@ -47,6 +53,7 @@ const UserPage = () => {
       },
     },
     {
+      id: "4",
       label: t("setting", { ns: "profile" }),
       command: () => {
         setActiveTab(TabType.SETTING);
@@ -62,9 +69,6 @@ const UserPage = () => {
           pt={{
             menu: {
               className: `bg-${theme}`,
-            },
-            label: {
-              className: `text-${oppositeTheme}`,
             },
             action: {
               className: `bg-${theme}`,

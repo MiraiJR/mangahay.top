@@ -9,8 +9,8 @@ import { Button } from "primereact/button";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useGetListFollowedComic } from "./useGetListFollowedComic";
 import { useTranslation } from "react-i18next";
-import { useFollowComic } from "../comic-page/useFollowComic";
 import { useEffect } from "react";
+import { useFollowComic } from "@/applications/desktop/comic-page/useFollowComic";
 
 const ListFollowingComics = () => {
   const { t } = useTranslation();

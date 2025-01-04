@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useGetMyCreatedComic } from "./useGetMyCreatedComic";
+import { useGetMyCreatedComic } from "../components/comic-manged-by-me/useGetMyCreatedComic";
 
 export const useRecommendedComics = () => {
   const { comics } = useGetMyCreatedComic();

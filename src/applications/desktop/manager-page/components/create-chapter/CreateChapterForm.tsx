@@ -2,14 +2,14 @@ import {
   AutoComplete,
   AutoCompleteCompleteEvent,
 } from "primereact/autocomplete";
-import { Button } from "primereact/button";
-import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
 import { InputText } from "primereact/inputtext";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useCreateChapter } from "./useCreateChapter";
 import { useTranslation } from "react-i18next";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
-import { useRecommendedComics } from "./useRecommendedComics";
+import { useRecommendedComics } from "../../hooks/useRecommendedComics";
+import { UploadImage } from "@/shared/components/base-components/upload-files/UploadImage";
+import { Button } from "antd";
 
 const CreateChapterForm = () => {
   const { t } = useTranslation();
@@ -23,8 +23,6 @@ const CreateChapterForm = () => {
     setChapterName,
     isEnd,
     setIsEnd,
-    fileUploadRef,
-    handleUploadMultipleFile,
     handleCreateChapter,
     isLoading,
   } = useCreateChapter();
@@ -80,30 +78,18 @@ const CreateChapterForm = () => {
       <div className="flex flex-col gap-2 w-[100%]">
         <div className={`flex flex-col gap-2 text-${oppositeTheme}`}>
           <label htmlFor="iamge">{t("chapterImages", { ns: "chapter" })}</label>
-          <FileUpload
-            ref={fileUploadRef}
-            multiple
-            onSelect={(event: FileUploadSelectEvent) =>
-              handleUploadMultipleFile(event)
-            }
-            customUpload={true}
-            accept="image/*"
-            emptyTemplate={
-              <p className="m-0">
-                {t("canDragAndDropImage", { ns: "common" })}
-              </p>
-            }
-          />
+          <UploadImage multiple />
         </div>
       </div>
 
       <div className="flex items-center justify-center">
         <Button
-          label={t("createChapterButton", { ns: "chapter" })}
-          icon="pi pi-check"
+          type="primary"
           loading={isLoading}
           onClick={() => handleCreateChapter()}
-        />
+        >
+          {t("createChapterButton", { ns: "chapter" })}
+        </Button>
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ interface itemProps {
 
 const ChapterPage = ({ detailComic }: itemProps) => {
   const { t } = useTranslation();
-  const { comic } = useGetComic(detailComic);
+  const { comic } = useGetComic();
   const { chapter } = useGetChapter();
   const { increaseView } = useIncreaseViewComic(detailComic.id);
   const items: MenuItem[] = [

@@ -1,10 +1,12 @@
+import { useUploadImageContext } from "@/shared/components/base-components/upload-files/UploadImageContext";
 import MeService from "@/shared/services/meService";
 import { userStore } from "@/shared/stores/user-storage";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-export const useUpdateAvatar = (avatar: File | null) => {
+export const useUpdateAvatar = (callBackSuccess: Function = () => {}) => {
   const { setUserProfile } = userStore();
+  const { uploadedFile: avatar } = useUploadImageContext();
 
   const validate = () => {
     if (!avatar) {
@@ -21,7 +23,6 @@ export const useUpdateAvatar = (avatar: File | null) => {
         const formData = new FormData();
         formData.append("file", avatar);
         const { data } = await MeService.updateAvatar(formData);
-
         setUserProfile(data);
       }
     },
@@ -30,6 +31,7 @@ export const useUpdateAvatar = (avatar: File | null) => {
     },
     onSuccess: () => {
       toast.success("Đổi avatar thành công!");
+      callBackSuccess();
     },
   });
 

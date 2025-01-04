@@ -1,17 +1,15 @@
-import LogoWeb from "@/shared/assets/logo.webp";
-import LogoWebLight from "@/shared/assets/logo-light.webp";
 import { UserCircle2 } from "lucide-react";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import LoginedUser from "../logged-in-user/LoginedUser";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { InputSwitch, InputSwitchChangeEvent } from "primereact/inputswitch";
-import Image from "next/image";
 import Link from "next/link";
 import { SearchComic } from "./components/search-comic/SearchComic";
 import { LeftMenu } from "./components/left-menu/LeftMenu";
 import { useTranslation } from "react-i18next";
 import { FlagCountries } from "../flag-country/FlagCountries";
 import { useAuthContext } from "@/shared/contexts/AuthContext";
+import { MainLogo } from "../MainLogo";
 
 const Header = () => {
   const { t } = useTranslation();
@@ -27,16 +25,7 @@ const Header = () => {
         className={`container mx-auto bg-${theme} text-${oppositeTheme} p-5 flex justify-between items-center relative`}
       >
         <div className="flex items-center gap-5 font-medium text-lg">
-          <Link href="/" hrefLang="vi">
-            <Image
-              priority
-              width={0}
-              height={100}
-              className="mobile:h-[30px] mobile:w-fit h-[100px]"
-              src={theme === "light" ? LogoWeb : LogoWebLight}
-              alt="mangahay.top logo"
-            />
-          </Link>
+          <MainLogo />
           <LeftMenu />
         </div>
         <div className="card flex flex-wrap items-center justify-content-center gap-3">

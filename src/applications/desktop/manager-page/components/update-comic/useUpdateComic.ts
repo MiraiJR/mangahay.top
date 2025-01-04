@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useUploadFile } from "../../useUploadFile";
 import { toast } from "react-toastify";
 import ComicService from "@/shared/services/comicService";
 import { useGetComic } from "@/shared/hooks/useGetComic";
+import { useUploadImageContext } from "@/shared/components/base-components/upload-files/UploadImageContext";
 
 export const useUpdateComic = (
   comicSlug: string,
@@ -19,15 +19,9 @@ export const useUpdateComic = (
   const [comicAuthors, setComicAuthors] = useState<string[]>([]);
   const [comicTranslators, setComicTranslators] = useState<string[]>([]);
   const [comicBriefDescription, setBriefDescription] = useState<string>("");
-  const [isUpdateImage, setIsUpdateImage] = useState<boolean>(false);
   const [statusComic, setStatusComic] = useState<string>("");
-  const {
-    fileUploadRef,
-    clearUploadedFile,
-    handleUploadImage,
-    uploadedFile: comicThumb,
-    setUploadedFile: setComicThumb,
-  } = useUploadFile(comic?.thumb ?? null);
+  const { uploadedFile: comicThumb, fileList } = useUploadImageContext();
+  const isUpdateThumb = fileList.length > 0 && comicThumb;
 
   useEffect(() => {
     if (comic) {
@@ -37,7 +31,6 @@ export const useUpdateComic = (
       setComicAuthors(comic.authors ?? []);
       setComicTranslators(comic.translators ?? []);
       setBriefDescription(comic.briefDescription ?? "");
-      setIsUpdateImage(false);
       setStatusComic(comic.state ?? "");
     }
   }, [comic]);
@@ -48,7 +41,7 @@ export const useUpdateComic = (
       comicAnotherName.trim() === "" ||
       comicGenres.length === 0 ||
       comicBriefDescription.trim() === "" ||
-      (isUpdateImage && !comicThumb)
+      !isUpdateThumb
     ) {
       throw new Error(t("notEmptyContent", { ns: "common" }));
     }
@@ -111,7 +104,7 @@ export const useUpdateComic = (
     let formData = new FormData();
     const { changedFields, changedData } = detectChangedFields();
 
-    if (changedFields.length === 0 && !isUpdateImage) {
+    if (changedFields.length === 0 && !isUpdateThumb) {
       throw new Error("Chưa thay đổi bất kỳ thông tin nào cả!");
     }
 
@@ -123,7 +116,7 @@ export const useUpdateComic = (
       formData.append("changedData[]", data);
     });
 
-    if (isUpdateImage && comicThumb) {
+    if (isUpdateThumb && comicThumb) {
       formData.append("thumb", comicThumb);
     }
 
@@ -166,7 +159,6 @@ export const useUpdateComic = (
     setComicAuthors,
     setComicTranslators,
     setBriefDescription,
-    setIsUpdateImage,
     setStatusComic,
     comicName,
     comicAnotherName,
@@ -174,12 +166,8 @@ export const useUpdateComic = (
     comicAuthors,
     comicTranslators,
     comicBriefDescription,
-    isUpdateImage,
     statusComic,
-    fileUploadRef,
-    handleUploadImage,
     comicThumb,
-    setComicThumb,
     handleUpdateComic: updateMutation.mutate,
     isLoadingUpdateComic: updateMutation.isPending,
     isSuccessUpdateComic: updateMutation.isSuccess,

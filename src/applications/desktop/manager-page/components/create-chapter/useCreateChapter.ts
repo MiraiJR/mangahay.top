@@ -1,22 +1,18 @@
-import { useState } from "react";
-import { useUploadFile } from "./useUploadFile";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { extractComicId } from "@/shared/helpers/helpers";
 import ChapterService from "@/shared/services/chapterService";
+import { useUploadImageContext } from "@/shared/components/base-components/upload-files/UploadImageContext";
 
 export const useCreateChapter = () => {
   const { t } = useTranslation();
   const [comicName, setComicName] = useState<string>("");
   const [chapterName, setChapterName] = useState<string>("");
+  const { uploadedFiles: chapterImages, reset: resetUploadImages } =
+    useUploadImageContext();
   const [isEnd, setIsEnd] = useState<boolean>(false);
-  const {
-    fileUploadRef,
-    handleUploadMultipleFile,
-    uploadedMultipleFile: chapterImages,
-    clearUploadedFile,
-  } = useUploadFile(null);
 
   const validate = () => {
     if (
@@ -46,7 +42,7 @@ export const useCreateChapter = () => {
     setComicName("");
     setChapterName("");
     setIsEnd(false);
-    clearUploadedFile();
+    resetUploadImages(true);
   };
 
   const mutation = useMutation({
@@ -73,8 +69,6 @@ export const useCreateChapter = () => {
     setChapterName,
     isEnd,
     setIsEnd,
-    fileUploadRef,
-    handleUploadMultipleFile,
     chapterImages,
     handleCreateChapter: mutation.mutate,
     isLoading: mutation.isPending,

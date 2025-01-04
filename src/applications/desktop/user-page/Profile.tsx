@@ -7,6 +7,7 @@ import { UserWallPaper } from "./components/wallpaper/UserWallpaper";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { Button } from "primereact/button";
 import { useTranslation } from "react-i18next";
+import { UploadImageProvider } from "@/shared/components/base-components/upload-files/UploadImageContext";
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -27,7 +28,9 @@ const Profile = () => {
         <div className={`bg-${theme} text-${oppositeTheme}`}>
           <div className="relative border">
             <UserWallPaper />
-            <UserAvatar />
+            <UploadImageProvider>
+              <UserAvatar />
+            </UploadImageProvider>
           </div>
           <div className="mt-[100px] flex flex-col gap-4 items-center">
             <div className="flex flex-col gap-2 w-[100%] ">

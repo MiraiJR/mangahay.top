@@ -2,18 +2,18 @@ import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import { Editor, EditorTextChangeEvent } from "primereact/editor";
 import { InputText } from "primereact/inputtext";
 import { Chips, ChipsChangeEvent } from "primereact/chips";
-import { FileUpload, FileUploadSelectEvent } from "primereact/fileupload";
 import {
   removeAccentsAndLowerCase,
   removeAccentsAndLowerCaseArray,
 } from "@/shared/helpers/StringHelper";
-import { Button } from "primereact/button";
 import { StatusComic } from "@/shared/types/enums/StatusComic";
 import { RadioButton } from "primereact/radiobutton";
 import { useGetGenres } from "@/shared/hooks/useGetGenres";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useCreateComic } from "./useCreateComic";
 import { useTranslation } from "react-i18next";
+import { UploadImage } from "@/shared/components/base-components/upload-files/UploadImage";
+import { Button } from "antd";
 
 const CreateComicForm = () => {
   const { t } = useTranslation();
@@ -26,7 +26,6 @@ const CreateComicForm = () => {
     setComicAuthors,
     setComicTranslators,
     setBriefDescription,
-    setIsUpdateImage,
     setStatusComic,
     comicName,
     comicAnotherName,
@@ -35,19 +34,20 @@ const CreateComicForm = () => {
     comicTranslators,
     comicBriefDescription,
     statusComic,
-    fileUploadRef,
-    handleUploadImage,
     handleCreateComic,
     isLoadingCreateComic,
   } = useCreateComic();
 
   const setSelectedGenres = (e: CheckboxChangeEvent) => {
-    let _filterGenres = [...comicGenres];
+    const currentSelectedGenres = [...comicGenres];
 
-    if (e.checked) _filterGenres.push(e.value);
-    else _filterGenres.splice(_filterGenres.indexOf(e.value), 1);
+    if (e.checked) {
+      currentSelectedGenres.push(e.value);
+    } else {
+      currentSelectedGenres.splice(currentSelectedGenres.indexOf(e.value), 1);
+    }
 
-    setComicGenres(_filterGenres);
+    setComicGenres(currentSelectedGenres);
   };
 
   return (
@@ -129,9 +129,7 @@ const CreateComicForm = () => {
         </div>
       </div>
       <div className={`flex flex-col gap-4 text-${oppositeTheme}`}>
-        <label htmlFor="translators">
-          {t("createComic.status.label", { ns: "common" })}
-        </label>
+        <label>{t("createComic.status.label", { ns: "common" })}</label>
         <div className="flex flex-wrap gap-3">
           {Object.values(StatusComic).map((status, _index) => (
             <div className="flex align-items-center" key={_index}>
@@ -157,7 +155,7 @@ const CreateComicForm = () => {
           <div className="grid grid-cols-6 mobile:grid-cols-3 gap-2">
             {genres.map((genre) => (
               <div
-                className="flex align-items-center"
+                className="flex align-items-center "
                 title={`${genre.name} ${genre.slug}`}
                 key={genre.slug}
               >
@@ -169,7 +167,10 @@ const CreateComicForm = () => {
                     removeAccentsAndLowerCase(genre.name)
                   )}
                 />
-                <label htmlFor={genre.slug} className="ml-2 mobile:text-xs">
+                <label
+                  htmlFor={genre.slug}
+                  className="ml-2 mobile:text-xs cursor-pointer"
+                >
                   {genre.name}
                 </label>
               </div>
@@ -196,24 +197,16 @@ const CreateComicForm = () => {
         <label htmlFor="iamge">
           {t("createComic.images.label", { ns: "common" })}
         </label>
-        <FileUpload
-          ref={fileUploadRef}
-          onSelect={(event: FileUploadSelectEvent) => {
-            handleUploadImage(event);
-            setIsUpdateImage("1");
-          }}
-          customUpload={true}
-          accept="image/*"
-          emptyTemplate={<p className="m-0">Có thể kéo thả ảnh vào đây</p>}
-        />
+        <UploadImage />
       </div>
       <div className="flex items-center justify-center">
         <Button
-          label={t("createComic.createComic", { ns: "common" })}
-          icon="pi pi-check"
+          type="primary"
           loading={isLoadingCreateComic}
           onClick={() => handleCreateComic()}
-        />
+        >
+          {t("createComic.createComic", { ns: "common" })}
+        </Button>
       </div>
     </div>
   );
