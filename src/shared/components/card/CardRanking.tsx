@@ -14,7 +14,7 @@ const CardRanking = ({ comic, position, isRanking }: itemProps) => {
   const { oppositeTheme } = useThemeContext();
 
   return (
-    <div className="grid grid-cols-12 p-2 border-b-2">
+    <div className="grid grid-cols-12 p-2 border-b-2 mobile:text-xs hover:bg-slate-300">
       {isRanking && (
         <div
           className={cn(`col-span-1 p-2 bg-slate-600 w-fit h-fit text-white`, {

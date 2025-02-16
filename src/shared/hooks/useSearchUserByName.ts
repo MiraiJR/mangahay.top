@@ -5,11 +5,14 @@ import UserService from "../services/userService";
 export const useSearchUserByName = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSearch = async (queryName: string) => {
+  const handleSearch = async (queryName: string, excludedIds?: number[]) => {
     setIsLoading(true);
 
     try {
-      const { data } = await UserService.searchUser(queryName);
+      const { data } = await UserService.searchUser(
+        queryName,
+        excludedIds ?? []
+      );
 
       return data.users;
     } catch (error: any) {

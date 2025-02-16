@@ -24,11 +24,15 @@ import { AuthContextProvider } from "@/shared/contexts/AuthContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { LanguageContextProvider } from "@/shared/contexts/LanguageContext";
 import { useRouter } from "next/router";
+import SwiperCore from "swiper/core";
+import { Keyboard, Mousewheel } from "swiper/modules";
 
 const store = createStore();
 const StoreContext = React.createContext<any>({});
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string;
+
+SwiperCore.use([Keyboard, Mousewheel]);
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   const router = useRouter();

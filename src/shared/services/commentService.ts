@@ -1,22 +1,17 @@
 import axiosClient from "../libs/axiosClient";
 
 const CommentService = {
-  commentOnComic: (comicId: number, content: string) =>
-    axiosClient.post<any>(`/comments`, {
-      comicId,
-      content,
-    }),
-  answerComment: (
+  commentOnComic: (
     comicId: number,
-    targetCommentId: number,
     content: string,
-    mentionedUserId: number | null
+    mentionedUserIds?: number[],
+    targetCommentId?: number
   ) =>
-    axiosClient.post<any>(`/comments`, {
+    axiosClient.post<UserCommentResponse>(`/comments`, {
       comicId,
       targetCommentId,
       content,
-      mentionedUserId,
+      mentionedUserIds,
     }),
   listAnswerOfComment: (
     commentId: number,

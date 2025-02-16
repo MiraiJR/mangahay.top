@@ -1,23 +1,15 @@
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
-import { useGetChapter } from "@/shared/hooks/useGetChapter";
-import { useGetListChapter } from "@/shared/hooks/useGetListChapter";
 import { useEffect, useState } from "react";
-import MenuChapter from "./MenuChapter";
+import { MenuChapter } from "./MenuChapter";
 import router from "next/router";
 import { ArrowLeftCircle, ArrowRightCircle, MenuSquare } from "lucide-react";
-import { Button } from "primereact/button";
+import { usePageContext } from "./Context";
+import { Button } from "antd";
+import { globalStore } from "@/shared/stores/global-storage";
 
-interface NavigationChapterProps {
-  comicId: number;
-  slugComic: string;
-}
-
-export const NavigationChapter = ({
-  comicId,
-  slugComic,
-}: NavigationChapterProps) => {
-  const { chapters } = useGetListChapter(comicId);
-  const { chapter } = useGetChapter();
+export const NavigationChapter = () => {
+  const { isMobile } = globalStore();
+  const { chapter, comic, chapters } = usePageContext();
   const [nextChapter, setNextChapter] = useState<Chapter | null>(null);
   const [previousChapter, setPreviousChapter] = useState<Chapter | null>(null);
   const {
@@ -45,37 +37,38 @@ export const NavigationChapter = ({
     <div className="relative z-5 flex justify-center items-center mobile:flex-col mobile:items-start">
       <div className="flex gap-4 mobile:w-[100%] mobile:justify-center">
         <Button
-          pt={{
-            badge: {
-              className: "bg-red",
-            },
-          }}
+          size={isMobile ? "middle" : "large"}
+          color="primary"
+          variant="solid"
           title="Chapter trước"
           onClick={() =>
-            router.push(`/truyen/${slugComic}/${previousChapter?.slug}`)
+            router.push(`/truyen/${comic?.slug}/${previousChapter?.slug}`)
           }
+          icon={<ArrowLeftCircle />}
           disabled={!previousChapter}
-        >
-          <ArrowLeftCircle />
-        </Button>
+        />
         <div className="relative" ref={menuChapterRef}>
           <Button
+            size={isMobile ? "middle" : "large"}
+            color="primary"
+            variant="solid"
             title="Danh sách chương"
             onClick={() => setShowMenuChapter(!showMenuChapter)}
-          >
-            <MenuSquare />
-          </Button>
-          {showMenuChapter && <MenuChapter chapters={chapters} />}
+            icon={<MenuSquare />}
+          />
+          <MenuChapter open={showMenuChapter} />
         </div>
         <Button
+          size={isMobile ? "middle" : "large"}
+          color="primary"
+          variant="solid"
           title="Chapter tiếp theo"
           onClick={() => {
-            router.push(`/truyen/${slugComic}/${nextChapter?.slug}`);
+            router.push(`/truyen/${comic?.slug}/${nextChapter?.slug}`);
           }}
           disabled={!nextChapter}
-        >
-          <ArrowRightCircle />
-        </Button>
+          icon={<ArrowRightCircle />}
+        />
       </div>
     </div>
   );

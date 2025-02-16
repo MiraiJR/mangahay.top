@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { extractComicId } from "@/shared/helpers/helpers";
 import ChapterService from "@/shared/services/chapterService";
 import { useUploadImageContext } from "@/shared/components/base-components/upload-files/UploadImageContext";
 
 export const useCreateChapter = () => {
   const { t } = useTranslation();
-  const [comicName, setComicName] = useState<string>("");
+  const [comicId, setComicId] = useState<number>(-1);
   const [chapterName, setChapterName] = useState<string>("");
   const { uploadedFiles: chapterImages, reset: resetUploadImages } =
     useUploadImageContext();
@@ -16,8 +15,7 @@ export const useCreateChapter = () => {
 
   const validate = () => {
     if (
-      comicName.trim() === "" ||
-      !comicName.includes("/") ||
+      comicId === -1 ||
       chapterName.trim() === "" ||
       chapterImages.length === 0
     ) {
@@ -28,8 +26,7 @@ export const useCreateChapter = () => {
   const buildFormData = () => {
     const formData = new FormData();
     formData.append("name", chapterName.replaceAll("/", ""));
-    const comicId = extractComicId(comicName);
-    formData.append("comicId", comicId as unknown as string);
+    formData.append("comicId", comicId.toString());
     formData.append("isEnd", isEnd ? "1" : "0");
     chapterImages.forEach((image) => {
       formData.append("images", image);
@@ -39,7 +36,6 @@ export const useCreateChapter = () => {
   };
 
   const reset = () => {
-    setComicName("");
     setChapterName("");
     setIsEnd(false);
     resetUploadImages(true);
@@ -63,8 +59,7 @@ export const useCreateChapter = () => {
   });
 
   return {
-    comicName,
-    setComicName,
+    setComicId,
     chapterName,
     setChapterName,
     isEnd,

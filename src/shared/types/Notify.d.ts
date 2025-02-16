@@ -8,4 +8,12 @@ type Notify = {
   thumb: string;
   createdAt: Date;
   updatedAt: Date;
+  module: string;
+};
+
+type PagingNotification = {
+  query: any;
+  total: number;
+  data: Notify[];
+  hasNext: boolean;
 };

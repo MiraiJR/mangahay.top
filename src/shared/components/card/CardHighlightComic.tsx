@@ -1,24 +1,24 @@
 import Image from "next/image";
-import { Rating } from "primereact/rating";
 import Link from "next/link";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
+import { Rate, Tag } from "antd";
+import { roundUpToNearestHalf } from "@/shared/helpers/helpers";
 
-interface itemProps {
+interface CardHighlightComicProps {
   comic: Comic;
 }
 
-const CardHighlightComic = ({ comic }: itemProps) => {
+const CardHighlightComic = ({ comic }: CardHighlightComicProps) => {
   const { theme, oppositeTheme } = useThemeContext();
 
   return (
     <div
-      className={`bg-${theme} p-6 text-${oppositeTheme} text-sm flex flex-col gap-2 border-${oppositeTheme} border-2 rounded-sm`}
+      className={`bg-${theme} p-6 text-${oppositeTheme} text-sm flex flex-col gap-2 border-${oppositeTheme} border-2 rounded-sm mobile:text-xs`}
     >
       <Link
-        rel="preload"
         href={`/truyen/${comic.slug}`}
-        lang="vi"
         className="flex items-center justify-center"
+        prefetch={false}
       >
         <Image
           loading="lazy"
@@ -29,7 +29,7 @@ const CardHighlightComic = ({ comic }: itemProps) => {
           alt={comic.name}
         />
       </Link>
-      <Link rel="preload" href={`/truyen/${comic.slug}`} lang="vi">
+      <Link href={`/truyen/${comic.slug}`} prefetch={false}>
         <h2
           className="text-center capitalize font-bold text-xl mobile:text-sm"
           title={comic.name}
@@ -38,24 +38,17 @@ const CardHighlightComic = ({ comic }: itemProps) => {
         </h2>
       </Link>
       <div className="flex justify-between">
-        <Rating value={comic.star} cancel={false} readOnly />
+        <Rate allowHalf disabled value={roundUpToNearestHalf(comic.star)} />
         <span>{comic.star}</span>
       </div>
       <div className="flex flex-wrap items-center justify-center gap-2">
-        {comic.genres.map((genre, _index) => (
+        {comic.genres.map((genre, index) => (
           <Link
-            rel="preload"
-            href={""}
-            className={`bg-${theme} rounded-md border border-${oppositeTheme} p-1 capitalize text-${oppositeTheme}`}
-            key={_index}
-            lang="vi"
+            href={`/tim-kiem?filterGenres=${genre}`}
+            key={index}
+            prefetch={false}
           >
-            <span
-              className="p-1 bg-white text-black rounded-md capitalize"
-              title={genre}
-            >
-              {genre}
-            </span>
+            <Tag color="magenta">{genre}</Tag>
           </Link>
         ))}
       </div>
@@ -66,10 +59,9 @@ const CardHighlightComic = ({ comic }: itemProps) => {
             <Link
               key={_index}
               href={`/tim-kiem?filterAuthor=${author}`}
-              className={`bg-${theme} rounded-md border border-${oppositeTheme} px-1 capitalize text-${oppositeTheme}`}
-              rel="preload"
+              prefetch={false}
             >
-              <h2 title={author}>{author}</h2>
+              <Tag color="magenta">{author}</Tag>
             </Link>
           ))}
         </div>

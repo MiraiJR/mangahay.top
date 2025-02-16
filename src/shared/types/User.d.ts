@@ -10,3 +10,10 @@ type User = {
   updatedAt: Date;
   setting: UserSetting;
 };
+
+type ShortUserInfo = {
+  id: number;
+  email: string;
+  fullname: string;
+  avatar: string;
+};

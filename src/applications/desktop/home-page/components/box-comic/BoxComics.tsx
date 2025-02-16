@@ -28,18 +28,16 @@ const BoxComics = ({ title, field }: ItemProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className="mb-20">
-      <div className="border-s-4 border-orange-500 my-4 flex justify-between items-center text-xl pl-4">
+    <div className="mb-20 mobile:text-xs">
+      <div className="border-s-4 border-orange-500 my-4 flex justify-between items-center text-xl pl-2">
         <div
-          className={`text-${oppositeTheme} font-bold text-3xl mobile:text-xl`}
+          className={`text-${oppositeTheme} font-bold text-3xl mobile:text-sm`}
         >
           {title}
         </div>
         <Link
-          rel="preload"
           className="flex items-center text-red-400"
           href={`/tim-kiem?filterSort=updatedAt`}
-          hrefLang="vi"
         >
           <span className="text-sm mobile:text-xs not-italic">
             {t("viewMore", { ns: "common" })}

@@ -6,7 +6,8 @@ import { toast } from "react-toastify";
 
 export const useUpdateAvatar = (callBackSuccess: Function = () => {}) => {
   const { setUserProfile } = userStore();
-  const { uploadedFile: avatar } = useUploadImageContext();
+  const { uploadedFile: avatar, reset: resetUploadedFile } =
+    useUploadImageContext();
 
   const validate = () => {
     if (!avatar) {
@@ -31,6 +32,7 @@ export const useUpdateAvatar = (callBackSuccess: Function = () => {}) => {
     },
     onSuccess: () => {
       toast.success("Đổi avatar thành công!");
+      resetUploadedFile();
       callBackSuccess();
     },
   });

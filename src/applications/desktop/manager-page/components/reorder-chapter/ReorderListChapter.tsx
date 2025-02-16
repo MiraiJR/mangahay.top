@@ -1,7 +1,7 @@
 import { Modal } from "antd";
 import { useReorderListChapterState } from "./useReorderListChapterState";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import MyLoading from "@/shared/components/MyLoading";
+import MyLoading from "@/shared/components/base-components/loading/MyLoading";
 
 interface ReorderListChapterProps {
   visible: boolean;

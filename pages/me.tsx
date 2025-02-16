@@ -1,32 +1,14 @@
 import UserPage from "@/applications/desktop/user-page/Page";
-import jwt from "@/shared/libs/jwt";
-import MeService from "@/shared/services/meService";
+import { useAuthContext } from "@/shared/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
-export default function ForgetPasswordRoute() {
-  const [isShow, setIsShow] = useState<boolean>(false);
+export default function MeRoute() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
+  const { isLoggedIn } = useAuthContext();
 
-  useEffect(() => {
-    if (!jwt.getToken()) {
-      router.push("/");
-      return;
-    }
+  if (!isLoggedIn) {
+    router.push("/");
+  }
 
-    const getMe = async () => {
-      try {
-        const { data } = await MeService.getMe();
-
-        setIsShow(true);
-        setUser(data);
-      } catch (error: any) {
-        router.push("/");
-      }
-    };
-
-    getMe();
-  }, []);
-  return <>{user && isShow && <UserPage />}</>;
+  return <UserPage />;
 }

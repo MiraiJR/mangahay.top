@@ -20,7 +20,7 @@ export const useUpdateComic = (
   const [comicTranslators, setComicTranslators] = useState<string[]>([]);
   const [comicBriefDescription, setBriefDescription] = useState<string>("");
   const [statusComic, setStatusComic] = useState<string>("");
-  const { uploadedFile: comicThumb, fileList } = useUploadImageContext();
+  const { uploadedFile: comicThumb, fileList, reset } = useUploadImageContext();
   const isUpdateThumb = fileList.length > 0 && comicThumb;
 
   useEffect(() => {
@@ -40,10 +40,13 @@ export const useUpdateComic = (
       comicName.trim() === "" ||
       comicAnotherName.trim() === "" ||
       comicGenres.length === 0 ||
-      comicBriefDescription.trim() === "" ||
-      !isUpdateThumb
+      comicBriefDescription.trim() === ""
     ) {
       throw new Error(t("notEmptyContent", { ns: "common" }));
+    }
+
+    if (fileList.length === 0) {
+      throw new Error("Ảnh mô tả là bắt buộc");
     }
   };
 
@@ -147,6 +150,7 @@ export const useUpdateComic = (
       queryClient.invalidateQueries({
         queryKey: ["comic", { slugComic: comicSlug }],
       });
+      reset();
       callBackSuccess();
     },
   });

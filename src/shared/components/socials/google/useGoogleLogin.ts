@@ -30,6 +30,9 @@ export const useGoogleLogin = () => {
       const { code } = response;
       mutation.mutate(code);
     },
+    onError: () => {
+      toast.error("Đăng nhập bằng tài khoản Google thất bại!");
+    },
     flow: "auth-code",
     select_account: true,
   });

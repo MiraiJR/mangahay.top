@@ -3,7 +3,13 @@ type QuerySearch = {
   page?: number;
   size?: number;
   status?: string;
-  orderBy?: 'asc' | 'desc' | 'updatedAt' | 'view' = 'updatedAt';
+  orderBy?: OrderByOption;
   author?: string;
   genres?: string[];
+};
+
+type OrderByOption = "asc" | "desc" | "updatedAt" | "view";
+
+type SeachComicByName = {
+  name: string;
 };

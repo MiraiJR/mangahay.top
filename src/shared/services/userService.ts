@@ -1,10 +1,11 @@
 import axiosClient from "../libs/axiosClient";
 
 const UserService = {
-  searchUser: (queryName: string) =>
+  searchUser: (queryName: string, excludedIds: number[]) =>
     axiosClient.get<SearchUserResult>("/users/search", {
       params: {
         queryName,
+        excludedIds,
       },
     }),
 };

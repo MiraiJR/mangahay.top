@@ -1,24 +1,24 @@
-export const optionStatus: OptionStatus[] = [
-  { name: "Đang tiến hành" },
-  { name: "Tạm ngưng" },
-  { name: "Hoàn thành" },
+export const optionStatus = [
+  { value: "Đang tiến hành", label: "Đang tiến hành" },
+  { value: "Tạm ngưng", label: "Tạm ngưng" },
+  { value: "Hoàn thành", label: "Hoàn thành" },
 ];
 
-export const optionSort: OptionSort[] = [
+export const optionSort = [
   {
-    name: "A->Z",
-    code: "asc",
+    value: "asc",
+    label: "A->Z",
   },
   {
-    name: "Z->A",
-    code: "desc",
+    label: "Z->A",
+    value: "desc",
   },
   {
-    name: "Xem nhiều nhất",
-    code: "view",
+    label: "Xem nhiều nhất",
+    value: "view",
   },
   {
-    name: "Mới cập nhật",
-    code: "updatedAt",
+    label: "Mới cập nhật",
+    value: "updatedAt",
   },
 ];

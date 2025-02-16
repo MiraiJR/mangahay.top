@@ -1,20 +1,8 @@
-import { useRef, useState } from "react";
-import dynamic from "next/dynamic";
 import MetaTags from "@/shared/components/MetaTags";
 import { originalURL } from "@/shared/libs/config";
-import { useTranslation } from "react-i18next";
-
-const BoxSearch = dynamic(() => import("./BoxSearch"), { ssr: false });
-const ListComics = dynamic(
-  () => import("@/shared/components/list-comics/ListComics"),
-  { ssr: false }
-);
+import { Body } from "./Body";
 
 const SearchPage = () => {
-  const resultRef = useRef<any>(null);
-  const [comics, setComics] = useState<Comic[]>([]);
-  const { t } = useTranslation();
-
   return (
     <div>
       <MetaTags
@@ -25,13 +13,7 @@ const SearchPage = () => {
         image={""}
         url={`${originalURL}/tim-kiem`}
       />
-      <BoxSearch resultRef={resultRef} setComics={setComics} />
-      <div ref={resultRef}>
-        <ListComics
-          title={t("searchResult", { ns: "search" })}
-          comics={comics}
-        />
-      </div>
+      <Body />
     </div>
   );
 };

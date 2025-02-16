@@ -6,7 +6,7 @@ interface UserCommentResponse {
   createdAt: Date;
   updatedAt: Date;
   user: CreatorCommentResponse | null;
-  mentionedUser: MentionedUserCommentResponseResponse;
+  mentionedUsers: MentionedUserCommentResponseResponse[];
   theNumberOfAnswer: number;
 }
 

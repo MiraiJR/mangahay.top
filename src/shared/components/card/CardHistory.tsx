@@ -1,8 +1,8 @@
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
-import themeStore from "@/shared/stores/theme-storage";
+import { roundUpToNearestHalf } from "@/shared/helpers/helpers";
+import { Rate } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { Rating } from "primereact/rating";
 import { useState, useEffect } from "react";
 
 interface itemProps {
@@ -15,7 +15,7 @@ interface itemPropsPreviewComic {
 }
 
 const PreviewComic = ({ comic, position }: itemPropsPreviewComic) => {
-  const { theme } = useThemeContext();
+  const { theme, oppositeTheme } = useThemeContext();
 
   useEffect(() => {
     const previewComicElement = document.getElementById(
@@ -32,7 +32,7 @@ const PreviewComic = ({ comic, position }: itemPropsPreviewComic) => {
   return (
     <div
       id={`preview-comic-${comic.id}`}
-      className={`fixed bg-${themeStore.getOppositeTheme()} text-${theme} w-[500px] p-5 z-1`}
+      className={`fixed bg-${oppositeTheme} text-${theme} w-[500px] p-5 z-1`}
     >
       <div className="flex flex-wrap gap-2">
         <h2>Tên:</h2>
@@ -56,7 +56,7 @@ const PreviewComic = ({ comic, position }: itemPropsPreviewComic) => {
       </div>
       <div className="flex flex-wrap gap-2">
         <h2>Đánh giá:</h2>
-        <Rating value={comic.star} cancel={false} readOnly />
+        <Rate allowHalf disabled value={roundUpToNearestHalf(comic.star)} />
       </div>
       <div className="flex flex-wrap gap-2">
         <h2>Nội dung:</h2>
@@ -67,7 +67,7 @@ const PreviewComic = ({ comic, position }: itemPropsPreviewComic) => {
 };
 
 const CardComicHistory = ({ comic }: itemProps) => {
-  const {} = useThemeContext();
+  const { oppositeTheme } = useThemeContext();
   const [isOpenPreview, setIsOpenPreview] = useState<boolean>(false);
   const [previewPosition, setPreviewPostion] = useState<ElementPostion>({
     top: 0,
@@ -85,16 +85,12 @@ const CardComicHistory = ({ comic }: itemProps) => {
   useEffect(() => {}, [comic]);
 
   return (
-    <div
-      className={`flex flex-col capitalize text-${themeStore.getOppositeTheme()}`}
-    >
+    <div className={`flex flex-col capitalize text-${oppositeTheme}`}>
       <Link
-        rel="preload"
-        hrefLang="vi"
         href={`/truyen/${comic.slug}`}
+        prefetch={false}
         onMouseMove={(e: any) => openPreviewComic(e)}
         onMouseLeave={() => setIsOpenPreview(false)}
-        lang="vi"
       >
         <Image
           loading="lazy"
@@ -105,14 +101,9 @@ const CardComicHistory = ({ comic }: itemProps) => {
           alt={comic.name}
         />
       </Link>
-      <Link
-        rel="preload"
-        hrefLang="vi"
-        href={`/truyen/${comic.slug}`}
-        lang="vi"
-      >
+      <Link href={`/truyen/${comic.slug}`} prefetch={false}>
         <h2
-          className={`text-center font-bold line-clamp-2 mobile:text-sm text-${themeStore.getOppositeTheme()}`}
+          className={`text-center font-bold line-clamp-2 mobile:text-xs text-${oppositeTheme}`}
           title={comic.name}
         >
           {comic.name}
@@ -120,13 +111,11 @@ const CardComicHistory = ({ comic }: itemProps) => {
       </Link>
       {comic.chapters.length > 0 ? (
         <Link
-          rel="preload"
-          hrefLang="vi"
           href={`/truyen/${comic.slug}/${comic.chapters[0].slug}`}
-          lang="vi"
+          prefetch={false}
         >
           <h3
-            className={`text-${themeStore.getOppositeTheme()} line-clamp-2 mobile:text-sm`}
+            className={`text-${oppositeTheme} line-clamp-2 mobile:text-sm`}
             title={comic.chapters[0].name}
           >
             Đang đọc {comic.chapters[0].name}
@@ -137,7 +126,7 @@ const CardComicHistory = ({ comic }: itemProps) => {
       )}
       <div className="flex justify-between items-center">
         <div className="mobile:hidden">
-          <Rating value={comic.star} cancel={false} readOnly />
+          <Rate allowHalf disabled value={roundUpToNearestHalf(comic.star)} />
         </div>
         <div className="desktop:hidden">
           <i className="pi pi-star-fill text-yellow-500"></i>

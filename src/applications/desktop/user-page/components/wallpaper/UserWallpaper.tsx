@@ -13,13 +13,13 @@ export const UserWallPaper = () => {
         <Image
           width={100}
           height={100}
-          className="w-[100%] h-[300px]"
+          className="w-[100%] h-[300px] mobile:text-xs"
           src={userProfile.wallpaper}
           alt={userProfile.fullname}
         />
       ) : (
         <div
-          className={`w-[100%] h-[300px] flex flex-col items-center justify-center font-bold text-xl flex-wrap`}
+          className={`w-[100%] h-[300px] flex flex-col items-center justify-center font-bold text-xl flex-wrap mobile:text-xs`}
         >
           Cảm ơn bạn đã chọn
           <span>MangaHay.Top</span>

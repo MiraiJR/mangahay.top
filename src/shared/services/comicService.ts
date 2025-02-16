@@ -1,19 +1,30 @@
 import axiosClient from "../libs/axiosClient";
 
+interface GetRankingComics {
+  field: string;
+  page?: number;
+  size?: number;
+}
+
 const ComicService = {
   getComics: (paging: Paging) =>
     axiosClient.get<PagingComic>(`/comics`, {
       params: paging,
     }),
-  getRankingComics: (field: string, limit: number) =>
+  getRankingComics: (query: GetRankingComics) =>
     axiosClient.get<PagingComic>(`/comics/ranking`, {
       params: {
-        field,
-        limit,
+        ...query,
       },
     }),
   searchComics: (query: QuerySearch) =>
     axiosClient.get<SearchComicResult>(`/search/comics`, {
+      params: {
+        ...query,
+      },
+    }),
+  searchManagedComics: (query: SeachComicByName) =>
+    axiosClient.get<SearchComicResult>(`/search/managed-comics`, {
       params: {
         ...query,
       },
@@ -83,5 +94,7 @@ const ComicService = {
       userId,
       permissions,
     }),
+  deleteSingleUserRight: (comicId: number, privilegeId: number) =>
+    axiosClient.delete<string>(`/comics/${comicId}/privileges/${privilegeId}`),
 };
 export default ComicService;

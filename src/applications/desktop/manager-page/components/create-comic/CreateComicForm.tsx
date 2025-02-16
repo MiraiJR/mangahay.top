@@ -5,7 +5,7 @@ import { Chips, ChipsChangeEvent } from "primereact/chips";
 import {
   removeAccentsAndLowerCase,
   removeAccentsAndLowerCaseArray,
-} from "@/shared/helpers/StringHelper";
+} from "@/shared/helpers/string-handler";
 import { StatusComic } from "@/shared/types/enums/StatusComic";
 import { RadioButton } from "primereact/radiobutton";
 import { useGetGenres } from "@/shared/hooks/useGetGenres";

@@ -1,7 +1,8 @@
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
+import { roundUpToNearestHalf } from "@/shared/helpers/helpers";
+import { Rate } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { Rating } from "primereact/rating";
 import { useState, useEffect } from "react";
 
 interface itemProps {
@@ -26,7 +27,7 @@ const PreviewComic = ({ comic, position }: itemPropsPreviewComic) => {
       previewComicElement.style.left = `${position.left}px`;
       previewComicElement.style.zIndex = "1000";
     }
-  });
+  }, [position]);
 
   return (
     <div
@@ -76,14 +77,14 @@ const CardComic = ({ comic }: itemProps) => {
   useEffect(() => {}, [comic]);
 
   return (
-    <div className={`flex flex-col capitalize text-${oppositeTheme}`}>
+    <div
+      className={`flex flex-col capitalize text-${oppositeTheme} mobile:text-xs`}
+    >
       <Link
-        rel="preload"
-        hrefLang="vi"
         href={`/truyen/${comic.slug}`}
         onMouseMove={(e: any) => openPreviewComic(e)}
         onMouseLeave={() => setIsOpenPreview(false)}
-        lang="vi"
+        prefetch={false}
       >
         <Image
           loading="lazy"
@@ -94,14 +95,9 @@ const CardComic = ({ comic }: itemProps) => {
           alt={comic.name}
         />
       </Link>
-      <Link
-        rel="preload"
-        hrefLang="vi"
-        href={`/truyen/${comic.slug}`}
-        lang="vi"
-      >
+      <Link href={`/truyen/${comic.slug}`} prefetch={false}>
         <h2
-          className={`text-center font-bold line-clamp-2 mobile:text-sm text-${oppositeTheme}`}
+          className={`text-center font-bold line-clamp-2 mobile:text-xs text-${oppositeTheme}`}
           title={comic.name}
         >
           {comic.name}
@@ -109,10 +105,8 @@ const CardComic = ({ comic }: itemProps) => {
       </Link>
       {comic.chapters.length > 0 ? (
         <Link
-          rel="preload"
-          hrefLang="vi"
           href={`/truyen/${comic.slug}/${comic.chapters[0].slug}`}
-          lang="vi"
+          prefetch={false}
         >
           <h3
             className={`text-${oppositeTheme} line-clamp-2 mobile:text-sm`}
@@ -122,11 +116,11 @@ const CardComic = ({ comic }: itemProps) => {
           </h3>
         </Link>
       ) : (
-        <span>Chưa có chapter</span>
+        <span>Chưa có chương</span>
       )}
       <div className="flex justify-between items-center">
         <div className="mobile:hidden">
-          <Rating value={comic.star} cancel={false} readOnly />
+          <Rate allowHalf disabled value={roundUpToNearestHalf(comic.star)} />
         </div>
         <div className="desktop:hidden">
           <i className="pi pi-star-fill text-yellow-500"></i>

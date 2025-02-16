@@ -34,8 +34,8 @@ export const useGetListChapter = (
   });
 
   return {
-    totalChapters: data.total,
-    chapters: data.chapters,
+    totalChapters: data.total ?? 0,
+    chapters: data.chapters ?? [],
     isLoading,
     error,
     setPage,

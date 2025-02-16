@@ -1,33 +1,23 @@
-import MyLoading from "@/shared/components/MyLoading";
-import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useGetGenres } from "@/shared/hooks/useGetGenres";
-import themeStore from "@/shared/stores/theme-storage";
+import Link from "next/link";
 
-const ListGenres = () => {
-  const { genres, isLoading } = useGetGenres();
-  const { theme } = useThemeContext();
-
-  if (isLoading) {
-    return <MyLoading />;
-  }
+export const ListGenres = () => {
+  const { genres } = useGetGenres();
 
   return (
     <div
-      className={`grid grid-cols-4 mobile:grid-cols-3 mobile:max-h-[300px] mobile:w-screen mobile:overflow-y-scroll gap-2 shadow-outer-lg-${themeStore.getOppositeTheme()} bg-${theme} p-2 z-10`}
+      className={`grid grid-cols-4 mobile:grid-cols-3 mobile:max-h-[300px] mobile:w-screen mobile:overflow-y-scroll gap-2 z-50`}
     >
       {genres.map((genre) => (
-        <a
+        <Link
           href={`/tim-kiem?filterGenres=${genre.slug}`}
           title={genre.name}
           key={genre.slug}
-          className="p-1 cursor-pointer hover:bg-slate-500 hover:text-red-400 mobile:text-sm"
-          hrefLang="vi"
+          className="p-1 cursor-pointer hover:text-red-600 mobile:text-xs "
         >
           {genre.name}
-        </a>
+        </Link>
       ))}
     </div>
   );
 };
-
-export default ListGenres;

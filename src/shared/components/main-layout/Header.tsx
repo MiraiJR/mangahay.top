@@ -1,23 +1,20 @@
 import { UserCircle2 } from "lucide-react";
-import { useState } from "react";
 import LoginedUser from "../logged-in-user/LoginedUser";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
-import { InputSwitch, InputSwitchChangeEvent } from "primereact/inputswitch";
 import Link from "next/link";
 import { SearchComic } from "./components/search-comic/SearchComic";
 import { LeftMenu } from "./components/left-menu/LeftMenu";
 import { useTranslation } from "react-i18next";
-import { FlagCountries } from "../flag-country/FlagCountries";
+import { FlagCountries } from "./components/flag-country/FlagCountries";
 import { useAuthContext } from "@/shared/contexts/AuthContext";
-import { MainLogo } from "../MainLogo";
+import { MainLogo } from "../base-components/logo/MainLogo";
+import { SwitchTheme } from "./components/SwitchTheme";
+import { MobileMenu } from "./components/mobile-menu/MobileMenu";
 
 const Header = () => {
   const { t } = useTranslation();
   const { isLoggedIn } = useAuthContext();
-  const { theme, toggleTheme, oppositeTheme } = useThemeContext();
-  const [checkedChangeTheme, setCheckedChangeTheme] = useState<boolean>(
-    theme === "light" ? false : true
-  );
+  const { theme, oppositeTheme } = useThemeContext();
 
   return (
     <div className="p-2">
@@ -31,17 +28,7 @@ const Header = () => {
         <div className="card flex flex-wrap items-center justify-content-center gap-3">
           <div className="flex items-center gap-2 mobile:hidden">
             <FlagCountries />
-            <label htmlFor="theme">
-              {t(`theme.${theme}`, { ns: "common" })}
-            </label>
-            <InputSwitch
-              id="theme"
-              checked={checkedChangeTheme}
-              onChange={(e: InputSwitchChangeEvent) => {
-                toggleTheme();
-                setCheckedChangeTheme(e.value ?? true);
-              }}
-            />
+            <SwitchTheme />
           </div>
           <SearchComic />
           {isLoggedIn ? (
@@ -58,10 +45,8 @@ const Header = () => {
               </button>
             </Link>
           )}
+          <MobileMenu />
         </div>
-      </div>
-      <div className="desktop:hidden">
-        <FlagCountries />
       </div>
     </div>
   );

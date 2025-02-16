@@ -5,9 +5,9 @@ import { originalURL } from "@/shared/libs/config";
 import ChapterService from "@/shared/services/chapterService";
 import ComicService from "@/shared/services/comicService";
 
-interface itemProps {
-  detailComic: Comic;
-  detailChapter: DetailChapter;
+interface RouteProps {
+  comic: Comic;
+  chapter: DetailChapter;
 }
 
 export async function getServerSideProps(context: any) {
@@ -18,34 +18,32 @@ export async function getServerSideProps(context: any) {
 
     return {
       props: {
-        detailComic: comic,
-        detailChapter: getNextPreAofChapterFromId(chapter.id, comic.chapters),
+        comic,
+        chapter: getNextPreAofChapterFromId(chapter.id, comic.chapters),
       },
     };
   } catch (error) {
     return {
       redirect: {
-        permanent: false,
+        permanent: true,
         destination: "/page-not-found",
       },
     };
   }
 }
 
-export default function ChapterRoute({
-  detailComic,
-  detailChapter,
-}: itemProps) {
-  const { currentChapter } = detailChapter;
+export default function ChapterRoute({ comic, chapter }: RouteProps) {
+  const { currentChapter } = chapter;
+
   return (
     <>
       <MetaTags
-        title={`${detailComic.name} - ${currentChapter.name} | MangaHay - Đọc truyện tranh mới nhất`}
-        description={`Đọc truyện tranh ${detailComic.name} [${detailComic.anotherName}] - ${currentChapter.name}  vietsub, chất lượng cao, không quảng cáo tại mangahay.top`}
-        image={detailComic.thumb}
-        url={`${originalURL}/truyen/${detailComic.slug}/${currentChapter.slug}`}
+        title={`${comic.name} - ${currentChapter.name} | MangaHay - Đọc truyện tranh mới nhất`}
+        description={`Đọc truyện tranh ${comic.name} [${comic.anotherName}] - ${currentChapter.name}  vietsub, chất lượng cao, không quảng cáo tại mangahay.top`}
+        image={comic.thumb}
+        url={`${originalURL}/truyen/${comic.slug}/${currentChapter.slug}`}
       />
-      <ChapterPage detailComic={detailComic} />
+      <ChapterPage />
     </>
   );
 }

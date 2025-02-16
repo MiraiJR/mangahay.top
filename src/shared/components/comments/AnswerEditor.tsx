@@ -1,47 +1,50 @@
-import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useAnswerComment } from "@/shared/hooks/useAnswerComment";
-import { Button } from "primereact/button";
-import { Editor, EditorTextChangeEvent } from "primereact/editor";
 import { useTranslation } from "react-i18next";
+import { RichTextEditor } from "../base-components/rich-text-editor/RichTextEditor";
+import { useAuthContext } from "@/shared/contexts/AuthContext";
+import { Button } from "antd";
 
 interface AnswerEditorProps {
   commentId: number;
   comicId: number;
-  mentionedUserId: number | null;
   fetchNextPage: any;
 }
 
 export const AnswerEditor = ({
   commentId,
   comicId,
-  mentionedUserId,
   fetchNextPage,
 }: AnswerEditorProps) => {
   const { t } = useTranslation();
-  const { oppositeTheme } = useThemeContext();
   const {
     contentAnswer,
     setContentAnswer,
     handleAnswerCommand,
     isSuccess,
     isLoading,
-  } = useAnswerComment(comicId, commentId, mentionedUserId);
+    onSelectMentionUser,
+    mentionUserIds,
+  } = useAnswerComment(comicId, commentId);
+  const { loggedInUserId } = useAuthContext();
 
   return (
-    <>
-      <Editor
+    <div>
+      <RichTextEditor
         value={contentAnswer}
-        onTextChange={(e: EditorTextChangeEvent) => {
-          if (e.htmlValue) {
-            setContentAnswer(e.htmlValue);
-          }
+        onTextChange={(value: string) => {
+          setContentAnswer(value);
         }}
-        style={{ height: "100px" }}
-        className={`mt-10 text-${oppositeTheme}`}
+        showMention
+        onSelectMentionUser={(value: number) => {
+          onSelectMentionUser(value);
+        }}
+        selectedMentionUserIds={[...mentionUserIds, loggedInUserId]}
       />
       <div className="w-[100%]">
         <Button
-          className="btn-primary w-fit mt-2 float-right"
+          color="primary"
+          variant="solid"
+          className="w-fit mt-2 float-right mobile:text-xs"
           onClick={() => {
             handleAnswerCommand();
             if (isSuccess) {
@@ -54,6 +57,6 @@ export const AnswerEditor = ({
           {t("listComment.answer", { ns: "common" })}
         </Button>
       </div>
-    </>
+    </div>
   );
 };

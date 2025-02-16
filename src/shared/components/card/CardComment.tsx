@@ -1,17 +1,20 @@
-import { formatDate } from "@/shared/helpers/helpers";
-import { Avatar } from "primereact/avatar";
 import { useTranslation } from "react-i18next";
 import { AnswerEditor } from "../comments/AnswerEditor";
-import { useContext } from "react";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useAnswerCommentContext } from "@/shared/contexts/AnswerCommentEditorContext";
 import { useGetListAnswerOfComment } from "@/shared/hooks/useGetListAnswerOfComment";
 import { ChevronUp } from "lucide-react";
+import { Mention } from "../base-components/mention/Mention";
+import { formatDate } from "@/shared/helpers/formatter";
+import { Avatar } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+import { globalStore } from "@/shared/stores/global-storage";
 
 interface itemProps {
   comment: UserCommentResponse;
 }
 const CardComment = ({ comment }: itemProps) => {
+  const { isMobile } = globalStore();
   const { t } = useTranslation();
   const { activeEditorId, setActiveEditorId } = useAnswerCommentContext();
   const { oppositeTheme } = useThemeContext();
@@ -27,38 +30,37 @@ const CardComment = ({ comment }: itemProps) => {
   );
 
   return (
-    <div className="flex gap-4 mb-5">
+    <div className="flex gap-4 mb-5 mobile:text-xs">
       <div>
         <Avatar
-          pt={{
-            image: {
-              className: "object-cover rounded",
-            },
-          }}
-          icon="pi pi-user"
-          image={comment.user?.avatar}
-          label="P"
-          size="xlarge"
+          size={isMobile ? "small" : "large"}
+          shape="square"
+          src={comment.user?.avatar}
+          icon={<UserOutlined />}
         />
       </div>
       <div className="flex flex-col w-[100%] h-fit">
         <div className="flex justify-between">
           <h2
-            className={`font-bold text-lg mobile:text-sm text-${oppositeTheme}`}
+            className={`font-bold text-lg mobile:text-xs text-${oppositeTheme}`}
             title={comment.user?.fullname}
           >
             {comment.user?.fullname ?? t("deletedUser", { ns: "common" })}
           </h2>
-          <h2 className={`text-right mobile:text-sm text-${oppositeTheme}`}>
+          <h2 className={`text-right mobile:text-xs text-${oppositeTheme}`}>
             {formatDate(comment.updatedAt)}
           </h2>
         </div>
         <div>
-          {comment.mentionedUser && (
-            <span className="text-red-600 mr-2">
-              @{comment.mentionedUser.fullname}
-            </span>
-          )}
+          {comment.mentionedUsers.map((mentionedUser) => (
+            <Mention
+              user={{
+                ...mentionedUser,
+                email: "",
+              }}
+              key={mentionedUser.id}
+            />
+          ))}
           <span
             className={`text-${oppositeTheme}`}
             title={comment.content}
@@ -80,7 +82,6 @@ const CardComment = ({ comment }: itemProps) => {
           <AnswerEditor
             commentId={comment.parentCommentId ?? comment.id}
             comicId={comment.comicId}
-            mentionedUserId={comment.user?.id ?? null}
             fetchNextPage={fetchNextPage}
           />
         )}

@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { BookFilled, FileAddFilled } from "@ant-design/icons";
+import {
+  BookFilled,
+  FileAddFilled,
+  UsergroupAddOutlined,
+} from "@ant-design/icons";
 import { MenuProps } from "antd";
 
 export const useLayoutManagerData = () => {
@@ -35,6 +39,14 @@ export const useLayoutManagerData = () => {
       label: `Cào chương`,
       onClick: () => {
         setIndexActiveTab(4);
+      },
+    },
+    {
+      key: "5",
+      icon: React.createElement(UsergroupAddOutlined),
+      label: `Nhóm dịch`,
+      onClick: () => {
+        setIndexActiveTab(5);
       },
     },
   ];

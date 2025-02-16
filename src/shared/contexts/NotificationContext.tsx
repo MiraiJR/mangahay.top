@@ -1,9 +1,12 @@
 import React, { createContext, useContext, ReactNode } from "react";
 import { NOTIFICATION_STATUS } from "@/applications/desktop/user-page/components/notification/enum";
 import { useQueryClient } from "@tanstack/react-query";
+import { useNotification } from "../hooks/useNotification";
 
 interface NotificationContextProps {
   refetchNotification: () => void;
+  totalUnreadNotification: number;
+  initialNotifications: Notify[];
 }
 
 const NotificationContext = createContext<NotificationContextProps | undefined>(
@@ -26,10 +29,15 @@ export const NotificationContextProvider = ({
     });
   };
 
+  const { total: totalUnreadNotification, data: initialNotifications } =
+    useNotification();
+
   return (
     <NotificationContext.Provider
       value={{
+        totalUnreadNotification: totalUnreadNotification ?? 0,
         refetchNotification,
+        initialNotifications: initialNotifications ?? [],
       }}
     >
       {children}

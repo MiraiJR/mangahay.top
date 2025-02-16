@@ -2,19 +2,22 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import { userStore } from "../stores/user-storage";
 import MeService from "../services/meService";
 import { useQuery } from "@tanstack/react-query";
-import { LoadingFullPage } from "../components/LoadingFullPage";
+import { LoadingFullPage } from "../components/base-components/loading/LoadingFullPage";
 import jwt from "../libs/jwt";
 
 interface AuthContextProps {
   isLoggedIn: boolean;
   setIsLoggedIn: (value: boolean) => void;
   isAdminOrTranslator: boolean;
+  loggedInUserId: number;
+  loggedInUser?: User;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!jwt.getToken());
+  const [loggedInUserId, setLoggedInUserId] = useState<number>(-1);
 
   const [isAdminOrTranslator, setIsAdminOrTranslator] =
     useState<boolean>(false);
@@ -24,12 +27,13 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     setIsLoggedIn(false);
   });
 
-  const { isLoading } = useQuery({
+  const { data: loggedInUser, isLoading } = useQuery({
     queryKey: ["me"],
     queryFn: async () => {
       const { data } = await MeService.getMe();
 
       setUserProfile(data);
+      setLoggedInUserId(data.id);
       if (["admin", "translator"].includes(data.role)) {
         setIsAdminOrTranslator(true);
       } else {
@@ -43,7 +47,13 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, setIsLoggedIn, isAdminOrTranslator }}
+      value={{
+        loggedInUserId,
+        isLoggedIn,
+        setIsLoggedIn,
+        isAdminOrTranslator,
+        loggedInUser,
+      }}
     >
       {isLoading ? <LoadingFullPage /> : children}
     </AuthContext.Provider>

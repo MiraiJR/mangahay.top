@@ -12,7 +12,7 @@ type Comic = {
   like: number;
   follow: number;
   star: number;
-  creator: User;
+  creator: ShortUserInfo;
   creatorId: number | null;
   createdAt: Date;
   updatedAt: Date;
@@ -40,9 +40,5 @@ type ComicPrivilege = {
   id: number;
   comicId: number;
   permissions: number[];
-  user: {
-    id: number;
-    fullname: string;
-    avatar: string;
-  };
+  user: ShortUserInfo;
 };

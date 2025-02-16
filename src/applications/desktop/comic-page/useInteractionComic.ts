@@ -13,10 +13,12 @@ export const useInteractionComic = (comicId: number) => {
   const { data: statusInteractComic = DEFAULT_INTERACTION } = useQuery({
     queryKey: ["comic.interaction", { comicId }],
     queryFn: async () => {
-      const { data } = await MeService.getInteractionWithComic(comicId);
-      return data;
+      if (comicId) {
+        const { data } = await MeService.getInteractionWithComic(comicId);
+        return data;
+      }
     },
-    enabled: isLoggedIn,
+    enabled: comicId !== 0 && isLoggedIn,
   });
 
   return {

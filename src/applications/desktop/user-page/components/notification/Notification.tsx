@@ -1,101 +1,130 @@
-import { useState } from "react";
-import CardNotify from "@/shared/components/card/CardNotify";
-import { ProgressSpinner } from "primereact/progressspinner";
-import EmptyComic from "@/shared/components/EmptyComic";
 import { useNotification } from "@/shared/hooks/useNotification";
 import { useRemoveAllNotification } from "./useRemoveAllNotification";
 import { Check, X } from "lucide-react";
 import { useMarkAllReadNotification } from "./useMarkAllReadNotification";
-import { NOTIFICATION_STATUS } from "./enum";
 import { NotificationContextProvider } from "@/shared/contexts/NotificationContext";
 import { useTranslation } from "react-i18next";
-import { Switch } from "antd";
+import { Avatar, Button, List, Popover, Switch } from "antd";
+import { formatDate } from "@/shared/helpers/formatter";
+import { NOTIFICATION_STATUS } from "./enum";
+import { MoreOutlined } from "@ant-design/icons";
+import { useState } from "react";
 
 const Notification = () => {
   const { t } = useTranslation();
-  const [isTypeReadNotification, setIsTypeReadNotification] =
-    useState<boolean>(false);
-  const { notifications, isLoading } = useNotification({
-    page: 1,
-    limit: Number.MAX_VALUE,
-    type: isTypeReadNotification
-      ? NOTIFICATION_STATUS.READ
-      : NOTIFICATION_STATUS.UNREAD,
-  });
+  const {
+    total,
+    data: notifications,
+    isLoading,
+    setType,
+    size,
+    setPage,
+    setSize,
+    page,
+    type,
+  } = useNotification(NOTIFICATION_STATUS.UNREAD);
   const { handleRemoveAllNotification } = useRemoveAllNotification();
   const { handleMarkAllReadNotification } = useMarkAllReadNotification();
+  const [isOpenMoreButton, setIsOpenMoreButton] = useState<boolean>(false);
+
+  const handleChangeType = (checked: boolean) => {
+    setPage(1);
+    setType(checked ? NOTIFICATION_STATUS.READ : NOTIFICATION_STATUS.UNREAD);
+  };
+
+  const moreMenuTemplate = () => {
+    return (
+      <div className="flex gap-1 flex-col">
+        {type === NOTIFICATION_STATUS.UNREAD && (
+          <div
+            className="flex items-center p-2 text-green-600 cursor-pointer hover:bg-slate-300"
+            onClick={() => handleMarkAllReadNotification()}
+          >
+            <Check />
+            <span>
+              {t("notificationPage.markAllReadButton", { ns: "profile" })}
+            </span>
+          </div>
+        )}
+        <div
+          className="flex items-center p-2 text-red-600 cursor-pointer hover:bg-slate-300"
+          onClick={() => {
+            handleRemoveAllNotification();
+          }}
+        >
+          <X />
+          <span>
+            {t("notificationPage.removeAllButton", { ns: "profile" })}
+          </span>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <NotificationContextProvider>
-      <div className="flex flex-col w-[100%]">
-        <div className="pt-4 text-center font-bold text-xl">
-          {t("notificationPage.list", { ns: "profile" })}
-        </div>
+      <div className="flex flex-col w-[100%] mobile:text-xs">
         <div className="my-10 card flex justify-content-center items-center justify-between">
           <Switch
             checkedChildren={t("notificationPage.type.read", { ns: "profile" })}
             unCheckedChildren={t("notificationPage.type.unread", {
               ns: "profile",
             })}
-            onChange={(checked) => {
-              setIsTypeReadNotification(checked);
-            }}
-            defaultValue={isTypeReadNotification}
+            onChange={handleChangeType}
+            defaultValue={false}
           />
 
-          <div className="flex gap-4">
-            <div
-              className="flex items-center text-green-600 cursor-pointer"
-              onClick={() => handleMarkAllReadNotification()}
-            >
-              <Check />
-              <span>
-                {t("notificationPage.markAllReadButton", { ns: "profile" })}
-              </span>
-            </div>
-            <div
-              className="flex items-center text-red-600 cursor-pointer"
-              onClick={() => {
-                handleRemoveAllNotification();
-              }}
-            >
-              <X />
-              <span>
-                {t("notificationPage.removeAllButton", { ns: "profile" })}
-              </span>
-            </div>
-          </div>
+          <Popover
+            content={moreMenuTemplate()}
+            trigger="click"
+            placement="leftTop"
+            open={isOpenMoreButton}
+            onOpenChange={() => {
+              setIsOpenMoreButton(!isOpenMoreButton);
+            }}
+          >
+            <Button icon={<MoreOutlined />} />
+          </Popover>
         </div>
-        {isLoading && (
-          <div className="flex items-center justify-center w-[100%] col-span-12">
-            <ProgressSpinner
-              style={{ width: "100px", height: "100px" }}
-              strokeWidth="8"
-              fill="var(--surface-ground)"
-              animationDuration=".5s"
-            />
-          </div>
-        )}
-        {notifications ? (
-          notifications.length === 0 && !isLoading ? (
-            <EmptyComic content="Không có thông báo" />
-          ) : (
-            <div className="w-[100%]">
-              {notifications.map((notify) => (
-                <CardNotify notify={notify} imageHeight={150} key={notify.id} />
-              ))}
-            </div>
-          )
-        ) : (
-          <div className="flex items-center justify-center w-[100%] col-span-12">
-            <ProgressSpinner
-              style={{ width: "100px", height: "100px" }}
-              strokeWidth="8"
-              fill="var(--surface-ground)"
-              animationDuration=".5s"
-            />
-          </div>
-        )}
+        <List
+          loading={isLoading}
+          dataSource={notifications}
+          renderItem={(notification) => (
+            <List.Item>
+              <List.Item.Meta
+                className={`${
+                  type === NOTIFICATION_STATUS.READ ? "bg-slate-300" : ""
+                } p-2 rounded-sm`}
+                avatar={
+                  <Avatar src={notification.thumb} alt="notification image" />
+                }
+                title={
+                  <a
+                    href={notification.redirectUrl}
+                    dangerouslySetInnerHTML={{ __html: notification.title }}
+                  />
+                }
+                description={
+                  <div className="flex flex-row justify-between">
+                    <span
+                      dangerouslySetInnerHTML={{ __html: notification.body }}
+                    />
+                    <span>{formatDate(notification.createdAt)}</span>
+                  </div>
+                }
+              />
+            </List.Item>
+          )}
+          pagination={{
+            total: total,
+            pageSize: size,
+            current: page,
+            onChange(page, pageSize) {
+              setPage(page);
+              setSize(pageSize);
+            },
+          }}
+        />
       </div>
     </NotificationContextProvider>
   );

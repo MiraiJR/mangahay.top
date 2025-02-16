@@ -3,14 +3,14 @@ import { Button, Layout, Menu, theme } from "antd";
 import { useLayoutManagerData } from "./useLayoutManagerData";
 import CreateComicForm from "../create-comic/CreateComicForm";
 import CreateChapterForm from "../create-chapter/CreateChapterForm";
-import CrawlChapter from "../crawl-comic/CrawlChapter";
+import CrawlChapter from "../crawl-chapter/CrawlChapter";
 import { TableComicsManagedByMe } from "../comic-manged-by-me/TableComicManagedByMe";
 import { useLogout } from "@/shared/components/logged-in-user/useLogout";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "@/shared/contexts/AuthContext";
 import { useRouter } from "next/router";
-import { MainLogo } from "@/shared/components/MainLogo";
 import { UploadImageProvider } from "@/shared/components/base-components/upload-files/UploadImageContext";
+import { MainLogo } from "@/shared/components/base-components/logo/MainLogo";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -57,6 +57,7 @@ export const LayoutManager = () => {
         );
       case 4:
         return <CrawlChapter />;
+      case 5:
       default:
         break;
     }

@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from "react";
-import MyLoading from "../components/MyLoading";
+import MyLoading from "../components/base-components/loading/MyLoading";
 import { originalURL } from "../libs/config";
 import { useAuthContext } from "../contexts/AuthContext";
 

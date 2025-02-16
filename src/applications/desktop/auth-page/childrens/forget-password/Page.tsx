@@ -1,7 +1,7 @@
-import ForgetPasswordForm from "./ForgetPasswordForm";
+import { Body } from "./Body";
 
 const ForgetPasswordPage = () => {
-  return <ForgetPasswordForm />;
+  return <Body />;
 };
 
 export default ForgetPasswordPage;

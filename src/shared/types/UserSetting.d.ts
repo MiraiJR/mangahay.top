@@ -6,5 +6,10 @@ type ChapterSetting = {
 };
 
 type UserSetting = {
-  chapterSetting: ChapterSetting;
+  chapter: ChapterSetting;
+  notification: NotificationSetting;
+};
+
+type NotificationSetting = {
+  mention: boolean;
 };

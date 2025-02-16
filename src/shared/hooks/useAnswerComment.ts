@@ -6,11 +6,11 @@ import CommentService from "../services/commentService";
 import { useAnswerCommentContext } from "../contexts/AnswerCommentEditorContext";
 import { useAuthContext } from "../contexts/AuthContext";
 
-export const useAnswerComment = (
-  comicId: number,
-  commentId: number,
-  mentionedUserId: number | null
-) => {
+export const useAnswerComment = (comicId: number, commentId: number) => {
+  const [mentionUserIds, setMentionUserIds] = useState<number[]>([]);
+  const onSelectMentionUser = (value: number) => {
+    setMentionUserIds((previousState) => [...previousState, value]);
+  };
   const [contentAnswer, setContentAnswer] = useState<string>("");
   const { isLoggedIn } = useAuthContext();
   const { t } = useTranslation();
@@ -28,19 +28,23 @@ export const useAnswerComment = (
     }
   };
 
+  const reset = () => {
+    setActiveEditorId(null);
+    setContentAnswer("");
+    setMentionUserIds([]);
+  };
+
   const mutation = useMutation({
     mutationKey: ["user.comment.answer", { commentId, comicId }],
     mutationFn: async () => {
       validate();
 
-      await CommentService.answerComment(
+      await CommentService.commentOnComic(
         comicId,
-        commentId,
         contentAnswer,
-        mentionedUserId
+        mentionUserIds,
+        commentId
       );
-
-      setContentAnswer("");
 
       queryClient.invalidateQueries({
         queryKey: ["comment.answers", { commentId }],
@@ -53,7 +57,7 @@ export const useAnswerComment = (
       toast.error(error.message);
     },
     onSuccess: () => {
-      setActiveEditorId(null);
+      reset();
     },
   });
 
@@ -63,5 +67,7 @@ export const useAnswerComment = (
     handleAnswerCommand: mutation.mutate,
     isLoading: mutation.isPending,
     isSuccess: mutation.isSuccess,
+    mentionUserIds,
+    onSelectMentionUser,
   };
 };

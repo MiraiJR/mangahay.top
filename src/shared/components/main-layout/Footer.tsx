@@ -1,30 +1,22 @@
-import LogoWeb from "@/shared/assets/logo.webp";
-import LogoWebLight from "@/shared/assets/logo-light.webp";
 import { originalURL } from "@/shared/libs/config";
 import { Facebook, Youtube } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { keywordRelatedComic } from "./constant";
 import { useTranslation } from "react-i18next";
-import { useContext } from "react";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
+import { MainLogo } from "../base-components/logo/MainLogo";
 
 const Footer = () => {
   const { t } = useTranslation();
   const { theme, oppositeTheme } = useThemeContext();
 
   return (
-    <div className={`container mx-auto bg-${theme} p-5 text-${oppositeTheme}`}>
+    <div
+      className={`container mx-auto bg-${theme} p-5 text-${oppositeTheme} mobile:text-xs`}
+    >
       <div className="flex desktop:items-center desktop:justify-around mobile:flex-col">
         <div className="flex flex-col items-center gap-5 font-medium text-lg">
-          <Image
-            priority
-            width={0}
-            height={150}
-            className="h-[150px]"
-            src={theme === "light" ? LogoWeb : LogoWebLight}
-            alt="mangahay top"
-          />
+          <MainLogo size={50} />
           <div className="flex gap-5">
             <Facebook size={30} />
             <Youtube size={30} />

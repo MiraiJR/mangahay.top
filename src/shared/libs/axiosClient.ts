@@ -9,8 +9,18 @@ const axiosClient = axios.create({
   baseURL,
 });
 
+const requiredToken = ["/users/me"];
+
 axiosClient.interceptors.request.use(
   (config) => {
+    if (config.url && requiredToken.includes(config.url)) {
+      const token = jwt.getToken()?.accessToken;
+
+      if (!token) {
+        return Promise.reject(new Error("Authorization token is missing."));
+      }
+    }
+
     config.headers["Authorization"] = `Bearer ${jwt.getToken()?.accessToken}`;
     return config;
   },

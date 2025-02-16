@@ -1,7 +1,5 @@
-import { useThemeContext } from "@/shared/contexts/ThemeContext";
-import { Dialog } from "primereact/dialog";
+import { Modal } from "antd";
 import { PrivilegeTable } from "./PrivilegeTable";
-import { PrivilegeContextProvider } from "./PrivilegeContext";
 
 interface DialogPrivilegeComicProps {
   visible: boolean;
@@ -14,30 +12,17 @@ export const DialogPrivilegeComic = ({
   changeVisible,
   comicId,
 }: DialogPrivilegeComicProps) => {
-  const { theme, oppositeTheme } = useThemeContext();
-
   return (
-    <Dialog
-      header={"User right"}
-      visible={visible}
-      maximizable
-      onHide={() => changeVisible(false)}
-      dismissableMask={true}
-      pt={{
-        header: {
-          className: `bg-${theme} text-${oppositeTheme}`,
-        },
-        content: {
-          className: `bg-${theme} text-${oppositeTheme}`,
-        },
-        footer: {
-          className: `bg-${theme} text-${oppositeTheme}`,
-        },
-      }}
+    <Modal
+      title="Cập nhật chương"
+      width="100vw"
+      open={visible}
+      centered
+      footer={[]}
+      onCancel={() => changeVisible(false)}
+      destroyOnClose
     >
-      <PrivilegeContextProvider>
-        <PrivilegeTable comicId={comicId} />
-      </PrivilegeContextProvider>
-    </Dialog>
+      <PrivilegeTable comicId={comicId} />
+    </Modal>
   );
 };

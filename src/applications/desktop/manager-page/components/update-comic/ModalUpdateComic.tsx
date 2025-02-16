@@ -8,12 +8,12 @@ import { Editor, EditorTextChangeEvent } from "primereact/editor";
 import {
   removeAccentsAndLowerCase,
   removeAccentsAndLowerCaseArray,
-} from "@/shared/helpers/StringHelper";
+} from "@/shared/helpers/string-handler";
 import { RadioButton } from "primereact/radiobutton";
 import { StatusComic } from "@/shared/types/enums/StatusComic";
 import { Chips, ChipsChangeEvent } from "primereact/chips";
-import { InputText } from "primereact/inputtext";
 import { UploadImage } from "@/shared/components/base-components/upload-files/UploadImage";
+import { Input } from "@/shared/components/base-components/input-text/Input";
 
 interface ModalUpdateComicProps {
   visible: boolean;
@@ -78,44 +78,35 @@ export const ModalUpdateComic = ({
       }}
       onCancel={() => changeVisible(false)}
       loading={isLoadingComic}
+      destroyOnClose
     >
       <div className={`flex flex-col gap-4 bg-${theme} p-2`}>
         <div className={`flex gap-4 flex-col text-${oppositeTheme}`}>
           <div className="flex gap-4  mobile:flex-col">
-            <div className="flex flex-col gap-2 w-[100%] ">
-              <label htmlFor="comicName">
-                {t("createComic.name.label", { ns: "common" })}
-              </label>
-              <InputText
-                id="comicName"
-                placeholder={t("createComic.name.placeholder", {
-                  ns: "common",
-                })}
-                aria-describedby="username-help"
-                className="w-[100%]"
-                value={comicName}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setComicName(event.target.value)
-                }
-              />
-            </div>
-            <div className="flex flex-col gap-2 w-[100%]">
-              <label htmlFor="anotherName">
-                {t("createComic.anotherName.label", { ns: "common" })}
-              </label>
-              <InputText
-                id="anotherName"
-                placeholder={t("createComic.anotherName.placeholder", {
-                  ns: "common",
-                })}
-                aria-describedby="username-help"
-                className="w-[100%]"
-                value={comicAnotherName}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setComicAnotherName(event.target.value)
-                }
-              />
-            </div>
+            <Input
+              label={t("createComic.name.label", { ns: "common" })}
+              value={comicName}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                setComicName(event.target.value)
+              }
+              placeholder={t("createComic.name.placeholder", {
+                ns: "common",
+              })}
+              className="w-[100%]"
+              required
+            />
+            <Input
+              label={t("createComic.anotherName.label", { ns: "common" })}
+              value={comicAnotherName}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                setComicAnotherName(event.target.value)
+              }
+              placeholder={t("createComic.anotherName.placeholder", {
+                ns: "common",
+              })}
+              className="w-[100%]"
+              required
+            />
           </div>
           <div className="flex gap-4 mobile:flex-col">
             <div className="flex flex-col gap-2 w-[100%]">
@@ -223,8 +214,8 @@ export const ModalUpdateComic = ({
           />
         </div>
         <div className={`flex flex-col gap-2 text-${oppositeTheme}`}>
-          <label htmlFor="iamge">
-            {t("createComic.images.label", { ns: "common" })}
+          <label htmlFor="image" className="text-red-400">
+            {t("createComic.images.label", { ns: "common" })} *
           </label>
           <UploadImage listInitialImageLink={[comic.thumb]} />
         </div>

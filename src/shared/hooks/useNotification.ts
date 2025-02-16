@@ -1,37 +1,28 @@
 import { NOTIFICATION_STATUS } from "@/applications/desktop/user-page/components/notification/enum";
-import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthContext } from "../contexts/AuthContext";
-import NotifyService from "../services/notifyService";
+import { usePaginationState } from "./usePaginationState";
+import { useState } from "react";
+import MeService from "../services/meService";
 
-interface UseNotificationParams {
-  page: number;
-  limit: number;
-  type?: NOTIFICATION_STATUS;
-}
-
-export const useNotification = ({
-  page = 1,
-  limit = Number.MAX_VALUE,
-  type = NOTIFICATION_STATUS.UNREAD,
-}: UseNotificationParams) => {
+export const useNotification = (
+  initialType: NOTIFICATION_STATUS = NOTIFICATION_STATUS.UNREAD
+) => {
+  const { page, setPage, setSize, size } = usePaginationState({
+    initialPage: 1,
+    initialSize: 10,
+  });
+  const [type, setType] = useState<NOTIFICATION_STATUS>(initialType);
   const { isLoggedIn } = useAuthContext();
 
-  const {
-    elementRef: notifyRef,
-    isVisiable: isShowNotification,
-    setIsVisiable: setIsShowNotification,
-  } = useClickOutside();
-  const { data: notifications = [], isLoading } = useQuery({
-    queryKey: ["notification", { page, limit, type }],
+  const { data: notifications, isLoading } = useQuery({
+    queryKey: ["notification", page, size, type],
     queryFn: async () => {
-      const { data } = await NotifyService.getMyNotification(
-        {
-          page,
-          limit,
-        },
-        type
-      );
+      const { data } = await MeService.getNotifications({
+        page,
+        size,
+        type,
+      });
 
       return data;
     },
@@ -39,10 +30,15 @@ export const useNotification = ({
   });
 
   return {
-    notifyRef,
-    isShowNotification,
-    setIsShowNotification,
-    notifications,
+    page,
+    setPage,
+    setSize,
+    size,
+    setType,
+    type,
+    ...notifications,
     isLoading,
   };
 };
+
+export type NotificationFromHook = ReturnType<typeof useNotification>;

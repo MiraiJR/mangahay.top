@@ -7,6 +7,10 @@ import { useAuthContext } from "../contexts/AuthContext";
 
 export const useComment = (comicId: number) => {
   const [contentComment, setContentComment] = useState<string>("");
+  const [mentionUserIds, setMentionUserIds] = useState<number[]>([]);
+  const onSelectMentionUser = (value: number) => {
+    setMentionUserIds((previousState) => [...previousState, value]);
+  };
   const { isLoggedIn } = useAuthContext();
   const queryClient = useQueryClient();
   const { t } = useTranslation();
@@ -26,7 +30,11 @@ export const useComment = (comicId: number) => {
     mutationFn: async () => {
       validate();
 
-      await CommentService.commentOnComic(comicId, contentComment);
+      await CommentService.commentOnComic(
+        comicId,
+        contentComment,
+        mentionUserIds
+      );
 
       setContentComment("");
 
@@ -44,5 +52,7 @@ export const useComment = (comicId: number) => {
     setContentComment,
     handleComment: mutation.mutate,
     isLoading: mutation.isPending,
+    mentionUserIds,
+    onSelectMentionUser,
   };
 };

@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import ComicService from "../services/comicService";
 
-export const useIncreaseViewComic = (comicId?: number) => {
+export const useIncreaseViewComic = () => {
   const mutation = useMutation({
-    mutationKey: ["comic.increaseView", { comicId }],
-    mutationFn: async () => {
+    mutationKey: ["comic.increaseView"],
+    mutationFn: async (comicId: number) => {
       if (comicId) {
         await ComicService.increaseView(comicId);
       }

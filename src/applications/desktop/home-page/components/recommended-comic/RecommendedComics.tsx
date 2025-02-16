@@ -8,6 +8,7 @@ import { MAX_THE_NUMBER_OF_RECOMMENDED_COMICS } from "../../constant";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { RecommendedComicsSkeleton } from "./RecommendedComicsSkeleton";
 import { useTranslation } from "react-i18next";
+import EmptyComic from "@/shared/components/EmptyComic";
 
 interface itemProps {
   genre: string;
@@ -32,20 +33,18 @@ const RecommendedComics = ({
   const { t } = useTranslation();
 
   return (
-    <div>
-      <div className="border-s-4 border-orange-500 pl-4 my-4 flex justify-between items-center text-xl">
+    <div className="mobile:text-xs">
+      <div className="border-s-4 border-orange-500 pl-2 my-4 flex justify-between items-center text-xl">
         <div
-          className={`font-bold text-3xl mobile:text-xl text-${oppositeTheme}`}
+          className={`font-bold text-3xl mobile:text-sm text-${oppositeTheme}`}
         >
           {title}
         </div>
         <Link
-          rel="preload"
           className="flex items-center text-red-400"
           href={`/the-loai/${genre}`}
-          hrefLang="vi"
         >
-          <span className="text-sm not-italic">
+          <span className="text-sm mobile:text-xs not-italic">
             {t("viewMore", { ns: "common" })}
           </span>
           <ChevronsRight size={20} />
@@ -57,10 +56,7 @@ const RecommendedComics = ({
           comicPerRow={comicPerRow}
         />
       ) : comics.length === 0 ? (
-        <RecommendedComicsSkeleton
-          isShowHighlight={isShowHighlight}
-          comicPerRow={comicPerRow}
-        />
+        <EmptyComic />
       ) : (
         <div className="grid grid-cols-12 gap-2">
           {isShowHighlight && comics.length > 0 && (

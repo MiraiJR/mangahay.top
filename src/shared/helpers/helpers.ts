@@ -1,9 +1,4 @@
-import moment from "moment";
 import { v1 as uuidv1 } from "uuid";
-
-export const formatDate = (date: Date): string => {
-  return moment(date).format("DD/MM/YYYY hh:mm");
-};
 
 export const extractComicId = (comicName: string): number => {
   const array = comicName.split("/");
@@ -23,4 +18,8 @@ export const removeRelatedToColorStyleCss = (value: string) => {
 export const generateUniqueString = () => {
   const uniqueString = uuidv1();
   return uniqueString;
+};
+
+export const roundUpToNearestHalf = (num: number) => {
+  return Math.ceil(num * 2) / 2;
 };

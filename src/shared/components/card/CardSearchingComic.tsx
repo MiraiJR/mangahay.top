@@ -9,10 +9,9 @@ const CardSearchingComic = ({ comic }: itemProps) => {
   return (
     <div className="grid grid-cols-12 gap-2 mb-2">
       <Link
-        rel="preload"
         className="col-span-3 max-h-[100px]"
-        hrefLang="vi"
         href={`/truyen/${comic.slug}`}
+        prefetch={false}
       >
         <Image
           width={0}
@@ -23,7 +22,7 @@ const CardSearchingComic = ({ comic }: itemProps) => {
         />
       </Link>
       <div className="col-span-9 flex flex-col">
-        <Link rel="preload" hrefLang="vi" href={`/truyen/${comic.slug}`}>
+        <Link href={`/truyen/${comic.slug}`} prefetch={false}>
           <h1
             className="line-clamp-2 text-left capitalize font-bold"
             title={comic.name}
@@ -33,8 +32,7 @@ const CardSearchingComic = ({ comic }: itemProps) => {
         </Link>
         {comic.chapters.length > 0 && (
           <Link
-            rel="preload"
-            hrefLang="vi"
+            prefetch={false}
             href={`/truyen/${comic.slug}/${comic.chapters[0].slug}`}
           >
             <h2 className="text-left font-thin capitalize">

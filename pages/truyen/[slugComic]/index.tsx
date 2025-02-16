@@ -3,39 +3,39 @@ import MetaTags from "@/shared/components/MetaTags";
 import { originalURL } from "@/shared/libs/config";
 import ComicService from "@/shared/services/comicService";
 
-interface itemProps {
-  detailComic: Comic;
+interface RouteProps {
+  comic: Comic;
 }
 
-export async function getServerSideProps(context: any) {
-  const slugComic = context.query.slugComic;
+export const getServerSideProps = async (context: any) => {
+  const { slugComic } = context.params;
 
   try {
-    const { data } = await ComicService.getComicBySlug(slugComic);
+    const { data: comic } = await ComicService.getComicBySlug(slugComic);
 
     return {
       props: {
-        detailComic: data,
+        comic,
       },
     };
-  } catch (error: any) {
+  } catch (error) {
     return {
       redirect: {
-        permanent: false,
+        permanent: true,
         destination: "/page-not-found",
       },
     };
   }
-}
+};
 
-export default function ComicRoute({ detailComic }: itemProps) {
+export default function ComicRoute({ comic }: RouteProps) {
   return (
     <>
       <MetaTags
-        title={`${detailComic?.name} | MangaHay - Đọc truyện tranh mới nhất`}
-        description={`Đọc truyện tranh ${detailComic?.name} [${detailComic?.anotherName}] vietsub, chất lượng cao, không quảnq cáo tại mangahay.top`}
-        image={detailComic?.thumb ?? ""}
-        url={`${originalURL}/truyen/${detailComic?.slug}`}
+        title={`${comic.name} | MangaHay - Đọc truyện tranh mới nhất`}
+        description={`Đọc truyện tranh ${comic.name} [${comic.anotherName}] vietsub, chất lượng cao, không quảnq cáo tại mangahay.top`}
+        image={comic.thumb}
+        url={`${originalURL}/truyen/${comic.slug}`}
       />
       <ComicPage />
     </>

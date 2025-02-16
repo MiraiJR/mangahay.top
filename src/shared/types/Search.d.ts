@@ -7,4 +7,5 @@ type SearchUserResult = {
 type SearchUserModel = {
   id: number;
   fullname: string;
+  avatar: string;
 };

@@ -1,10 +1,10 @@
 import { create } from "zustand";
-import { ChapterSetting } from "../types/UserSetting";
+import { UserSetting } from "../types/UserSetting";
 
 interface userStore {
   userProfile: User | null;
   setUserProfile: (data: User) => void;
-  setUserChapterSetting: (data: ChapterSetting) => void;
+  setUserSetting: (data: UserSetting) => void;
 }
 
 export const userStore = create<userStore>((set) => ({
@@ -14,14 +14,14 @@ export const userStore = create<userStore>((set) => ({
       ...state,
       userProfile: data,
     })),
-  setUserChapterSetting: (data) =>
+  setUserSetting: (data) =>
     set((state) => ({
       ...state,
       userProfile: {
         ...state.userProfile,
         setting: {
           ...state.userProfile?.setting,
-          chapterSetting: data,
+          ...data,
         },
       } as User,
     })),

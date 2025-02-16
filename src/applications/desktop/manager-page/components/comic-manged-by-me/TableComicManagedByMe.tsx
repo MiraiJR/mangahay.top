@@ -1,4 +1,3 @@
-import { formatDate } from "@/shared/helpers/helpers";
 import { useTranslation } from "react-i18next";
 import { ComicPrivilegePermission } from "@/shared/types/enums/ComicPrevilegePermission.enum";
 import {
@@ -24,6 +23,7 @@ import { DialogListManagedChapter } from "@/applications/desktop/manager-page/co
 import { ReorderListChapter } from "@/applications/desktop/manager-page/components/reorder-chapter/ReorderListChapter";
 import { ModalUpdateComic } from "@/applications/desktop/manager-page/components/update-comic/ModalUpdateComic";
 import { UploadImageProvider } from "@/shared/components/base-components/upload-files/UploadImageContext";
+import { formatDate } from "@/shared/helpers/formatter";
 
 export const TableComicsManagedByMe = () => {
   const { t } = useTranslation();
@@ -224,7 +224,7 @@ export const TableComicsManagedByMe = () => {
               visible={isShowListManagedChapter}
               changeVisible={setIsShowListManagedChapter}
               comicId={selectedComic.id}
-              isCreatorComic={isCreator(comic)}
+              isCreatorComic={isCreator(selectedComic)}
             />
             <ReorderListChapter
               visible={isShowReorderChapter}

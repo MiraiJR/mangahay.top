@@ -1,46 +1,42 @@
-import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { cn } from "@/shared/libs/utils";
-import { motion } from "framer-motion";
-import Link from "next/link";
 import { useParams } from "next/navigation";
+import { usePageContext } from "./Context";
+import { Button, Drawer } from "antd";
+import { globalStore } from "@/shared/stores/global-storage";
+import { useRouter } from "next/router";
 
-interface itemProps {
-  chapters: Chapter[];
+interface MenuChapterProps {
+  open: boolean;
 }
 
-const variants = {
-  open: { opacity: 1, x: 0 },
-  closed: { opacity: 0, x: "-100%" },
-};
-
-const MenuChapter = ({ chapters }: itemProps) => {
+export const MenuChapter = ({ open }: MenuChapterProps) => {
   const { slugChapter = "", slugComic = "" } = useParams();
-  const { theme, oppositeTheme } = useThemeContext();
+  const { chapters } = usePageContext();
+  const { isMobile } = globalStore();
+  const router = useRouter();
 
   return (
-    <motion.nav
-      animate={"open"}
-      variants={variants}
-      className={`fixed left-0 top-0 flex flex-col z-50 bg-${theme} text-${oppositeTheme} h-screen border-r-2 border-red-600`}
+    <Drawer
+      title="Danh sách chương"
+      placement={"left"}
+      closable
+      open={open}
+      width={isMobile ? 200 : 300}
     >
-      {chapters.map((chapter) => (
-        <Link
-          rel="preload"
-          href={`/truyen/${slugComic}/${chapter.slug}`}
-          className={cn(
-            `py-4 px-10 mobile:py-2 mobile:px-5 hover:bg-yellow-400`,
-            {
-              "bg-yellow-400": slugChapter === chapter.slug,
-            }
-          )}
-          title={`${chapter.name} ${chapter.slug}`}
-          key={chapter.id}
-        >
-          {chapter.name}
-        </Link>
-      ))}
-    </motion.nav>
+      <div className="flex flex-col gap-2">
+        {chapters.map((chapter) => (
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => router.push(`/truyen/${slugComic}/${chapter.slug}`)}
+            className={`border-none block p-2 w-full mobile:py-2 mobile:text-sm text-xl mobile:px-5 hover:!bg-slate-400 hover:!text-white`}
+            key={chapter.id}
+            disabled={slugChapter === chapter.slug}
+          >
+            {chapter.name}
+          </Button>
+        ))}
+      </div>
+    </Drawer>
   );
 };
-
-export default MenuChapter;

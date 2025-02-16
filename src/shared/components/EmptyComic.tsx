@@ -17,8 +17,9 @@ const EmptyComic = ({
   const { oppositeTheme } = useThemeContext();
 
   return (
-    <div className="text-center flex flex-col items-center justify-center w-full">
+    <div className="text-center flex flex-col items-center justify-center w-full my-2 mobile:text-xs">
       <Image
+        className="w-[200px] mobile:w-[60px]"
         priority
         width={200}
         src={image}

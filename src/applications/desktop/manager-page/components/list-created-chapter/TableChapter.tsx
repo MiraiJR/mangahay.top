@@ -1,19 +1,19 @@
 import {
-  Avatar,
   Button,
   Popconfirm,
   PopconfirmProps,
   Table,
   TableColumnsType,
 } from "antd";
-import { DeleteOutlined, EditOutlined, UserOutlined } from "@ant-design/icons";
-import { formatDate } from "@/shared/helpers/helpers";
-import { ComicPrivilegePermission } from "@/shared/types/enums/ComicPrevilegePermission.enum";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useDeleteSingleChapter } from "./useDeleteSingleChapter";
 import { useTableChapterState } from "./useTableChapterState";
-import MyLoading from "@/shared/components/MyLoading";
+import MyLoading from "@/shared/components/base-components/loading/MyLoading";
 import { ModelUpdateChapter } from "./ModelUpdateChapter";
 import { useState } from "react";
+import { MinimumUser } from "@/shared/components/MinimumUser";
+import { formatDate } from "@/shared/helpers/formatter";
+import { ComicPrivilegePermission } from "@/shared/types/enums/ComicPrevilegePermission.enum";
 
 interface TableChapterProps {
   comicId: number;
@@ -22,7 +22,7 @@ interface TableChapterProps {
 
 export const TableChapter = ({
   comicId,
-  isCreatorComic,
+  isCreatorComic = false,
 }: TableChapterProps) => {
   const {
     isLoading,
@@ -38,6 +38,13 @@ export const TableChapter = ({
   const [isOpenModelUpdateChapter, setIsOpenModelUpdateChapter] =
     useState<boolean>(false);
   const [selectedChapter, setSelectedChapter] = useState<string>("");
+  const canRemove =
+    isCreatorComic ||
+    permissions.includes(ComicPrivilegePermission.REMOVE_CHAPTER);
+
+  const canUpdate =
+    isCreatorComic ||
+    permissions.includes(ComicPrivilegePermission.UPDATE_CHAPTER);
 
   if (isLoading) {
     return <MyLoading />;
@@ -55,14 +62,14 @@ export const TableChapter = ({
       title: "Creator",
       key: "creator",
       render: (chapter) => (
-        <div className="flex gap-2 flex-wrap">
-          <Avatar
-            src={chapter.creator?.avatar}
-            size={24}
-            icon={<UserOutlined />}
-          />
-          <p className="m-0">{chapter.creator?.fullname}</p>
-        </div>
+        <MinimumUser
+          user={{
+            id: chapter.creator.id,
+            email: "",
+            fullname: chapter.creator.fullname,
+            avatar: chapter.creator.avatar,
+          }}
+        />
       ),
     },
     {
@@ -72,8 +79,7 @@ export const TableChapter = ({
     },
     {
       title: "Action",
-      dataIndex: "",
-      key: "x",
+      key: "action",
       render: (chapter) => actionTemplate(chapter),
     },
   ];
@@ -85,14 +91,6 @@ export const TableChapter = ({
   const cancel: PopconfirmProps["onCancel"] = () => {};
 
   const actionTemplate = (chapter: Chapter) => {
-    const canRemove =
-      isCreatorComic ||
-      permissions.includes(ComicPrivilegePermission.REMOVE_CHAPTER);
-
-    const canUpdate =
-      isCreatorComic ||
-      permissions.includes(ComicPrivilegePermission.UPDATE_CHAPTER);
-
     return (
       <div className="flex gap-2">
         {canRemove && (

@@ -1,24 +1,18 @@
-import {
-  AutoComplete,
-  AutoCompleteCompleteEvent,
-} from "primereact/autocomplete";
-import { InputText } from "primereact/inputtext";
 import { useThemeContext } from "@/shared/contexts/ThemeContext";
 import { useCreateChapter } from "./useCreateChapter";
 import { useTranslation } from "react-i18next";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
-import { useRecommendedComics } from "../../hooks/useRecommendedComics";
 import { UploadImage } from "@/shared/components/base-components/upload-files/UploadImage";
 import { Button } from "antd";
+import { AutoCompleteManagedComic } from "@/shared/components/base-components/auto-complete/AutoCompleteManagedComic";
+import { extractComicId } from "@/shared/helpers/helpers";
+import { Input } from "@/shared/components/base-components";
 
 const CreateChapterForm = () => {
   const { t } = useTranslation();
   const { oppositeTheme } = useThemeContext();
-  const { recommendedComics, handleSearchRecommendedComics } =
-    useRecommendedComics();
   const {
-    comicName,
-    setComicName,
+    setComicId,
     chapterName,
     setChapterName,
     isEnd,
@@ -29,40 +23,25 @@ const CreateChapterForm = () => {
 
   return (
     <div className={`flex flex-col gap-4 text-${oppositeTheme}`}>
-      <div className="flex flex-col gap-4 w-[100%]">
-        <div className="font-bold">
-          {t("createNewChapter", { ns: "chapter" })}
-        </div>
-        <AutoComplete
-          placeholder={t("createNewChapter", { ns: "chapter" })}
-          inputStyle={{
-            width: "100%",
-          }}
-          value={comicName}
-          suggestions={recommendedComics}
-          completeMethod={(e: AutoCompleteCompleteEvent) => {
-            handleSearchRecommendedComics(e.query);
-          }}
-          onChange={(e) => {
-            setComicName(e.value);
-          }}
-        />
-      </div>
-      <div className="flex flex-col gap-2 w-[100%]">
-        <label htmlFor="chapterName">
-          {t("chapterName", { ns: "chapter" })}
-        </label>
-        <InputText
-          id="chapterName"
-          placeholder={t("chapterName", { ns: "chapter" })}
-          aria-describedby="username-help"
-          className="w-[100%]"
-          value={chapterName}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setChapterName(event.target.value)
-          }
-        />
-      </div>
+      <AutoCompleteManagedComic
+        label={t("createNewChapter", { ns: "chapter" })}
+        onSelect={(selectedComic: string) => {
+          setComicId(extractComicId(selectedComic));
+        }}
+        required
+      />
+      <Input
+        label={t("chapterName", { ns: "chapter" })}
+        id="chapterName"
+        placeholder={t("chapterName", { ns: "chapter" })}
+        aria-describedby="username-help"
+        className="w-[100%]"
+        value={chapterName}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          setChapterName(event.target.value)
+        }
+        required
+      />
       <div className="flex flex-row gap-2 w-[100%] items-center">
         <label htmlFor="isChapterEnd">
           {t("theLastChapter", { ns: "chapter" })}

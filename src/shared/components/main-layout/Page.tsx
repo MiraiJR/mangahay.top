@@ -23,7 +23,7 @@ const MainLayout = ({
     return (
       <div
         id="main-layout"
-        className={`min-h-screen relative bg-${theme} ${className}`}
+        className={`min-h-screen relative bg-${theme} ${className} mobile:text-xs`}
       >
         {children}
       </div>
@@ -52,7 +52,11 @@ const MainLayout = ({
       <div className={cn(`bg-${theme} relative drop-shadow-lg z-10`)}>
         <Header />
       </div>
-      <div className={cn("container relative mx-auto my-10 mobile:p-2")}>
+      <div
+        className={cn(
+          "container relative mx-auto my-10 mobile:p-2 mobile:my-1"
+        )}
+      >
         {children}
       </div>
       <div className={`bg-${theme} border-t-${oppositeTheme} border-2`}>

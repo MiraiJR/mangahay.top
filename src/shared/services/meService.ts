@@ -1,3 +1,4 @@
+import { NOTIFICATION_STATUS } from "@/applications/desktop/user-page/components/notification/enum";
 import axiosClient from "../libs/axiosClient";
 
 export const TypeComicInteraction = {
@@ -39,6 +40,16 @@ const MeService = {
         },
       }
     ),
+  getNotifications: (query: {
+    page: number;
+    size: number;
+    type: NOTIFICATION_STATUS;
+  }) =>
+    axiosClient.get<PagingNotification>(`/users/me/notifications`, {
+      params: {
+        ...query,
+      },
+    }),
 };
 
 export default MeService;
